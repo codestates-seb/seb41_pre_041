@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const HeaderWrap = styled.div`
+    display: flex;
     position: fixed;
+    justify-content: center;
     z-index: 10;
     width: 100%;
     border-top: 3px solid #F2740D;
@@ -49,6 +51,50 @@ const HeaderContainer = styled.div`
             background: #e3e6e8;
         }
     }
+
+    #search {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        padding: 0 8px;
+    }
+    .input-wrap {
+        flex: 1;
+    }
+    input {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .nav-login {
+        display: flex;
+        align-items: center;
+        li {
+            height: 30px;
+            padding: 1px 10px;
+            border: 1px solid #39739d;
+            border-radius: 4px;
+            background: #e1ecf4;
+        }
+        li:last-child {
+            margin-left: 4px;
+            background: #0a95ff;
+            a {
+                color: #ffffff;
+            }
+        }
+        li:hover {
+            background: #b3d3ea;
+        }
+        li:last-child:hover {
+            background: #0074cc;
+        }
+        a {
+            font-size: 13px;
+            color: #39739d;
+        }
+    }
 `
 
 function StackHeader() {
@@ -69,11 +115,18 @@ function StackHeader() {
                     <li><a href="/">For Teams</a></li>
                 </ul>
 
+                {/* search */}
                 <form id="search" role="search">
                     <div className="input-wrap">
-                        <input></input>
+                        <input type="text" placeholder="Search..."></input>
                     </div>
                 </form>
+
+                {/* login */}
+                <ul className="nav-login">
+                    <li><a href="/">Log in</a></li>
+                    <li><a href="/">Sign Up</a></li>
+                </ul>
             </HeaderContainer>
         </HeaderWrap>
     )
