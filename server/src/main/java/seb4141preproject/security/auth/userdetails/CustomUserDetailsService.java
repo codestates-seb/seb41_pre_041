@@ -1,11 +1,11 @@
-package seb4141preproject.security;
+package seb4141preproject.security.auth.userdetails;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
 import seb4141preproject.security.testMember.entity.Member;
 import seb4141preproject.security.testMember.repository.MemberRepository;
 
@@ -28,8 +28,45 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member findMember = optionalMember.orElseThrow(() ->
                 new UsernameNotFoundException("email not found"));
 
-        Collection<? extends GrantedAuthority> authorities = authorityUtils.createAuthorities();
+        return new MemberDetails(findMember);
+    }
 
-        return new User(findMember.getEmail(), findMember.getPassword(), authorities);
+    private final class MemberDetails extends Member implements UserDetails {
+        MemberDetails(Member member) {
+            setId(member.getId());
+            setName(member.getName());
+            setPassword(member.getPassword());
+            setRoles(member.getRoles());
+        }
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return authorityUtils.createAuthorities(this.getRoles());
+        }
+
+        @Override
+        public String getUsername() {
+            return getEmail();
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 }
