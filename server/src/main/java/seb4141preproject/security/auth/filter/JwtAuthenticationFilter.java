@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.security.auth.JwtTokenizer;
 import seb4141preproject.security.auth.dto.LoginDto;
 import seb4141preproject.security.testMember.entity.Member;
@@ -37,8 +38,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-
-        System.out.println("token : " + token);
 
         return authenticationManager.authenticate(token);
     }
