@@ -20,15 +20,15 @@ import java.util.Map;
 public class JwtTokenizer {
     @Getter
     @Value("${jwt.key}")
-    private String secretKey;
+    private String secretKey; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
 
     @Getter
     @Value("${jwt.ATExpiration}")
-    private int ATExpiration;
+    private int ATExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
 
     @Getter
     @Value("${jwt.RTExpiration}")
-    private int RTExpiration;
+    private int RTExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
 
     public String encodeSecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
