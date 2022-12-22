@@ -1,14 +1,12 @@
 package seb4141preproject.question.dto;
 
 import lombok.Getter;
+import seb4141preproject.Vote;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
-public class QuestionRequestDto {
+public class QuestionVoteRequestDto {
     @NotNull
-    private String title;
-
-    @NotNull
-    private String content;
+    private Vote.VoteStatus voteStatus;
 }

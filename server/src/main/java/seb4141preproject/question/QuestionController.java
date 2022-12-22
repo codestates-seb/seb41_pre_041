@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import seb4141preproject.Member;
 import seb4141preproject.PaginatedResponseDto;
-import seb4141preproject.question.dto.QuestionRequestDto;
-import seb4141preproject.question.dto.QuestionResponseDto;
+import seb4141preproject.question.dto.*;
+import seb4141preproject.question.entity.Question;
+import seb4141preproject.question.entity.QuestionVote;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -54,10 +56,9 @@ public class QuestionController {
 
     @GetMapping("/{question-id}")
     public ResponseEntity<QuestionResponseDto> getQuestion(@Positive @PathVariable("question-id") long id) {
-        return new ResponseEntity<>(
-                mapper.questionToQuestionResponseDto(questionService.readQuestion(id)),
-                HttpStatus.OK
-        );
+        Question question = questionService.readQuestion(id);
+
+        return new ResponseEntity<>(mapper.questionToQuestionResponseDto(question), HttpStatus.OK);
     }
 
     @PatchMapping("/{question-id}")
@@ -66,15 +67,67 @@ public class QuestionController {
         Question question = mapper.questionRequestDtoToQuestion(requestDto);
         question.setId(id);
 
-        return new ResponseEntity<>(
-                mapper.questionToQuestionResponseDto(questionService.updateQuestion(question)),
-                HttpStatus.OK
-        );
+        Question updatedQuestion = questionService.updateQuestion(question);
+
+        return new ResponseEntity<>(mapper.questionToQuestionResponseDto(updatedQuestion), HttpStatus.OK);
     }
 
     @DeleteMapping("/{question-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteQuestion(@Positive @PathVariable("question-id") long id) {
         questionService.deleteQuestion(id);
+    }
+
+    @PostMapping("/{question-id}/votes")
+    public ResponseEntity<QuestionVoteResponseDto> postQuestionVote(
+            @Positive @PathVariable("question-id") long questionId,
+            @Valid @RequestBody QuestionVoteRequestDto requestDto
+    ) {
+        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
+        questionVote.setQuestion(new Question());
+        questionVote.getQuestion().setId(questionId);
+
+        QuestionVote createdQuestionVote = questionService.createQuestionVote(questionVote);
+
+        return new ResponseEntity<>(
+                mapper.questionVoteToQuestionVoteResponseDto(createdQuestionVote),
+                HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping("/{question-id}/votes/count")
+    public ResponseEntity<QuestionVoteCountDto> getQuestionVoteCount(
+            @Positive @PathVariable("question-id") long questionId
+    ) {
+        long voteCount = questionService.getQuestionVoteCount(questionId);
+
+        return new ResponseEntity<>(new QuestionVoteCountDto(questionId, voteCount), HttpStatus.OK);
+    }
+
+    @GetMapping("/{question-id}/votes/{member-id}")
+    public ResponseEntity<QuestionVoteResponseDto> getQuestionVote(
+            @Positive @PathVariable("question-id") long questionId,
+            @Positive @PathVariable("member-id") long memberId
+    ) {
+        QuestionVote questionVote = questionService.readQuestionVote(questionId, memberId);
+
+        return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(questionVote), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{question-id}/votes/{member-id}")
+    public ResponseEntity<QuestionVoteResponseDto> patchQuestionVote(
+            @Positive @PathVariable("question-id") long questionId,
+            @Positive @PathVariable("member-id") long memberId,
+            @Valid @RequestBody QuestionVoteRequestDto requestDto
+    ) {
+        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
+        questionVote.setQuestion(new Question());
+        questionVote.getQuestion().setId(questionId);
+        questionVote.setMember(new Member());
+        questionVote.getMember().setId(memberId);
+
+        QuestionVote updatedQuestionVote = questionService.updateQuestionVote(questionVote);
+
+        return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(updatedQuestionVote), HttpStatus.OK);
     }
 }

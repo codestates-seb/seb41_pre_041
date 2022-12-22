@@ -1,4 +1,4 @@
-package seb4141preproject.question;
+package seb4141preproject.question.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +18,19 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String title;
+
     private String content;
-    private int views = 0;
+
+    private long viewCount;
+
+    // 답변 수와 투표 수를 임시 저장하기 위해 사용
+    @Transient
+    private long answerCount;
+
+    @Transient
+    private long voteCount;
 
     // Spring Security authentication 구현 후 @CreatedBy auditing 기능으로 입력 예정
     // 구현 전에는 수동으로 입력
@@ -35,7 +45,7 @@ public class Question {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public void countViews() {
-        views++;
+    public void countView() {
+        viewCount++;
     }
 }

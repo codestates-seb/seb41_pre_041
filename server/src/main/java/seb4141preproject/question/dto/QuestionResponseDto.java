@@ -8,12 +8,14 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class QuestionResponseDto {
-    private final long id;
-    private final String title;
-    private final String content;
-    private final long memberId;
-    private final String memberName;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime modifiedAt;
-    private final int views;
+    long id;
+    String title;
+    String content;
+    long memberId;
+    String memberName;
+    LocalDateTime createdAt;
+    LocalDateTime modifiedAt;
+    long viewCount;
+    long answerCount;
+    long voteCount;
 }

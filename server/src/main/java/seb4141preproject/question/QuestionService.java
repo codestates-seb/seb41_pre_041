@@ -6,22 +6,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ValueConstants;
 import seb4141preproject.Member;
+import seb4141preproject.Vote;
+import seb4141preproject.question.entity.Question;
+import seb4141preproject.question.entity.QuestionVote;
+import seb4141preproject.question.repository.QuestionRepository;
+import seb4141preproject.question.repository.QuestionVoteRepository;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuestionVoteRepository questionVoteRepository;
 
     public Question createQuestion(Question question) {
         // Spring Security에서 인증된 principal을 받아와야 한다.
         // 인증 구현 전까지는 mock 사용
-        Member member = new Member();
-        member.setId(1L);
-        member.setName("홍길동");
-        question.setMember(member);
+        question.setMember(new Member());
+        question.getMember().setId(1L);
 
         return questionRepository.save(question);
     }
@@ -29,14 +32,23 @@ public class QuestionService {
     public Page<Question> readQuestions(int page, int size, String q) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 
-        return q.equals(ValueConstants.DEFAULT_NONE)
+        Page<Question> questions =
+                q == null
                 ? questionRepository.findAll(pageRequest)
                 : questionRepository.findByQ(q, pageRequest);
+
+        questions.forEach(question -> {
+//            question.setAnswerCount(getAnswerCount(question.getId());
+            question.setVoteCount(getQuestionVoteCount(question.getId()));
+        });
+
+        return questions;
     }
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
-        question.countViews();
+        question.countView();
+        question.setVoteCount(getQuestionVoteCount(id));
 
         return question;
     }
@@ -51,5 +63,34 @@ public class QuestionService {
 
     public void deleteQuestion(long id) {
         questionRepository.deleteById(id);
+    }
+
+    public QuestionVote createQuestionVote(QuestionVote questionVote) {
+        // Spring Security에서 인증된 principal을 받아와야 한다.
+        // 인증 구현 전까지는 mock 사용
+        questionVote.setMember(new Member());
+        questionVote.getMember().setId(1L);
+
+        return questionVoteRepository.save(questionVote);
+    }
+
+    public long getQuestionVoteCount(long questionId) {
+        return questionVoteRepository.countByQuestion_IdAndVoteStatus(questionId, Vote.VoteStatus.UPVOTE)
+                - questionVoteRepository.countByQuestion_IdAndVoteStatus(questionId, Vote.VoteStatus.DOWNVOTE);
+    }
+
+    public QuestionVote readQuestionVote(long questionId, long memberId) {
+        return questionVoteRepository.findByQuestion_IdAndMember_Id(questionId, memberId).orElseThrow();
+    }
+
+    public QuestionVote updateQuestionVote(QuestionVote questionVote) {
+        QuestionVote foundQuestionVote =
+                questionVoteRepository.findByQuestion_IdAndMember_Id(
+                        questionVote.getQuestion().getId(),
+                        questionVote.getMember().getId()
+                ).orElseThrow();
+        foundQuestionVote.setVoteStatus(questionVote.getVoteStatus());
+
+        return questionVoteRepository.save(foundQuestionVote);
     }
 }
