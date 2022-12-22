@@ -49,6 +49,9 @@ const FooterContainer = styled.div`
 
     .copyrigth {
         display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        
         flex: 1 1 150px;
         .list {
             display: flex;
@@ -57,6 +60,14 @@ const FooterContainer = styled.div`
             a {
                 padding: 4px 0px;
                 font-size: 11px;
+            }
+        }
+        p {
+            font-size: 11px;
+            color: #9199a1;
+            a {
+                color: #9199a1;
+                text-decoration: underline;
             }
         }
     }
@@ -135,6 +146,9 @@ function Footer() {
                         <li><Link className="link" to="/notfound">LinkdIn</Link></li>
                         <li><Link className="link" to="/notfound">Instagram</Link></li>
                     </ul>
+                    <p>
+                        Site design / logo © 2022 Stack Exchange Inc; user contributions licensed under <Link to="notfound">CC BY-SA.</Link> rev 2022.12.21.43127
+                    </p>
                 </div>
             </ FooterContainer>
         </ FooterWrap>
