@@ -106,16 +106,16 @@ function Header() {
             <HeaderContainer>
                 {/* logo */}
                 <h1 className="logo">
-                    <a href="/">
+                    <Link to="/">
                         <span className="logo-img"/>
-                    </a>
+                    </Link>
                 </h1>
 
                 {/* navigation */}
                 <ul className="nav-items">
-                    <li><a href="/">About</a></li>
+                    <li><Link to="/notfound">About</Link></li>
                     <li><Link to="/">Products</Link></li>                    
-                    <li><a href="/">For Teams</a></li>
+                    <li><Link to="/notfound">For Teams</Link></li>
                 </ul>
 
                 {/* search */}

@@ -52,8 +52,8 @@ function LeftSideBar() {
                         <li className="public">PUBLIC</li>
                         <li><Link className="public-links check icon" to="/"><Earth width="16" height="16"/>Questions</Link></li>
                         <li><Link className="public-links" to="/notfound">Tags</Link></li>
-                        <li><a className="public-links" href="/">Users</a></li>
-                        <li><a className="public-links" href="/">Compaines</a></li>
+                        <li><Link className="public-links" to="/notfound">Users</Link></li>
+                        <li><Link className="public-links" to="/notfound">Compaines</Link></li>
                     </ul>
                 </li>
             </ul>

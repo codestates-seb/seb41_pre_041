@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const FooterWrap = styled.div`
     display: flex;
@@ -66,73 +67,73 @@ function Footer() {
         <FooterWrap>
             <FooterContainer>
                 <div className="logo">
-                    <a href="/">
+                    <Link to="/">
                         <svg width="32" height="37" viewBox="0 0 32 37">
                             <path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"></path>
                             <path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"></path>
                         </svg>
-                    </a>
+                    </Link>
                 </div>
                 <nav className="nav">
                     <div className="footer-list">
                         <h5 className="title">
-                            <a href="/">STACK OVERFLOW</a>
+                            <Link to="/">STACK OVERFLOW</Link>
                         </h5>
                         <ul>
-                            <li><a className="link" href="/">Questions</a></li>
-                            <li><a className="link" href="/">Help</a></li>
+                            <li><Link className="link" to="/">Questions</Link></li>
+                            <li><Link className="link" to="/notfound">Help</Link></li>
                         </ul>
                     </div>
                     <div className="footer-list">
                         <h5 className="title">
-                            <a href="/">PRODUCTS</a>
+                            <Link to="/">PRODUCTS</Link>
                         </h5>
                         <ul>
-                            <li><a className="link" href="/">Teams</a></li>
-                            <li><a className="link" href="/">Advertising</a></li>
-                            <li><a className="link" href="/">Collectives</a></li>
-                            <li><a className="link" href="/">Talent</a></li>
+                            <li><Link className="link" to="/notfound">Teams</Link></li>
+                            <li><Link className="link" to="/notfound">Advertising</Link></li>
+                            <li><Link className="link" to="/notfound">Collectives</Link></li>
+                            <li><Link className="link" to="/notfound">Talent</Link></li>
                         </ul>
                     </div>
                     <div className="footer-list">
                         <h5 className="title">
-                            <a href="/">COMPANY</a>
+                            <Link to="/">COMPANY</Link>
                         </h5>
                         <ul>
-                            <li><a className="link" href="/">About</a></li>
-                            <li><a className="link" href="/">Press</a></li>
-                            <li><a className="link" href="/">Work Here</a></li>
-                            <li><a className="link" href="/">Legal</a></li>
-                            <li><a className="link" href="/">Privacy Policy</a></li>
-                            <li><a className="link" href="/">Terms of Service</a></li>
-                            <li><a className="link" href="/">Contact Us</a></li>
-                            <li><a className="link" href="/">Cookie Settings</a></li>
-                            <li><a className="link" href="/">Cookie Policy</a></li>
+                            <li><Link className="link" to="/notfound">About</Link></li>
+                            <li><Link className="link" to="/notfound">Press</Link></li>
+                            <li><Link className="link" to="/notfound">Work Here</Link></li>
+                            <li><Link className="link" to="/notfound">Legal</Link></li>
+                            <li><Link className="link" to="/notfound">Privacy Policy</Link></li>
+                            <li><Link className="link" to="/notfound">Terms of Service</Link></li>
+                            <li><Link className="link" to="/notfound">Contact Us</Link></li>
+                            <li><Link className="link" to="/notfound">Cookie Settings</Link></li>
+                            <li><Link className="link" to="/notfound">Cookie Policy</Link></li>
                         </ul>
                     </div>
                     <div className="footer-list">
                         <h5 className="title">
-                            <a href="/">STACK EXCHANGE NETWORK</a>
+                            <Link to="/">STACK EXCHANGE NETWORK</Link>
                         </h5>
                         <ul>
-                            <li><a className="link" href="/">Technology</a></li>
-                            <li><a className="link" href="/">Culture & recreation</a></li>
-                            <li><a className="link" href="/">Life & arts</a></li>
-                            <li><a className="link" href="/">Science</a></li>
-                            <li><a className="link" href="/">Professional</a></li>
-                            <li><a className="link" href="/">Business</a></li>
-                            <li className="mg25"><a className="link" href="/">API</a></li>
-                            <li><a className="link" href="/">Data</a></li>
+                            <li><Link className="link" to="/notfound">Technology</Link></li>
+                            <li><Link className="link" to="/notfound">Culture & recreation</Link></li>
+                            <li><Link className="link" to="/notfound">Life & arts</Link></li>
+                            <li><Link className="link" to="/notfound">Science</Link></li>
+                            <li><Link className="link" to="/notfound">Professional</Link></li>
+                            <li><Link className="link" to="/notfound">Business</Link></li>
+                            <li className="mg25"><Link className="link" to="/notfound">API</Link></li>
+                            <li><Link className="link" to="/notfound">Data</Link></li>
                         </ul>
                     </div>
                 </nav>
                 <div className="copyrigth">
                     <ul className="list">
-                        <li><a className="link" href="/">Blog</a></li>
-                        <li><a className="link" href="/">Fackbook</a></li>
-                        <li><a className="link" href="/">Twitter</a></li>
-                        <li><a className="link" href="/">LinkdIn</a></li>
-                        <li><a className="link" href="/">Instagram</a></li>
+                        <li><Link className="link" to="/notfound">Blog</Link></li>
+                        <li><Link className="link" to="/notfound">Fackbook</Link></li>
+                        <li><Link className="link" to="/notfound">Twitter</Link></li>
+                        <li><Link className="link" to="/notfound">LinkdIn</Link></li>
+                        <li><Link className="link" to="/notfound">Instagram</Link></li>
                     </ul>
                 </div>
             </ FooterContainer>
