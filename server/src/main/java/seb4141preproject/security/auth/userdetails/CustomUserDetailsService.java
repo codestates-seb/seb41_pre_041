@@ -5,10 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
-import seb4141preproject.security.testMember.entity.Member;
-import seb4141preproject.security.testMember.repository.MemberRepository;
+import seb4141preproject.testMember.entity.Member;
+import seb4141preproject.testMember.repository.MemberRepository;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -35,6 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         MemberDetails(Member member) {
             setId(member.getId());
             setName(member.getName());
+            setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
         }
