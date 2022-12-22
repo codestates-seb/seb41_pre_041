@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import seb4141preproject.Member;
 import seb4141preproject.PaginatedResponseDto;
 import seb4141preproject.question.dto.*;
 import seb4141preproject.question.entity.Question;
@@ -104,27 +103,23 @@ public class QuestionController {
         return new ResponseEntity<>(new QuestionVoteCountDto(questionId, voteCount), HttpStatus.OK);
     }
 
-    @GetMapping("/{question-id}/votes/{member-id}")
+    @GetMapping("/{question-id}/votes/me")
     public ResponseEntity<QuestionVoteResponseDto> getQuestionVote(
-            @Positive @PathVariable("question-id") long questionId,
-            @Positive @PathVariable("member-id") long memberId
+            @Positive @PathVariable("question-id") long questionId
     ) {
-        QuestionVote questionVote = questionService.readQuestionVote(questionId, memberId);
+        QuestionVote questionVote = questionService.readQuestionVote(questionId);
 
         return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(questionVote), HttpStatus.OK);
     }
 
-    @PatchMapping("/{question-id}/votes/{member-id}")
+    @PatchMapping("/{question-id}/votes/me")
     public ResponseEntity<QuestionVoteResponseDto> patchQuestionVote(
             @Positive @PathVariable("question-id") long questionId,
-            @Positive @PathVariable("member-id") long memberId,
             @Valid @RequestBody QuestionVoteRequestDto requestDto
     ) {
         QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
         questionVote.setQuestion(new Question());
         questionVote.getQuestion().setId(questionId);
-        questionVote.setMember(new Member());
-        questionVote.getMember().setId(memberId);
 
         QuestionVote updatedQuestionVote = questionService.updateQuestionVote(questionVote);
 

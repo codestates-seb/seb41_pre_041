@@ -79,16 +79,22 @@ public class QuestionService {
                 - questionVoteRepository.countByQuestion_IdAndVoteStatus(questionId, Vote.VoteStatus.DOWNVOTE);
     }
 
-    public QuestionVote readQuestionVote(long questionId, long memberId) {
+    public QuestionVote readQuestionVote(long questionId) {
+        // Spring Security에서 인증된 principal을 받아와야 한다.
+        // 인증 구현 전까지는 mock 사용
+        long memberId = 1L;
+
         return questionVoteRepository.findByQuestion_IdAndMember_Id(questionId, memberId).orElseThrow();
     }
 
     public QuestionVote updateQuestionVote(QuestionVote questionVote) {
+        // Spring Security에서 인증된 principal을 받아와야 한다.
+        // 인증 구현 전까지는 mock 사용
+        long memberId = 1L;
+
         QuestionVote foundQuestionVote =
-                questionVoteRepository.findByQuestion_IdAndMember_Id(
-                        questionVote.getQuestion().getId(),
-                        questionVote.getMember().getId()
-                ).orElseThrow();
+                questionVoteRepository.findByQuestion_IdAndMember_Id(questionVote.getQuestion().getId(), memberId)
+                        .orElseThrow();
         foundQuestionVote.setVoteStatus(questionVote.getVoteStatus());
 
         return questionVoteRepository.save(foundQuestionVote);
