@@ -1,6 +1,7 @@
 package seb4141preproject.security.auth.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -44,7 +45,11 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeRequests(auth -> auth // TODO : 회원, 비회원 권한 조정 필요
-                        .anyRequest().permitAll());
+                        .antMatchers("/members/test").hasRole("USER")
+                        .antMatchers("/logout").hasRole("USER")
+                        .anyRequest().permitAll())
+                .logout()
+                .disable();
 
         return http.build();
     }

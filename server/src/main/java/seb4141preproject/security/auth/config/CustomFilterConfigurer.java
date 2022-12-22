@@ -14,7 +14,7 @@ public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterC
     // JwtTokenizer 를 주입받아 JwtFilter 를 통해 Security 로직에 필터를 등록
     // 커스텀한 jwtAuthenticationFilter 를 Security Filter 앞에 추가한다.
     @Override
-        public void configure(HttpSecurity http) throws Exception {
+        public void configure(HttpSecurity http) {
             JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenizer);
             http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         }

@@ -78,13 +78,15 @@ public class AuthService {
     }
 
     public void logout(TokenRequestDto tokenRequestDto) {
-        // TODO: access token은 black list table에 등록하여 더 이상 해당 토큰으로 로그인 못 하도록 처리 필요
+        // TODO: 사용된 Access Token 사용하지 못하게 처리
+
+        System.out.println(tokenRequestDto.getRefreshToken());
 
         // Refresh token 제거
-        RefreshToken findRefreshToken = refreshTokenRepository.findByValue(tokenRequestDto.getRefreshToken())
+        RefreshToken refreshToken = refreshTokenRepository.findByValue(tokenRequestDto.getRefreshToken())
                 .orElseThrow(() -> new RuntimeException("REFRESH_TOKEN_NOT_FOUND"));
 
-        refreshTokenRepository.delete(findRefreshToken);
+        refreshTokenRepository.delete(refreshToken);
     }
 
     // 클래스 내부에서만 사용 가능한 토큰 생성하는 로직

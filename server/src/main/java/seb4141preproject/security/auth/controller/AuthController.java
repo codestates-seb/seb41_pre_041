@@ -30,11 +30,10 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto,
-                                 @AuthenticationPrincipal Member member) {
-        if (member != null) {
-            authService.logout(tokenRequestDto);
-        }
+    public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto) { //@AuthenticationPrincipal
+        System.out.println("Logout EndPoint!");
+//        if (member != null)
+        authService.logout(tokenRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
