@@ -63,6 +63,7 @@ const FooterContainer = styled.div`
             }
         }
         p {
+            margin-bottom: 24px;
             font-size: 11px;
             color: #9199a1;
             a {
