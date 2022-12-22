@@ -1,0 +1,27 @@
+spring:
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:db/schema.sql
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/memberTest
+    username: root
+    password: Dkgod134652!!
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+jwt:
+  key: ${JWT_SECRET_KEY}
+  ATExpiration: 1
+  RTExpiration: 420

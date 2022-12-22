@@ -32,39 +32,23 @@ public class Member {
     @Column(length = 20, nullable = false)
     private String password;
 
-    private String roles;
-
-    public Member(String name, String email, String password) {
-
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
+    @ElementCollection
+    private List<String> roles;
 
     // mappedBy 자신의 연관계의 주인이 아닌 것을 표시 하는 설정
-    @OneToMany(cascade ={CascadeType.ALL},mappedBy = "question")
-    //memeber테이블 에서 Question 일대 다 관계
-    @JsonIgnore // @JsonIgnore를 붙이면 데이터를 주고 받을 때 해당 데이터는 'lgnore'되어서 응답값에 보이지 않게 된다.
-    private List<Question> memberQuestions = new ArrayList<>();
-
-
-    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answer")
-    //member 테이블 에서 answer 일대 다 관계
-    @JsonIgnore
-    private List<Answer> memberAnswers = new ArrayList<>();
-
-    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "vote")
-    //member 테이블에서 vote로 일대 다 관계
-    @JsonIgnore
-    private List<vote> membervote = new ArrayList<>();
-
-
-
-    public List<String> getRoleList() {
-        if (this.roles.length() > 0) {
-            return Arrays.asList(this.roles.split(","));
-        }
-        return new ArrayList<>();
-    }
-
+//    @OneToMany(cascade ={CascadeType.ALL},mappedBy = "question")
+//    //memeber테이블 에서 Question 일대 다 관계
+//    @JsonIgnore // @JsonIgnore를 붙이면 데이터를 주고 받을 때 해당 데이터는 'lgnore'되어서 응답값에 보이지 않게 된다.
+//    private List<Question> memberQuestions = new ArrayList<>();
+//
+//
+//    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answer")
+//    //member 테이블 에서 answer 일대 다 관계
+//    @JsonIgnore
+//    private List<Answer> memberAnswers = new ArrayList<>();
+//
+//    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "vote")
+//    //member 테이블에서 vote로 일대 다 관계
+//    @JsonIgnore
+//    private List<vote> membervote = new ArrayList<>();
 }

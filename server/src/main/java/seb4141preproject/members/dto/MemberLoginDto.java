@@ -14,7 +14,7 @@ public class MemberLoginDto {
     @NotEmpty(message = "이메일은 필수 입력 값입니다.")
     @Email(message = "이메일 형식으로 입력해주세요.")
     @ApiModelProperty(value = "회원-이메일")
-    private String Email;
+    private String email;
 
     @NotEmpty(message = "비밀번호는 필수 입력 값입니다.")
     @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요")

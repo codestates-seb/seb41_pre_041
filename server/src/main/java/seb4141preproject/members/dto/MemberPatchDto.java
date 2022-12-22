@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 public class MemberPatchDto {
 
+    @ApiModelProperty(value = "회원-식별자")
+    private long id;
+
     @ApiModelProperty(value = "회원-닉네임")
     private String name;
 

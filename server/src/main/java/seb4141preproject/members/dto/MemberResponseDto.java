@@ -3,9 +3,13 @@ package seb4141preproject.members.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class MemberResponseDto {
     private long id;
 
@@ -13,7 +17,7 @@ public class MemberResponseDto {
 
     private String email;
 
-    private String memberToken;
+    private String password;
 
-
+    private List<String> roles;
 }
