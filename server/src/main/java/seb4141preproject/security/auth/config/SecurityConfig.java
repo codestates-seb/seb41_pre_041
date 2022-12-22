@@ -1,4 +1,4 @@
-package seb4141preproject.security.config;
+package seb4141preproject.security.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

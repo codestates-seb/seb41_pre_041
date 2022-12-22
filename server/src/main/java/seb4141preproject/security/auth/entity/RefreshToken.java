@@ -1,4 +1,4 @@
-package seb4141preproject.security.auth.refreshtoken;
+package seb4141preproject.security.auth.entity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +24,6 @@ public class RefreshToken extends DataTable {
     private String value;
 
     @Builder
-
     public RefreshToken(String key, String value) {
         this.key = key;
         this.value = value;

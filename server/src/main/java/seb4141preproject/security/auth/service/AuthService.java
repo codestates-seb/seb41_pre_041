@@ -10,8 +10,8 @@ import seb4141preproject.security.auth.JwtTokenizer;
 import seb4141preproject.security.auth.dto.LoginDto;
 import seb4141preproject.security.auth.dto.TokenDto;
 import seb4141preproject.security.auth.dto.TokenRequestDto;
-import seb4141preproject.security.auth.refreshtoken.RefreshToken;
-import seb4141preproject.security.auth.refreshtoken.RefreshTokenRepository;
+import seb4141preproject.security.auth.entity.RefreshToken;
+import seb4141preproject.security.auth.repository.RefreshTokenRepository;
 import seb4141preproject.testMember.mapper.MemberMapper;
 import seb4141preproject.testMember.repository.MemberRepository;
 
@@ -37,12 +37,12 @@ public class AuthService {
         TokenDto tokenDto = createToken(authentication);
 
         // 4. RefreshToken 저장
-        RefreshToken createdRefreshToken = RefreshToken.builder()
+        RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())
                 .value(tokenDto.getRefreshToken())
                 .build();
 
-        refreshTokenRepository.save(createdRefreshToken);
+        refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
     }

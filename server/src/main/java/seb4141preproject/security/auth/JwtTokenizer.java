@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenizer {
-    private final Key key; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
+    private final Key key;
 
     @Getter
     @Value("${jwt.ATExpiration}")
@@ -33,13 +33,14 @@ public class JwtTokenizer {
     @Value("${jwt.RTExpiration}")
     private int RTExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
 
-    public JwtTokenizer(@Value("${jwt.key}") String secretKey) {
+    public JwtTokenizer(@Value("${jwt.key}") String secretKey) { // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
         this.key = getKeyFromEncodedSecretKey(secretKey);
     }
 
     public String encodeSecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
+
     private Key getKeyFromEncodedSecretKey(String encodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(encodedSecretKey);
         Key secretKey = Keys.hmacShaKeyFor(keyBytes);
@@ -57,12 +58,12 @@ public class JwtTokenizer {
 
         long now = (new Date()).getTime();
 
-        Date accessTokenExpiresIn = new Date(now + ATExpiration);
+        Date accessTokenExpiresIn = new Date(now + ATExpiration * 1000 * 60);
         return Jwts.builder()
                 .setClaims(claims)  // JWT에 담는 body
                 .setSubject(authentication.getName())    // JWT 제목 payload "sub": "email"
                 .setIssuedAt(Calendar.getInstance().getTime())  // JWT 발행일자 payload "iat": "발행일자"
-                .setExpiration(accessTokenExpiresIn)  // 만료일자 payload "exp": "발행시간 + 1시간"
+                .setExpiration(accessTokenExpiresIn)  // 만료일자 payload "exp": "발행시간 + 설정 시간(ATExpiration)"
                 .signWith(key)  // signature header "alg": "HS512"
                 .compact(); // 생성
     }
@@ -71,10 +72,11 @@ public class JwtTokenizer {
 
         long now = (new Date()).getTime();
 
+        Date refreshTokenExpiresIn = new Date(now + RTExpiration * 1000 * 60);
         return Jwts.builder()
                 .setSubject(authentication.getName())    // JWT 제목 payload "sub": "email"
                 .setIssuedAt(Calendar.getInstance().getTime())  // JWT 발행일자 payload "iat": "발행일자"
-                .setExpiration(new Date(now + RTExpiration))  // 만료일자 payload "exp": "발행시간 + 7일"
+                .setExpiration(refreshTokenExpiresIn)  // 만료일자 payload "exp": "발행시간 + 설정 시간(RTExpiration)"
                 .signWith(key)  // signature header "alg": "HS512"
                 .compact(); // 생성
     }

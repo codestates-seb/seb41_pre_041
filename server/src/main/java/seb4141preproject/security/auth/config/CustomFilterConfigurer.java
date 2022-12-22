@@ -1,4 +1,4 @@
-package seb4141preproject.security.config;
+package seb4141preproject.security.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import seb4141preproject.security.auth.JwtTokenizer;
 import seb4141preproject.security.auth.filter.JwtAuthenticationFilter;
-import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
 
 @RequiredArgsConstructor
 public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity>{
@@ -16,7 +15,7 @@ public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterC
     // 커스텀한 jwtAuthenticationFilter 를 Security Filter 앞에 추가한다.
     @Override
         public void configure(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenizer);
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenizer);
+            http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         }
 }
