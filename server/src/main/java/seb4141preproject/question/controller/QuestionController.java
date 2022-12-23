@@ -15,6 +15,7 @@ import seb4141preproject.question.mapper.QuestionMapper;
 import seb4141preproject.question.service.QuestionService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
 @Slf4j
@@ -37,7 +38,7 @@ public class QuestionController {
     public ResponseEntity<PaginatedResponseDto<QuestionResponseDto>> getQuestions(
             @Positive @RequestParam int page,
             @Positive @RequestParam int size,
-            @RequestParam(required = false) String q
+            @Min(1) @RequestParam(required = false) String q
     ) {
         Page<Question> questionPage = questionService.readQuestions(page - 1, size, q);
 
