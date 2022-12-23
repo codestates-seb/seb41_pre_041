@@ -2,19 +2,14 @@ package seb4141preproject.question.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import seb4141preproject.Member;
+import seb4141preproject.entity.Auditable;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Question {
+public class Question extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -23,7 +18,8 @@ public class Question {
 
     private String content;
 
-    private long viewCount;
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
+    private QuestionView questionView;
 
     // 답변 수와 투표 수를 임시 저장하기 위해 사용
     @Transient
@@ -31,21 +27,4 @@ public class Question {
 
     @Transient
     private long voteCount;
-
-    // Spring Security authentication 구현 후 @CreatedBy auditing 기능으로 입력 예정
-    // 구현 전에는 수동으로 입력
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-
-    public void countView() {
-        viewCount++;
-    }
 }

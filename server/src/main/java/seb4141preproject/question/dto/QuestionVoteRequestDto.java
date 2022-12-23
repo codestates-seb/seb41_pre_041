@@ -1,7 +1,7 @@
 package seb4141preproject.question.dto;
 
 import lombok.Getter;
-import seb4141preproject.Vote;
+import seb4141preproject.entity.Vote;
 
 import javax.validation.constraints.NotNull;
 

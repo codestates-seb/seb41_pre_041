@@ -6,13 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import seb4141preproject.Member;
+import org.springframework.transaction.annotation.Transactional;
+import seb4141preproject.entity.Member;
 import seb4141preproject.question.entity.Question;
+import seb4141preproject.question.entity.QuestionView;
 import seb4141preproject.question.repository.QuestionRepository;
 
 @Slf4j
 @AllArgsConstructor
 @Service
+@Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionVoteService questionVoteService;
@@ -23,9 +26,13 @@ public class QuestionService {
         question.setMember(new Member());
         question.getMember().setId(1L);
 
+        question.setQuestionView(new QuestionView());
+        question.getQuestionView().setQuestion(question);
+
         return questionRepository.save(question);
     }
 
+    @Transactional(readOnly = true)
     public Page<Question> readQuestions(int page, int size, String q) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 
@@ -36,7 +43,7 @@ public class QuestionService {
 
         questions.forEach(question -> {
 //            question.setAnswerCount(getAnswerCount(question.getId());
-            question.setVoteCount(questionVoteService.getQuestionVoteCount(question.getId()));
+            question.setVoteCount(questionVoteService.readQuestionVoteCount(question.getId()));
         });
 
         return questions;
@@ -44,8 +51,8 @@ public class QuestionService {
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
-        question.countView();
-        question.setVoteCount(questionVoteService.getQuestionVoteCount(id));
+        question.getQuestionView().countView();
+        question.setVoteCount(questionVoteService.readQuestionVoteCount(id));
 
         return question;
     }

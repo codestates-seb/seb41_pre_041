@@ -3,14 +3,16 @@ package seb4141preproject.question.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import seb4141preproject.Member;
-import seb4141preproject.Vote;
+import org.springframework.transaction.annotation.Transactional;
+import seb4141preproject.entity.Member;
+import seb4141preproject.entity.Vote;
 import seb4141preproject.question.entity.QuestionVote;
 import seb4141preproject.question.repository.QuestionVoteRepository;
 
 @Slf4j
 @AllArgsConstructor
 @Service
+@Transactional
 public class QuestionVoteService {
     private final QuestionVoteRepository questionVoteRepository;
 
@@ -23,11 +25,13 @@ public class QuestionVoteService {
         return questionVoteRepository.save(questionVote);
     }
 
-    public long getQuestionVoteCount(long questionId) {
+    @Transactional(readOnly = true)
+    public long readQuestionVoteCount(long questionId) {
         return questionVoteRepository.countByQuestion_IdAndVoteStatus(questionId, Vote.VoteStatus.UPVOTE)
                 - questionVoteRepository.countByQuestion_IdAndVoteStatus(questionId, Vote.VoteStatus.DOWNVOTE);
     }
 
+    @Transactional(readOnly = true)
     public QuestionVote readQuestionVote(long questionId) {
         // Spring Security에서 인증된 principal을 받아와야 한다.
         // 인증 구현 전까지는 mock 사용

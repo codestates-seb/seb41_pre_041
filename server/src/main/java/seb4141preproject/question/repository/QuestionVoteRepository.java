@@ -1,7 +1,7 @@
 package seb4141preproject.question.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import seb4141preproject.Vote;
+import seb4141preproject.entity.Vote;
 import seb4141preproject.question.entity.QuestionVote;
 
 import java.util.Optional;

@@ -14,6 +14,7 @@ public interface QuestionMapper {
 
     @Mapping(target = "memberId", source = "member.id")
     @Mapping(target = "memberName", source = "member.name")
+    @Mapping(target = "viewCount", source = "questionView.viewCount")
     QuestionResponseDto questionToQuestionResponseDto(Question question);
 
     List<QuestionResponseDto> questionsToQuestionResponseDtos(List<Question> questions);

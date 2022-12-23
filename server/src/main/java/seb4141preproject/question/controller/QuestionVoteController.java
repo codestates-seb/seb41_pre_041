@@ -47,7 +47,7 @@ public class QuestionVoteController {
     public ResponseEntity<QuestionVoteCountDto> getQuestionVoteCount(
             @Positive @PathVariable("question-id") long questionId
     ) {
-        long voteCount = questionVoteService.getQuestionVoteCount(questionId);
+        long voteCount = questionVoteService.readQuestionVoteCount(questionId);
 
         return new ResponseEntity<>(new QuestionVoteCountDto(questionId, voteCount), HttpStatus.OK);
     }

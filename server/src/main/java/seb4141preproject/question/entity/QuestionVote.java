@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import seb4141preproject.Vote;
+import seb4141preproject.entity.Vote;
 
 import javax.persistence.*;
 
