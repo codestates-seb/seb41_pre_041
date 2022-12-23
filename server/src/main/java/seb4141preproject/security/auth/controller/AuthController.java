@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,10 +32,11 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto) { //@AuthenticationPrincipal
+    public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto,
+                                 @AuthenticationPrincipal User user) {
         System.out.println("Logout EndPoint!");
-//        if (member != null)
-        authService.logout(tokenRequestDto);
+        System.out.println(user.getUsername());
+        if (user != null) authService.logout(tokenRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
