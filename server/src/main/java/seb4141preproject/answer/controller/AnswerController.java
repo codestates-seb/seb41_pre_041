@@ -3,7 +3,6 @@ package seb4141preproject.answer.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +11,7 @@ import seb4141preproject.answer.entity.Answer;
 import seb4141preproject.answer.mapper.AnswerMapper;
 import seb4141preproject.answer.service.AnswerService;
 import seb4141preproject.dto.MultiResponseDto;
+import seb4141preproject.dto.PageInfo;
 import seb4141preproject.dto.SingleResponseDto;
 
 import javax.validation.Valid;
@@ -20,7 +20,8 @@ import java.util.List;
 
 /**
  * - AnswerController_v1
- * Member/Question 연결 필요
+ * - Member/Question 연결 필요
+ * - getAnswers 응답 구조 테스트 필요
  */
 
 @RestController
@@ -55,6 +56,7 @@ public class AnswerController {
         Answer answer =
                 answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody));
         AnswerDto.Response response = mapper.answerToAnswerResponse(answer);
+
         return new ResponseEntity<>(
                 new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -70,13 +72,14 @@ public class AnswerController {
 
     @GetMapping
     public ResponseEntity getAnswers(@Positive @RequestParam int page,
-                                    @Positive @RequestParam int size) {
-        Page<Answer> pageAnswers = answerService.findAnswers(page - 1, size);
-        List<Answer> answers = pageAnswers.getContent();
+                                    @Positive @RequestParam int size,
+                                     @Positive @RequestParam long questionId) {
+        Page<Answer> answers = answerService.findAnswers(page - 1, size, questionId);
+        List<Answer> answerList = answers.getContent();
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.answersToAnswerResponses(answers),pageAnswers),
-                HttpStatus.OK);
+                new MultiResponseDto<>(mapper.answersToAnswerResponses(answerList),answers),
+                        HttpStatus.OK);
     }
 
     @DeleteMapping("/{answer-id}")

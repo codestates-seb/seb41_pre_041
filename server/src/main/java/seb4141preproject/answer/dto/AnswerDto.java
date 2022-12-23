@@ -10,9 +10,9 @@ public class AnswerDto {
     @Getter
     @AllArgsConstructor
     public static class Post {
-        @NotBlank
+
         private long memberId;
-        @NotBlank
+
         private long questionId;
         @NotBlank
         private String description;
