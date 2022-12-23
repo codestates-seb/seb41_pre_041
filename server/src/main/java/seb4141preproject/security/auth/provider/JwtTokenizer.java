@@ -1,4 +1,4 @@
-package seb4141preproject.security.auth;
+package seb4141preproject.security.auth.provider;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

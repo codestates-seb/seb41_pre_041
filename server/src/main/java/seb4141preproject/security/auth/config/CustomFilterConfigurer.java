@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import seb4141preproject.security.auth.JwtTokenizer;
+import seb4141preproject.security.auth.provider.JwtTokenizer;
 import seb4141preproject.security.auth.filter.JwtAuthenticationFilter;
 
 @RequiredArgsConstructor

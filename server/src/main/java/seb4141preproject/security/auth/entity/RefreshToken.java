@@ -3,7 +3,6 @@ package seb4141preproject.security.auth.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import seb4141preproject.security.audit.DataTable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "REFRESH_TOKEN")
 @Entity
-public class RefreshToken extends DataTable {
+public class RefreshToken {
 
     @Id
     @Column(name = "RT_KEY", length = 700)

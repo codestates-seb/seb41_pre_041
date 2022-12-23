@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import seb4141preproject.security.auth.JwtTokenizer;
+import seb4141preproject.security.auth.provider.JwtTokenizer;
 import seb4141preproject.security.auth.dto.LoginDto;
 import seb4141preproject.security.auth.dto.TokenDto;
 import seb4141preproject.security.auth.dto.TokenRequestDto;
