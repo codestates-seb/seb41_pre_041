@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import seb4141preproject.members.entity.Member;
 import seb4141preproject.members.repository.MemberRepository;
-import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
+import seb4141preproject.security.auth.utils.*;
 
 import java.util.Collection;
 import java.util.Optional;

@@ -9,10 +9,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import seb4141preproject.security.auth.provider.JwtTokenizer;
-import seb4141preproject.security.auth.handler.CustomAccessDeniedHandler;
-import seb4141preproject.security.auth.handler.CustomAuthenticationEntryPoint;
-import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
+import seb4141preproject.security.auth.provider.*;
+import seb4141preproject.security.auth.handler.*;
+import seb4141preproject.security.auth.utils.*;
 
 @EnableWebSecurity
 public class SecurityConfig {

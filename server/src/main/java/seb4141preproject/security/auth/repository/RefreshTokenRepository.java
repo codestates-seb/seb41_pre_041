@@ -1,7 +1,7 @@
 package seb4141preproject.security.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import seb4141preproject.security.auth.entity.RefreshToken;
+import seb4141preproject.security.auth.entity.*;
 
 import java.util.Optional;
 

@@ -5,8 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import seb4141preproject.security.auth.utils.ErrorResponder;
-import seb4141preproject.security.auth.utils.ErrorResponse;
+import seb4141preproject.security.auth.utils.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
