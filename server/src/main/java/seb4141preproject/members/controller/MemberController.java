@@ -35,8 +35,9 @@ public class MemberController {
 // 요청 URL에 매핑된 API에 대한 설명
     public ResponseEntity postMember(@RequestBody @Valid MemberPostDto memberPostDto) {
         Member member = mapper.memberPostDtoToMember(memberPostDto);
+        Member createdMember = memberService.createMember(member);
 
-        return new ResponseEntity(mapper.memberToMemberResponseDto(member),
+        return new ResponseEntity(mapper.memberToMemberResponseDto(createdMember),
                HttpStatus.CREATED);
     }
 

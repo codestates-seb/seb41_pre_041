@@ -2,10 +2,12 @@ package seb4141preproject.members.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.members.entity.*;
 import seb4141preproject.members.repository.*;
+import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,17 +19,24 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public Member createMember(Member member) throws IllegalAccessException {
+    public Member createMember(Member member) {
 
         // 기존 이메일 존재 / 회원 생성 실패
-        Optional<Member> optionalMember = memberRepository.findByEmail(member.getEmail());
-        optionalMember.orElseThrow(() ->
-                new IllegalAccessException("이미 가입된 회원입니다."));
+        verifyExistsEmail(member.getEmail());
+        // password 암호화
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+        // User Role 저장
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
 
-        member.setRoles(List.of("ROLE_USER"));
+        Member savedMember = memberRepository.save(member);
+
         // DB에 회원 정보 저장
-        return memberRepository.save(member);
+        return savedMember;
     }
 
     public Member updateMember(Member member) { // 매개변수 member -> patchDto를 member로 변환한 객체
@@ -43,19 +52,24 @@ public class MemberService {
         return savedMember;
     }
    public Member findMember(long id) {
-       Optional<Member> optional = memberRepository.findById(id);
-
-       return optional.get();
+       return findVerifiedMember(id);
    }
    public void deleteMember (long id) {
         memberRepository.deleteById(id);
    }
 
-    private Member findVerifiedMember(long id) {
+   private void verifyExistsEmail(String email) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        if (optionalMember.isPresent()) {
+            throw new RuntimeException("이미 가입된 회원입니다.");
+        }
+   }
+
+   private Member findVerifiedMember(long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         Member findMember = optionalMember.orElseThrow(() ->
                 new RuntimeException("MEMBER NOT FOUND"));
 
         return findMember;
-    }
+   }
 }
