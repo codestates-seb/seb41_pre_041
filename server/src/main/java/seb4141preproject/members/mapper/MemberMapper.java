@@ -1,10 +1,8 @@
 package seb4141preproject.members.mapper;
 
 import org.springframework.stereotype.Component;
-import seb4141preproject.members.dto.MemberPatchDto;
-import seb4141preproject.members.dto.MemberPostDto;
-import seb4141preproject.members.dto.MemberResponseDto;
-import seb4141preproject.members.entity.Member;
+import seb4141preproject.members.dto.*;
+import seb4141preproject.members.entity.*;
 
 import java.sql.Array;
 import java.util.ArrayList;

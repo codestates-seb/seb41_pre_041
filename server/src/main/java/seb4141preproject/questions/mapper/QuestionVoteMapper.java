@@ -1,0 +1,16 @@
+package seb4141preproject.questions.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import seb4141preproject.questions.dto.QuestionVoteRequestDto;
+import seb4141preproject.questions.dto.QuestionVoteResponseDto;
+import seb4141preproject.questions.entity.QuestionVote;
+
+@Mapper(componentModel = "spring")
+public interface QuestionVoteMapper {
+    QuestionVote questionVoteRequestDtoToQuestionVote(QuestionVoteRequestDto requestDto);
+
+    @Mapping(target = "questionId", source = "question.id")
+    @Mapping(target = "memberId", source = "member.id")
+    QuestionVoteResponseDto questionVoteToQuestionVoteResponseDto(QuestionVote questionVote);
+}

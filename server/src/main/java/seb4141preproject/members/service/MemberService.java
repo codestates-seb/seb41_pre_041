@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.members.entity.Member;
-import seb4141preproject.members.repository.MemberRepository;
+import seb4141preproject.members.entity.*;
+import seb4141preproject.members.repository.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +21,9 @@ public class MemberService {
     public Member createMember(Member member) throws IllegalAccessException {
 
         // 기존 이메일 존재 / 회원 생성 실패
-        Member findMember = memberRepository.findByEmail(member.getEmail());
-        if (findMember != null)
-            throw new IllegalAccessException("이미 가입된 회원입니다.");
+        Optional<Member> optionalMember = memberRepository.findByEmail(member.getEmail());
+        optionalMember.orElseThrow(() ->
+                new IllegalAccessException("이미 가입된 회원입니다."));
 
         member.setRoles(List.of("ROLE_USER"));
         // DB에 회원 정보 저장

@@ -35,7 +35,9 @@ public class Member {
     @ElementCollection
     private List<String> roles;
 
-    // mappedBy 자신의 연관계의 주인이 아닌 것을 표시 하는 설정
+//    마이페이지에서 본인이 작성한 questions 확인 기능이 있을때 mapping 해도 상관 없을듯?
+
+//    mappedBy 자신의 연관계의 주인이 아닌 것을 표시 하는 설정
 //    @OneToMany(cascade ={CascadeType.ALL},mappedBy = "question")
 //    //memeber테이블 에서 Question 일대 다 관계
 //    @JsonIgnore // @JsonIgnore를 붙이면 데이터를 주고 받을 때 해당 데이터는 'lgnore'되어서 응답값에 보이지 않게 된다.

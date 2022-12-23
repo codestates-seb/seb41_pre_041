@@ -6,14 +6,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import seb4141preproject.members.mapper.MemberMapper;
+import seb4141preproject.members.repository.MemberRepository;
 import seb4141preproject.security.auth.provider.JwtTokenizer;
 import seb4141preproject.security.auth.dto.LoginDto;
 import seb4141preproject.security.auth.dto.TokenDto;
 import seb4141preproject.security.auth.dto.TokenRequestDto;
 import seb4141preproject.security.auth.entity.RefreshToken;
 import seb4141preproject.security.auth.repository.RefreshTokenRepository;
-import seb4141preproject.testMember.mapper.MemberMapper;
-import seb4141preproject.testMember.repository.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
