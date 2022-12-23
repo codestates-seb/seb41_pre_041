@@ -7,12 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import seb4141preproject.PaginatedResponseDto;
-import seb4141preproject.question.service.QuestionService;
+import seb4141preproject.dto.PaginatedResponseDto;
 import seb4141preproject.question.dto.QuestionRequestDto;
 import seb4141preproject.question.dto.QuestionResponseDto;
 import seb4141preproject.question.entity.Question;
 import seb4141preproject.question.mapper.QuestionMapper;
+import seb4141preproject.question.service.QuestionService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

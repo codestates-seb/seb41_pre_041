@@ -1,4 +1,4 @@
-package seb4141preproject.entity;
+package seb4141preproject.member;
 
 import lombok.Getter;
 import lombok.Setter;

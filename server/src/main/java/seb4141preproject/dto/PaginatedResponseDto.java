@@ -1,4 +1,4 @@
-package seb4141preproject;
+package seb4141preproject.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

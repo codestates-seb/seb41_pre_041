@@ -1,10 +1,10 @@
-package seb4141preproject;
+package seb4141preproject.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import seb4141preproject.entity.Member;
+import seb4141preproject.member.Member;
 
 import java.util.Optional;
 
