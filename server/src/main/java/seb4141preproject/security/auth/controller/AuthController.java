@@ -32,8 +32,6 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto,
                                  @AuthenticationPrincipal User user) {
-        System.out.println("Logout EndPoint!");
-        System.out.println(user.getUsername());
         if (user != null) authService.logout(tokenRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

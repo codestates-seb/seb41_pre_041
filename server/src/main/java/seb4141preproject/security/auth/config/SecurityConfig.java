@@ -29,6 +29,9 @@ public class SecurityConfig {
     @CrossOrigin // TODO : 구체적인 CORS 설정 필요
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .headers().frameOptions().disable() // h2 데이터베이스 확인 가능하게
+                .and()
+
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -46,6 +49,7 @@ public class SecurityConfig {
 
                 .authorizeRequests(auth -> auth // TODO : 회원, 비회원 권한 조정 필요
                         .antMatchers("/members/test").hasRole("USER")
+                        .antMatchers("/h2/**").permitAll() // h2 데이터베이스 확인 가능하게
                         .antMatchers(HttpMethod.POST, "/questions").hasRole("USER") // 질문 작성
                         .antMatchers(HttpMethod.PATCH, "/questions/{question-id}").hasRole("USER") // 질문 수정
                         .antMatchers(HttpMethod.DELETE, "/questions/{question-id}").hasRole("USER") // 질문 삭제

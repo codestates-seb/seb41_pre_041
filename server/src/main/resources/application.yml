@@ -15,3 +15,7 @@ spring:
         hbm2ddl:
           import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     open-in-view: false
+jwt:
+  key: kevin12341234123412341234123412341234adsfgeeettwaeaafasfsadf
+  ATExpiration: 10
+  RTExpiration: 420

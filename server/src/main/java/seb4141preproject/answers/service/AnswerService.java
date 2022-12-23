@@ -39,9 +39,9 @@ public class AnswerService {
 //        verifiedMember(answer.getMember().getId());
 //        verifiedQuestion(answer.getQuestion().getId());
 
-        Answer savedanswer = answerRepository.save(answer);
+        Answer savedAnswer = answerRepository.save(answer);
 
-        return savedanswer;
+        return savedAnswer;
     }
 
     public Answer updateAnswer(Answer answer) {
