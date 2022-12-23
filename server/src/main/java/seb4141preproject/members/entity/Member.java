@@ -20,7 +20,7 @@ public class Member {
 
     @Id // @Id는 해당 프로퍼티가 테이블의 primary key 역할이라는 것을 지정
     @Column(name ="member_id")
-    @GeneratedValue(strategy =  GenerationType.AUTO) // ID가 자동으로 생성 및 증가한다.
+    @GeneratedValue(strategy =  GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다.
     private long id;
 
     @Column(length = 50, nullable = false)
