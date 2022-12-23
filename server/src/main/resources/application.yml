@@ -1,8 +1,10 @@
 spring:
-  sql:
-    init:
-      mode: always
-      data-locations: classpath*:db/schema.sql
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:test
   jpa:
     hibernate:
       ddl-auto: create
@@ -10,18 +12,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/memberTest
-    username: root
-    password: Dkgod134652!!
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-jwt:
-  key: ${JWT_SECRET_KEY}
-  ATExpiration: 1
-  RTExpiration: 420
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+    open-in-view: false
