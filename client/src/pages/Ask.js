@@ -1,9 +1,22 @@
+import styled from "styled-components";
+import AskView from "../components/Ask/AskView";
 import Footer from "../components/Footer";
 
+const AskArticle = styled.article`
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9f9;
+`;
+
 const Ask = () => {
-  return <div>여기는 질문 작성 페이지!
-    <Footer/>
-  </div>;
+  return (
+    <>
+      <AskArticle>
+        <AskView />
+      </AskArticle>
+      <Footer />
+    </>
+  );
 };
 
 export default Ask;

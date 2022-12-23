@@ -1,7 +1,18 @@
-import React from "react";
+import styled from "styled-components";
+import EditAnswerView from "../components/EditAnswer.js/EditAnswerView";
+
+const EditAArticle = styled.article`
+  height: 85vh;
+  padding: 40px;
+  display: flex;
+`;
 
 const EditAnswer = () => {
-  return <div>여기는 답변 수정 페이지!</div>;
+  return (
+    <EditAArticle>
+      <EditAnswerView />
+    </EditAArticle>
+  );
 };
 
 export default EditAnswer;
