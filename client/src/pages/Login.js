@@ -1,7 +1,20 @@
-import React from "react";
+import styled from "styled-components";
+import LoginView from "../components/Login/LoginView";
+
+const LoginArticle = styled.article`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f2f3;
+`;
 
 const Login = () => {
-  return <div>여기는 로그인 페이지!</div>;
+  return (
+    <LoginArticle>
+      <LoginView />
+    </LoginArticle>
+  );
 };
 
 export default Login;
