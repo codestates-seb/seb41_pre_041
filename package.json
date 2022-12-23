@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "react-js-pagination": "^3.0.3"
+    "react-js-pagination": "^3.0.3",
+    "react-social-login": "^3.4.16"
   }
 }
