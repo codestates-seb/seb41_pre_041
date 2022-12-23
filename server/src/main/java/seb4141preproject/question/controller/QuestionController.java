@@ -1,4 +1,4 @@
-package seb4141preproject.question;
+package seb4141preproject.question.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import seb4141preproject.PaginatedResponseDto;
-import seb4141preproject.question.dto.*;
+import seb4141preproject.question.service.QuestionService;
+import seb4141preproject.question.dto.QuestionRequestDto;
+import seb4141preproject.question.dto.QuestionResponseDto;
 import seb4141preproject.question.entity.Question;
-import seb4141preproject.question.entity.QuestionVote;
+import seb4141preproject.question.mapper.QuestionMapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -75,54 +77,5 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteQuestion(@Positive @PathVariable("question-id") long id) {
         questionService.deleteQuestion(id);
-    }
-
-    @PostMapping("/{question-id}/votes")
-    public ResponseEntity<QuestionVoteResponseDto> postQuestionVote(
-            @Positive @PathVariable("question-id") long questionId,
-            @Valid @RequestBody QuestionVoteRequestDto requestDto
-    ) {
-        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
-        questionVote.setQuestion(new Question());
-        questionVote.getQuestion().setId(questionId);
-
-        QuestionVote createdQuestionVote = questionService.createQuestionVote(questionVote);
-
-        return new ResponseEntity<>(
-                mapper.questionVoteToQuestionVoteResponseDto(createdQuestionVote),
-                HttpStatus.CREATED
-        );
-    }
-
-    @GetMapping("/{question-id}/votes/count")
-    public ResponseEntity<QuestionVoteCountDto> getQuestionVoteCount(
-            @Positive @PathVariable("question-id") long questionId
-    ) {
-        long voteCount = questionService.getQuestionVoteCount(questionId);
-
-        return new ResponseEntity<>(new QuestionVoteCountDto(questionId, voteCount), HttpStatus.OK);
-    }
-
-    @GetMapping("/{question-id}/votes/me")
-    public ResponseEntity<QuestionVoteResponseDto> getQuestionVote(
-            @Positive @PathVariable("question-id") long questionId
-    ) {
-        QuestionVote questionVote = questionService.readQuestionVote(questionId);
-
-        return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(questionVote), HttpStatus.OK);
-    }
-
-    @PatchMapping("/{question-id}/votes/me")
-    public ResponseEntity<QuestionVoteResponseDto> patchQuestionVote(
-            @Positive @PathVariable("question-id") long questionId,
-            @Valid @RequestBody QuestionVoteRequestDto requestDto
-    ) {
-        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
-        questionVote.setQuestion(new Question());
-        questionVote.getQuestion().setId(questionId);
-
-        QuestionVote updatedQuestionVote = questionService.updateQuestionVote(questionVote);
-
-        return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(updatedQuestionVote), HttpStatus.OK);
     }
 }
