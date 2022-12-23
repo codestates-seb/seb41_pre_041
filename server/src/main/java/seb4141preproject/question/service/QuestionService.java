@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.entity.Member;
 import seb4141preproject.question.entity.Question;
 import seb4141preproject.question.entity.QuestionView;
 import seb4141preproject.question.repository.QuestionRepository;
@@ -19,13 +18,9 @@ import seb4141preproject.question.repository.QuestionRepository;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionVoteService questionVoteService;
+//    private final AnswerService answerService;
 
     public Question createQuestion(Question question) {
-        // Spring Security에서 인증된 principal을 받아와야 한다.
-        // 인증 구현 전까지는 mock 사용
-        question.setMember(new Member());
-        question.getMember().setId(1L);
-
         question.setQuestionView(new QuestionView());
         question.getQuestionView().setQuestion(question);
 
@@ -42,7 +37,7 @@ public class QuestionService {
                 : questionRepository.findByQ(q, pageRequest);
 
         questions.forEach(question -> {
-//            question.setAnswerCount(getAnswerCount(question.getId());
+//            question.setAnswerCount(answerService.readAnswerCount(question.getId());
             question.setVoteCount(questionVoteService.readQuestionVoteCount(question.getId()));
         });
 
@@ -52,6 +47,7 @@ public class QuestionService {
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
         question.getQuestionView().countView();
+//        question.setAnswerCount(answerService.readAnswerCount(id);
         question.setVoteCount(questionVoteService.readQuestionVoteCount(id));
 
         return question;

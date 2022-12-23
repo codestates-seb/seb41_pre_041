@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.entity.Member;
 import seb4141preproject.entity.Vote;
 import seb4141preproject.question.entity.QuestionVote;
 import seb4141preproject.question.repository.QuestionVoteRepository;
@@ -17,11 +16,6 @@ public class QuestionVoteService {
     private final QuestionVoteRepository questionVoteRepository;
 
     public QuestionVote createQuestionVote(QuestionVote questionVote) {
-        // Spring Security에서 인증된 principal을 받아와야 한다.
-        // 인증 구현 전까지는 mock 사용
-        questionVote.setMember(new Member());
-        questionVote.getMember().setId(1L);
-
         return questionVoteRepository.save(questionVote);
     }
 
