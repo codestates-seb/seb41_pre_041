@@ -25,7 +25,7 @@ public class AnswerService {
     }
 
     public Answer createAnswer(Answer answer) {
-        // Member, Question 연결 전 목업 데이터 사용
+        // Member, Question 연결 전 목업 데이터 사용 세팅
         Member member = new Member();
         member.setId(1L);
 

@@ -25,6 +25,7 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
+    // 글자 수 지정
     @Column(nullable = false)
     private String description;
 
