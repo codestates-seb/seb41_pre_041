@@ -1,26 +1,19 @@
 import React from "react";
-import SocialButton from './SocialButton';
+import GoogleLogin from 'react-google-login';
 
-export default function GoogleAuth() {
-
-    const handleSocialLogin = (user) => {
-        console.log(user);
-    };
-
-    const handleSocialLoginFailure = (err) => {
-        console.error(err);
-    };
+function GoogleAuth() {
+    function handleGoogleSuccess(response) {
+        console.log(response);
+    }
 
     return (
-        <div>
-            <SocialButton
-                provider="google"
-                appId={process.env.GOOGLE_LOGIN_APP_ID}
-                onLoginSuccess={handleSocialLogin}
-                onLoginFailure={handleSocialLoginFailure}
-            >
-                Googleログイン
-            </SocialButton>
+        <div className="App">
+            <GoogleLogin
+                clientId={process.env.REACT_APP_Google}
+                onSuccess={handleGoogleSuccess}
+            />
         </div>
     );
 }
+
+export default GoogleAuth;

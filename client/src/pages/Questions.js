@@ -25,7 +25,7 @@ const Questions = () => {
       <div>
         <Header>
           <h1 className="all-questions">All Questions
-            <AskButton>Ask Question</AskButton></h1></Header>
+            <AskButton> <Link to="/ask">Ask Question</Link></AskButton></h1></Header>
         <Quantity><h4>{Question.length} questions</h4></Quantity>
         <div className="question">
           {Question.map(question => (
@@ -77,7 +77,7 @@ border-top: 1px solid rgb(220, 224, 226);
 
 const AskButton = styled.button`
 background-color: #137EFF;
-color: white;
+text: white;
 border-radius: 2px;
 width: 94px;
 height: 36px;
