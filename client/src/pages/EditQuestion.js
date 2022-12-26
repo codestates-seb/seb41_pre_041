@@ -7,6 +7,14 @@ const EditQuestion = () => {
   const [title, setTitle] = useState('기존 제목');
   const [post, setPost] = useState('기존포스팅');
 
+  const handleSaveClick = () => {
+    setPost({ post })
+  }
+  const cancelClick = () => {
+    setPost()
+  }
+
+
   const editorRef = useRef();
   const handleEditClick = () => {
     // 입력창에 입력한 내용을 HTML 태그 형태로 취득
@@ -21,19 +29,11 @@ const EditQuestion = () => {
   Because community members review edits, please try to make the post substantially better than
   how you found it, for example, by fixing grammar or adding additional resources and hyperlinks.`
 
-  const sideHead = `How to edit`
 
-  const sidePrecaution =
-    `• Correct minor types or mistakes
-  • Clarify meaning without changing it
-  • Add related resources or links
-  • Always respect the author’s intent
-  • Don’t use edits to reply to the author`
 
   return (
     <div>
-      <Precaution>{headPrecaution}
-        <SidePrecaution>{sideHead}<br />{sidePrecaution}</SidePrecaution></Precaution>
+      <Precaution>{headPrecaution}</Precaution>
       <div className="edit-title"><div>Title</div>
         <input value={title} onChange={event => setTitle(event.target.value)} />
       </div>
@@ -56,8 +56,8 @@ const EditQuestion = () => {
           ]}
           useCommandShortcut={false} // 키보드 입력 컨트롤 방지
         ></Editor>
-        <button onClick={handleEditClick}>Save edits</button>
-        <button>Cancel</button>
+        <button onClick={handleEditClick} onChange={handleSaveClick}>Save edits</button>
+        <button onClick={cancelClick}>Cancel</button>
 
       </div>
     </div >
@@ -70,15 +70,6 @@ background: rgb(255, 248, 220);
 width: 100vw
 padding: 10px;
 border: 1px solid rgb(220, 224, 226);
-`;
-
-
-const SidePrecaution = styled.div`
-float: right;
-white-space: pre-line;
-width: 300px;
-background: rgb(255, 248, 220);
-padding: 10px;
 `;
 
 export default EditQuestion;

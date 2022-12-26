@@ -5,45 +5,51 @@ import { ReactComponent as Google } from "../assets/google-icon.svg";
 import { ReactComponent as Github } from "../assets/github-icon.svg";
 import { ReactComponent as Facebook } from "../assets/facebook-icon.svg";
 
-const Signup = (props) => {
+const Signup = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
+
+  //오류메시지 상태저장
+  const [emailMessage, setEmailMessage] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState('')
+
+  // 유효성 검사
+  const [isEmail, setIsEmail] = useState(false)
+  const [isPassword, setIsPassword] = useState(false)
 
   const onNameHandler = (event) => {
     setName(event.currentTarget.value)
   }
   const onEmailHandler = (event) => {
-    setEmail(event.currentTarget.value)
+    const currentEmail = event.currentTarget.value
+    setEmail(currentEmail)
+    const emailRegExp = /\S+@\S+\.\S+/;
+    if (!emailRegExp.test(currentEmail)) {
+      setEmailMessage('Please enter a valid email address.');
+      setIsEmail(false);
+    } else {
+      setEmailMessage('')
+      setIsEmail(true);
+    }
   }
 
   const onPasswordHandler = (event) => {
-    setPassword(event.currentTarget.value)
+    const currentPwd = event.currentTarget.value
+    setPassword(currentPwd)
+    const pwdRegExp = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
+    if (!pwdRegExp.test(currentPwd)) {
+      setPasswordMessage('Please enter a valid Password.')
+      setIsPassword(false)
+    } else {
+      setPasswordMessage('')
+      setIsPassword(true)
+    }
   }
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
   }
-
-  //   if (password !== /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/) {
-  //     return alert('password is not valid')
-  //   }
-
-  //   let body = {
-  //     name: name,
-  //     email: email,
-  //     password: password,
-  //   }
-
-  //   dispatch(registerUser(body))
-  //     .then(response => {
-  //       if (response.payload.success) {
-  //         props.history.push('/loginPage')
-  //       } else {
-  //         alert('Error')
-  //       }
-  //     })
-  // }
 
   const passwordVaild = `Passwords must contain at least eight characters, including at least 1 special letter and 1 number.`
 
@@ -82,6 +88,7 @@ const Signup = (props) => {
               </label>
               <div className="email-input">
                 <input id="email" value={email} onChange={onEmailHandler}></input>
+                <p className="message">{emailMessage}</p>
               </div>
             </div>
             <div className="password">
@@ -89,12 +96,13 @@ const Signup = (props) => {
                 Password
               </label>
               <div className="password-input">
-                <input id="password" value={password} onChange={onPasswordHandler}></input>
+                <input id="password" type="password" value={password} onChange={onPasswordHandler}></input>
+                <p className="message">{passwordMessage}</p>
               </div>
               <div className="password-valid">{passwordVaild}</div>
             </div>
             <div className="Signup">
-              <button className="signup-btn">Sign up</button>
+              <button className="signup-btn" type="submit">Sign up</button>
             </div>
           </form>
         </section >
@@ -161,6 +169,10 @@ const SignupContainer = styled.section`
         background - color: #364984;
       color: #ffffff;
     }
+  }
+
+  .message {
+    color: red;
   }
 
       .account-signup-container {
