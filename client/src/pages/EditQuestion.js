@@ -7,14 +7,6 @@ const EditQuestion = () => {
   const [title, setTitle] = useState('기존 제목');
   const [post, setPost] = useState('기존포스팅');
 
-  const handleSaveClick = () => {
-    setPost({ post })
-  }
-  const cancelClick = () => {
-    setPost()
-  }
-
-
   const editorRef = useRef();
   const handleEditClick = () => {
     // 입력창에 입력한 내용을 HTML 태그 형태로 취득
@@ -56,8 +48,8 @@ const EditQuestion = () => {
           ]}
           useCommandShortcut={false} // 키보드 입력 컨트롤 방지
         ></Editor>
-        <button onClick={handleEditClick} onChange={handleSaveClick}>Save edits</button>
-        <button onClick={cancelClick}>Cancel</button>
+        <button onClick={handleEditClick} onChange={event => setPost(event.target.value)}>Save edits</button>
+        <button>Cancel</button>
 
       </div>
     </div >
