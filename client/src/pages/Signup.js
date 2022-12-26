@@ -1,50 +1,259 @@
 import React, { useState } from "react";
+// import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom'
 import styled from 'styled-components';
-import GoogleAuth from '../components/GoogleAuth';
+import { ReactComponent as Google } from "../assets/google-icon.svg";
+import { ReactComponent as Github } from "../assets/github-icon.svg";
+import { ReactComponent as Facebook } from "../assets/facebook-icon.svg";
 
 const Signup = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
 
+  //오류메시지 상태저장
+  const [emailMessage, setEmailMessage] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState('')
+
+  // 유효성 검사
+  const [isEmail, setIsEmail] = useState(false)
+  const [isPassword, setIsPassword] = useState(false)
+
   const onNameHandler = (event) => {
     setName(event.currentTarget.value)
   }
   const onEmailHandler = (event) => {
-    setEmail(event.currentTarget.value)
+    const currentEmail = event.currentTarget.value
+    setEmail(currentEmail)
+    const emailRegExp = /\S+@\S+\.\S+/;
+    if (!emailRegExp.test(currentEmail)) {
+      setEmailMessage('Please enter a valid email address.');
+      setIsEmail(false);
+    } else {
+      setEmailMessage('')
+      setIsEmail(true);
+    }
   }
 
   const onPasswordHandler = (event) => {
-    setPassword(event.currentTarget.value)
+    const currentPwd = event.currentTarget.value
+    setPassword(currentPwd)
+    const pwdRegExp = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
+    if (!pwdRegExp.test(currentPwd)) {
+      setPasswordMessage('Please enter a valid Password.')
+      setIsPassword(false)
+    } else {
+      setPasswordMessage('')
+      setIsPassword(true)
+    }
+  }
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
   }
 
   const passwordVaild = `Passwords must contain at least eight characters, including at least 1 special letter and 1 number.`
-
-
+  const signupCheckbox = `Opt-in to receive occasional product updates, user research invitations, company announcements, and digests.`
   return (
     <div>
-      <SocialSignup>
-        <GoogleAuth />
-      </SocialSignup>
-      <div class="signup">
-        <form>
-          <label>Display name</label>
-          <div><input type="text" value={name} onChange={onNameHandler} /></div>
-          <label>Email</label>
-          <div><input type="email" value={email} onChange={onEmailHandler} /></div>
-          <label>Password</label>
-          <div><input type="password" value={password} onChange={onPasswordHandler} /></div>
-          <div>{passwordVaild}</div>
-          <div><button type="submit">Sign up</button></div>
-        </form>
-      </div>
-    </div>
+      <Container>
+        <LeftSideContainer>
+          <h1>Join the Stack Overflow community</h1>
+          <ul>
+            <li>Get unstuck — ask a question</li>
+            <li>Unlock new privileges like voting and commenting</li>
+            <li>Save your favorite tags, filters, and jobs</li>
+            <li>Earn reputation and badges</li>
+            <div>Collaborate and share knowledge with a private group for FREE.
+              <Link to="https://stackoverflow.co/teams/?utm_source=so-owned&utm_medium=product&utm_campaign=free-50&utm_content=public-sign-up"><div>Get Stack Overflow for Teams free for up to 50 users.</div></Link>
+            </div>
+          </ul>
+        </LeftSideContainer>
+        < SignupContainer >
+          {/*소셜 로그인 폼*/}
+          <section className="social-signup-container">
+            <button className="google">
+              <Google />
+              <span>Sign up with Google</span>
+            </button>
+            <button className="github">
+              <Github />
+              <span>Sign up with Github</span>
+            </button>
+            <button className="facebook">
+              <Facebook />
+              <span>Sign up with Facebook</span>
+            </button>
+          </section>
+          {/*이메일 비밀번호 입력창*/}
+          < section className="account-signup-container">
+            <form onSubmit={onSubmitHandler}>
+              <div className="name">
+                <label htmlFor="name" className="name-label">
+                  Display name
+                </label>
+                <div className="name-input">
+                  <input id="name" value={name} onChange={onNameHandler}></input>
+                </div>
+              </div>
+              <div className="email">
+                <label htmlFor="email" className="email-label">
+                  Email
+                </label>
+                <div className="email-input">
+                  <input id="email" value={email} onChange={onEmailHandler}></input>
+                  <p className="message">{emailMessage}</p>
+                </div>
+              </div>
+              <div className="password">
+                <label htmlFor="password" className="password-label">
+                  Password
+                </label>
+                <div className="password-input">
+                  <input id="password" type="password" value={password} onChange={onPasswordHandler}></input>
+                  <p className="message">{passwordMessage}</p>
+                </div>
+                <div className="password-valid">{passwordVaild}</div>
+              </div>
+              <div classsName="checkbox-wrap"><input type="checkbox" id="sentence" /><label for="sentence">{signupCheckbox}</label></div>
+              <div className="Signup">
+                <button className="signup-btn" type="submit">Sign up</button>
+              </div>
+            </form>
+            <Policy>By clicking “Sign up”, you agree to our<Link to="https://stackoverflow.com/legal/terms-of-service/public"><div>terms of service,</div></Link><Link to="https://stackoverflow.com/legal/privacy-policy"><div>privacy policy</div></Link>  and  <Link to="https://stackoverflow.com/legal/cookie-policy"><div>cookie policy</div></Link></Policy>
+          </section >
+        </SignupContainer >
+      </Container>
+    </div >
   )
 };
 
-const SocialSignup = styled.div`
+const Container = styled.section`
 display: flex;
-margin-top: 50px;
-`;
+background-color: rgb(237, 239, 240);
+`
+
+const LeftSideContainer = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`
+
+const SignupContainer = styled.section`
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      float: right;
+      margin: 50px 0;
+      margin-right: 50px;
+
+      .social-signup-container {
+        width: 400px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+  }
+  .social-signup-container > button {
+        margin: 4px 0px;
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    > span {
+        margin - left: 6px;
+    }
+  }
+
+      .google {
+        color: #2f3337;
+      background-color: #ffffff;
+      border: 1px solid #a7a7a7;
+      &:hover {
+        background - color: #f5f5f5;
+      color: #2f3337;
+    }
+  }
+      .github {
+        color: #ffffff;
+      background-color: #2f3337;
+      border-color: transparent;
+      &:hover {
+        background - color: #000000;
+      color: #ffffff;
+    }
+  }
+      .facebook {
+        color: #ffffff;
+      background-color: #385499;
+      border-color: transparent;
+      &:hover {
+        background - color: #364984;
+      color: #ffffff;
+    }
+  }
+
+  .message {
+    color: red;
+  }
+
+      .account-signup-container {
+        width: 400px;
+      height: 600px;
+      margin-bottom: 30px;
+      padding: 30px 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px #a7a7a7;
+      background-color: #ffffff;
+    > div {
+        margin - bottom: 25px;
+    }
+      & input {
+        width: 340px;
+      height: 38px;
+      margin-top: 7px;
+      &:focus {
+        border: 1px solid #92c3e9;
+      border-radius: 5px;
+      box-shadow: 0px 0px 0px 5px #d9eaf7;
+      outline: 0;
+      }
+    }
+
+      & button {
+        width: 340px;
+      height: 50px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 3px;
+      background-color: #0a95ff;
+      font-size: 19px;
+      color: #ffffff;
+      :hover {
+        cursor: pointer;
+      background-color: #0074cc;
+      }
+    }
+  }
+      & a {
+        font - weight: 500;
+      color: #0b79ce;
+      :hover {
+        color: #4da4de;
+      cursor: pointer;
+      }
+    }
+  }
+      `;
+const Policy = styled.div`
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      `
 
 export default Signup;

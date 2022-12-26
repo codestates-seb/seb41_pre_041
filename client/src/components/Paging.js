@@ -23,7 +23,7 @@ const Paging = () => {
     );
 };
 const PaginationBox = styled.div`
-  .pagination { display: flex; justify-content: start; margin-top: 20px; margin-left: 20px;}
+  .pagination { display: flex; justify-content: start; margin-top: 20px; margin-left: 20px; }
   ul { list-style: none; padding: 0; }
   ul.pagination li {
     display: inline-block;
