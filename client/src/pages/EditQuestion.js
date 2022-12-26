@@ -3,9 +3,16 @@ import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import styled from 'styled-components';
 
+const dummyPost = {
+  id: 1,
+  title: '기존 제목',
+  question: '기존 포스팅'
+}
+
 const EditQuestion = () => {
-  const [title, setTitle] = useState('기존 제목');
-  const [post, setPost] = useState('기존포스팅');
+  const [title, setTitle] = useState(dummyPost.title);
+  const [post, setPost] = useState(dummyPost.question);
+
 
   const editorRef = useRef();
   const handleEditClick = () => {
@@ -22,13 +29,14 @@ const EditQuestion = () => {
   how you found it, for example, by fixing grammar or adding additional resources and hyperlinks.`
 
 
-
   return (
     <div>
       <Precaution>{headPrecaution}</Precaution>
-      <div className="edit-title"><div>Title</div>
-        <input value={title} onChange={event => setTitle(event.target.value)} />
-      </div>
+      <TitleContainer>
+        <div className="edit-title"><div>Title</div>
+          <input value={title} onChange={event => setTitle(event.target.value)} />
+        </div>
+      </TitleContainer>
       <div className="edit-question">
         <div>Body</div>
         <Editor
@@ -49,7 +57,7 @@ const EditQuestion = () => {
           useCommandShortcut={false} // 키보드 입력 컨트롤 방지
         ></Editor>
         <button onClick={handleEditClick} onChange={event => setPost(event.target.value)}>Save edits</button>
-        <button>Cancel</button>
+        <button onClick={() => setPost(false)}>Cancel</button>
 
       </div>
     </div >
@@ -63,5 +71,12 @@ width: 100vw
 padding: 10px;
 border: 1px solid rgb(220, 224, 226);
 `;
+
+const TitleContainer = styled.div`
+& input {
+  width: 100%;
+  line-height: 30px;
+}
+`
 
 export default EditQuestion;

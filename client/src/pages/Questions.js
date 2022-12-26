@@ -9,14 +9,20 @@ const Question = [{
   user: '김코딩',
   title: '어려워서 모르겠습니다.',
   question: '어떻게 하는 지 모르겠어요',
-  createdAt: "2022-12-20"
+  createdAt: "2022-12-20",
+  votes: 5,
+  answers: 1,
+  views: 41,
 },
 {
   id: 2,
   user: '박해커',
   title: '그래도 잘 해보아요',
   question: '매핑은 그럭저럭 해봅니다.',
-  createdAt: "2022-12-21"
+  createdAt: "2022-12-21",
+  votes: 103,
+  answers: 3,
+  views: 3002,
 }];
 
 const Questions = () => {
@@ -31,9 +37,9 @@ const Questions = () => {
           {Question.map(question => (
             <Ask key={question.id}>
               <Stats>
-                <div>0 votes</div>
-                <div>0 answers</div>
-                <div>0 views</div>
+                <div>{question.votes} votes</div>
+                <div>{question.answers} answers</div>
+                <div>{question.views} views</div>
               </Stats>
               <Title><Link to="/question"><h3>{question.title}</h3></Link>
                 <div className="question-summary">{question.question}</div></Title>
