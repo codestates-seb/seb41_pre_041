@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import seb4141preproject.members.entity.Member;
 import seb4141preproject.questions.entity.Question;
+import seb4141preproject.utils.Auditable;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Answer {
+public class Answer extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,17 +30,11 @@ public class Answer {
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime modifiedAt;
-
-    // 테스트를 위해 목업 데이터 클래스 연결
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+
+//    @ManyToOne
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
 }
