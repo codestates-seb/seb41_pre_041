@@ -1,3 +1,4 @@
+import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
@@ -38,7 +39,7 @@ const EditASection = styled.section`
   }
 
   .button-box > button {
-    width: 170px;
+    width: 105px;
     height: 47px;
     border: none;
     border-radius: 5px;
@@ -48,7 +49,7 @@ const EditASection = styled.section`
     color: #ffffff;
   }
 
-  .button-box > .ask-active {
+  .button-box > .update-btn {
     background-color: #0a95ff;
     :hover {
       cursor: pointer;
@@ -56,15 +57,23 @@ const EditASection = styled.section`
     }
   }
 
-  .button-box > .reset-active {
+  .cancle-btn {
+    font-size: 16px;
+    margin-left: 20px;
+    border: none;
     background-color: transparent;
-    color: #c22e32;
-  }
-
-  .button-box > .reset-disable {
-    display: none;
+    color: #1392db;
+    :hover {
+      cursor: pointer;
+      color: #0074cc;
+    }
   }
 `;
+
+const answerDummy = {
+  answerId: 1,
+  content: "요구사항 정의서부터 작성하세요. 화이팅~",
+};
 
 const EditAnswerView = () => {
   const editARef = useRef();
@@ -82,10 +91,19 @@ const EditAnswerView = () => {
     setNewAnswerValue(data);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (newAnswerValue.length) {
-      const updateNewAnswer = [newAnswerValue];
-      console.log(updateNewAnswer);
+      await axios
+        .patch(`/answer/${answerDummy.answerId}`, {
+          content: newAnswerValue,
+        })
+        .then(() => {
+          /*해당 답변의 질문글 상세 페이지로 이동하도록 수정 필요*/
+          window.location.replace("/");
+        })
+        .catch((error) => {
+          console.log(`ERROR RESPONSE : ${error.status}`);
+        });
     }
   };
 
@@ -109,8 +127,7 @@ const EditAnswerView = () => {
       <h3>Answer</h3>
       <Editor
         id="input-body"
-        initialValue="기존 답변 내용이 들어가야 합니다"
-        /*get으로 기존 답변 데이터를 가져와 내용 속성을 해당 부분에 삽입*/
+        initialValue={answerDummy.content}
         previewStyle="vertical"
         height="300px"
         initialEditType="wysiwyg"
@@ -122,7 +139,7 @@ const EditAnswerView = () => {
         <button
           disabled={!newAnswer}
           onClick={handleUpdate}
-          className={newAnswer ? "update-btn" : null}
+          className={newAnswer ? "update-btn" : ""}
         >
           Save edits
         </button>

@@ -41,7 +41,8 @@ const Questions = () => {
                 <div>{question.answers} answers</div>
                 <div>{question.views} views</div>
               </Stats>
-              <Title><Link to="/question"><h3>{question.title}</h3></Link>
+              <Title>{/*각 게시글마다의 개별 링크 연결이 필요*/}
+                <Link to={`/question/${question.id}`}><h3>{question.title}</h3></Link>
                 <div className="question-summary">{question.question}</div></Title>
               <UserContainer>
                 <span>{question.user}</span>

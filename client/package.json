@@ -9,13 +9,9 @@
     "@testing-library/user-event": "^13.5.0",
     "@toast-ui/editor": "^3.2.1",
     "@toast-ui/react-editor": "^3.2.2",
-    "axios": "^1.2.1",
     "react": "^18.2.0",
     "react-axios": "^2.0.6",
     "react-dom": "^18.2.0",
-    "react-facebook-login": "^4.1.1",
-    "react-github-login": "^1.0.3",
-    "react-google-login": "^5.2.2",
     "react-js-pagination": "^3.0.3",
     "react-router-dom": "^6.5.0",
     "react-scripts": "5.0.1",
@@ -46,5 +42,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://abb6-14-63-98-43.jp.ngrok.io/home"
 }

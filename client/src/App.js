@@ -1,14 +1,14 @@
-import React from 'react';
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 import Header from "./components/Header";
-import Main from './Main';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import Logout from './pages/Logout';
-import Ask from './pages/Ask';
-import NotFound from './components/NotFound';
+import Main from "./Main";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Logout from "./pages/Logout";
+import Ask from "./pages/Ask";
+import NotFound from "./components/NotFound";
 
 // CSS 초기화
 const GlobalStyle = createGlobalStyle`
@@ -20,31 +20,45 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
-`
+`;
 const SectionWrap = styled.div`
-    width: 100%;
-    padding-top: 53px;
-`
+  width: 100%;
+  padding-top: 53px;
+`;
 
 function App() {
+  const isLoginStore = () => !!sessionStorage.getItem("Authorization");
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    isLoginStore() ? setIsLogin(true) : setIsLogin(false);
+  }, []);
+
+  // 로그인 기능 구현 후  각 페이지 로딩 상태 확인 필수
   return (
     <>
-    <Router>
-      <GlobalStyle />
-      <Header />
-      <SectionWrap>
-      <Routes>
-        <Route path='/signup' element={<Signup/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/logout' element={<Logout/>}/>
-        <Route path='/ask' element={<Ask/>}/>
-        <Route path='/*' element={<Main/>}/>
-        <Route path='/notfound' element={<NotFound/>}/>
-      </Routes>
-      </SectionWrap>
-    </Router>
+      <Router>
+        <GlobalStyle />
+        <Header isLogin={isLogin} />
+        <SectionWrap>
+          <Routes>
+            <Route
+              path="/signup"
+              element={isLogin ? <NotFound /> : <Signup />}
+            />
+            <Route path="/login" element={isLogin ? <NotFound /> : <Login />} />
+            <Route
+              path="/logout"
+              element={isLogin ? <Logout setIsLogin={setIsLogin} /> : <Login />}
+            />
+            <Route path="/ask" element={isLogin ? <Ask /> : <Login />} />
+            <Route path="/*" element={<Main isLogin={isLogin} />} />
+            <Route path="/notfound" element={<NotFound />} />
+          </Routes>
+        </SectionWrap>
+      </Router>
     </>
-    )
-};
+  );
+}
 
 export default App;

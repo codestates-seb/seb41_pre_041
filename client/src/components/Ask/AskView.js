@@ -1,3 +1,4 @@
+import axios from "axios";
 import styled from "styled-components";
 import { Editor } from "@toast-ui/react-editor";
 import { useState, useEffect, useRef } from "react";
@@ -99,7 +100,7 @@ const AskSection = styled.section`
   }
 
   .toastui-editor-contents {
-    font-size: 19px;
+    font-size: 17px;
   }
 
   .button-box > button {
@@ -160,13 +161,26 @@ const AskView = () => {
 
   const handlePost = () => {
     if (titleValue.length && bodyValue.length) {
-      const post = [titleValue, bodyValue];
-      console.log(post);
+      addQuestion(titleValue, bodyValue);
     }
   };
 
   const handleReset = () => {
     window.location.reload();
+  };
+
+  const addQuestion = async () => {
+    await axios
+      .post("/questions", {
+        title,
+        content: body,
+      })
+      .then(() => {
+        window.location.replace("/");
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
   };
 
   useEffect(() => {

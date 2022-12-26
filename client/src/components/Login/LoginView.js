@@ -1,142 +1,12 @@
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { ReactComponent as Google } from "../../assets/google-icon.svg";
 import { ReactComponent as Github } from "../../assets/github-icon.svg";
 import { ReactComponent as Facebook } from "../../assets/facebook-icon.svg";
-
-const LoginContainer = styled.section`
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  .login-logo {
-    margin: 20px 0;
-  }
-  .social-login-container {
-    width: 350px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  .social-login-container > button {
-    margin: 4px 0px;
-    padding: 14px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 500;
-    border-radius: 5px;
-    text-decoration: none;
-    cursor: pointer;
-    > span {
-      margin-left: 6px;
-    }
-  }
-
-  .google {
-    color: #2f3337;
-    background-color: #ffffff;
-    border: 1px solid #a7a7a7;
-    &:hover {
-      background-color: #f5f5f5;
-      color: #2f3337;
-    }
-  }
-  .github {
-    color: #ffffff;
-    background-color: #2f3337;
-    border-color: transparent;
-    &:hover {
-      background-color: #000000;
-      color: #ffffff;
-    }
-  }
-  .facebook {
-    color: #ffffff;
-    background-color: #385499;
-    border-color: transparent;
-    &:hover {
-      background-color: #364984;
-      color: #ffffff;
-    }
-  }
-
-  .account-login-container {
-    width: 350px;
-    height: 300px;
-    margin-bottom: 30px;
-    padding: 30px 30px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px #a7a7a7;
-    background-color: #ffffff;
-    > div {
-      margin-bottom: 25px;
-      font-size: 20px;
-      font-weight: 600;
-    }
-    & input {
-      width: 290px;
-      height: 38px;
-      margin-top: 7px;
-      &:focus {
-        border: 1px solid #92c3e9;
-        border-radius: 5px;
-        box-shadow: 0px 0px 0px 5px #d9eaf7;
-        outline: 0;
-      }
-    }
-
-    & button {
-      width: 290px;
-      height: 50px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 3px;
-      background-color: #0a95ff;
-      font-size: 19px;
-      color: #ffffff;
-      :hover {
-        cursor: pointer;
-        background-color: #0074cc;
-      }
-    }
-  }
-
-  .password-label > a {
-    margin-left: 73px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #0b79ce;
-    :hover {
-      color: #4da4de;
-      cursor: pointer;
-    }
-  }
-
-  .part {
-    text-align: center;
-    > div {
-      margin-bottom: 10px;
-      font-size: 17px;
-    }
-    & a {
-      font-weight: 500;
-      color: #0b79ce;
-      :hover {
-        color: #4da4de;
-        cursor: pointer;
-      }
-    }
-  }
-`;
+import LoginForm from "./LoginForm";
 
 const LoginView = () => {
   return (
-    <LoginContainer>
+    <>
       {/*로그인 폼 로고*/}
       <div className="login-logo">
         <Link to="/">
@@ -165,30 +35,7 @@ const LoginView = () => {
         </button>
       </section>
       {/*이메일 비밀번호 입력창*/}
-      <section className="account-login-container">
-        <div className="email">
-          <label htmlFor="email" className="email-label">
-            Email
-          </label>
-          <div className="email-input">
-            <input id="email"></input>
-          </div>
-        </div>
-        <div className="password">
-          <label htmlFor="password" className="password-label">
-            Password
-            <Link to="/notfound" className="talent-link">
-              <span>Forgot password?</span>
-            </Link>
-          </label>
-          <div className="password-input">
-            <input id="password"></input>
-          </div>
-        </div>
-        <div className="login">
-          <button className="login-btn">Log in</button>
-        </div>
-      </section>
+      <LoginForm />
       {/*부가 파트*/}
       <section className="part">
         <div className="signup-part">
@@ -204,7 +51,7 @@ const LoginView = () => {
           </Link>
         </div>
       </section>
-    </LoginContainer>
+    </>
   );
 };
 export default LoginView;
