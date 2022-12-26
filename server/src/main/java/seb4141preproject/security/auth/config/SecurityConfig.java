@@ -47,16 +47,16 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeRequests(auth -> auth // TODO : 회원, 비회원 권한 조정 필요
-                        .antMatchers("/members/test").hasRole("USER")
                         .antMatchers("/h2/**").permitAll() // h2 데이터베이스 확인 가능하게
-                        .antMatchers(HttpMethod.POST, "/questions").hasRole("USER") // 질문 작성
-                        .antMatchers(HttpMethod.PATCH, "/questions/{question-id}").hasRole("USER") // 질문 수정
-                        .antMatchers(HttpMethod.DELETE, "/questions/{question-id}").hasRole("USER") // 질문 삭제
-                        .antMatchers(HttpMethod.POST, "/answers").hasRole("USER") // 답변 작성
-                        .antMatchers(HttpMethod.PATCH, "/answers/{answer-id}").hasRole("USER") // 답변 수정
-                        .antMatchers(HttpMethod.DELETE, "/answers/{answer-id}").hasRole("USER") // 답변 삭제
-                        .antMatchers("/logout").hasRole("USER") // 로그아웃
-                        .antMatchers("/members/{member-id}").hasRole("USER") // 마이페이지 확인, 회원정보 수정
+                        .antMatchers(HttpMethod.POST, "/api/questions").hasRole("USER") // 질문 작성
+                        .antMatchers(HttpMethod.PATCH, "/api/questions/{question-id}").hasRole("USER") // 질문 수정
+                        .antMatchers(HttpMethod.DELETE, "/api/questions/{question-id}").hasRole("USER") // 질문 삭제
+                        .antMatchers(HttpMethod.POST, "/api/answers").hasRole("USER") // 답변 작성
+                        .antMatchers(HttpMethod.PATCH, "/api/answers/{answer-id}").hasRole("USER") // 답변 수정
+                        .antMatchers(HttpMethod.DELETE, "/api/answers/{answer-id}").hasRole("USER") // 답변 삭제
+                        .antMatchers("/api/auths/reissue").hasRole("USER") // 토큰 재발급
+                        .antMatchers("/api/auths/logout").hasRole("USER") // 로그아웃
+                        .antMatchers("/api/members/{member-id}").hasRole("USER") // 마이페이지 확인, 회원정보 수정
 
                         .anyRequest().permitAll())
                 .logout()
