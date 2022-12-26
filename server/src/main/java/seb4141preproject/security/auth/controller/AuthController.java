@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import seb4141preproject.security.auth.dto.*;
 import seb4141preproject.security.auth.service.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor
@@ -20,9 +23,15 @@ public class AuthController {
 
     // 회원가입 -> MemberService에서 처리.
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDto loginDto) {
-        return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
+    @PostMapping("/login") // TODO : refresh Token 생성 후 cookie 저장?
+    public ResponseEntity login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+
+//        Cookie setting 로직 초안
+        TokenDto tokenDto = authService.login(loginDto);
+//        Cookie cookie = authService.createCookie(tokenDto);
+//        response.addCookie(cookie);
+
+        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }
 
     @PostMapping("/reissue")

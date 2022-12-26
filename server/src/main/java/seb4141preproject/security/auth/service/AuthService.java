@@ -13,6 +13,8 @@ import seb4141preproject.security.auth.dto.*;
 import seb4141preproject.security.auth.entity.*;
 import seb4141preproject.security.auth.repository.RefreshTokenRepository;
 
+import javax.servlet.http.Cookie;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -84,6 +86,14 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("REFRESH_TOKEN_NOT_FOUND"));
 
         refreshTokenRepository.delete(refreshToken);
+    }
+
+    // refresh token Cookie 생성 로직
+    public Cookie createCookie(TokenDto tokenDto) {
+        Cookie cookie = new Cookie("refresh-token", tokenDto.getRefreshToken());
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        return cookie;
     }
 
     // 클래스 내부에서만 사용 가능한 토큰 생성하는 로직
