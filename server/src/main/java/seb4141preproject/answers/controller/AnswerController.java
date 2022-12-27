@@ -52,7 +52,7 @@ public class AnswerController {
     public ResponseEntity patchAnswer(
             @PathVariable("answer-id") @Positive long answerId,
             @Valid @RequestBody AnswerDto.Patch requestBody) {
-        requestBody.setAnswerId(answerId);
+        requestBody.setId(answerId);
 
         Answer answer = answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody));
 

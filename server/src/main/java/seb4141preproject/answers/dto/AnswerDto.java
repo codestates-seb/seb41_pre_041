@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class AnswerDto {
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post {
 
         // private long memberId;
@@ -23,11 +24,11 @@ public class AnswerDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Patch {
-        private long answerId;
+        private long id;
         private String content;
 
-        public void setAnswerId(long answerId) {
-            this.answerId = answerId;
+        public void setId(long id) {
+            this.id = id;
         }
     }
 
@@ -35,7 +36,7 @@ public class AnswerDto {
     @AllArgsConstructor
     public static class Response {
 
-        long answerId;
+        long id;
         long memberId;
         long questionId;
         String content;
