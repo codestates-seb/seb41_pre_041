@@ -14,7 +14,6 @@ import seb4141preproject.security.auth.entity.*;
 import seb4141preproject.security.auth.repository.RefreshTokenRepository;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -47,26 +46,22 @@ public class AuthService {
         return tokenDto;
     }
 
-    public TokenDto reissue(HttpServletRequest request) {
+    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
         // 1. Refresh Token 검증
-        String accessToken = request.getHeader("Authorization").substring(7);
-
-        String refreshToken = request.getHeader("Cookie").substring(14);
-
-        if (!jwtTokenizer.validateToken(refreshToken)) {
+        if (!jwtTokenizer.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
         }
 
         // 2. Access Token 에서 인증정보 가져오기
-        Authentication authentication = jwtTokenizer.getAuthentication(accessToken);
+        Authentication authentication = jwtTokenizer.getAuthentication(tokenRequestDto.getAccessToken());
 
         // 3. 저장소에서 User ID(email) 를 기반으로 Refresh Token 값 가져옴
-        RefreshToken findRefreshToken =
+        RefreshToken refreshToken =
                 refreshTokenRepository.findByKey(authentication.getName())
                         .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
         // 4. 유저의 Refresh Token 과 저장된 Refresh Token 이 일치하는지 검사
-        if (!findRefreshToken.getValue().equals(refreshToken)) {
+        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
 
@@ -74,22 +69,23 @@ public class AuthService {
         TokenDto tokenDto = createToken(authentication);
 
         // 6. 저장소 정보 업데이트
-        RefreshToken newRefreshToken = findRefreshToken.updateValue(tokenDto.getRefreshToken());
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
         // 토큰 발급
         return tokenDto;
     }
 
-    public void logout(HttpServletRequest request) {
+    public void logout(TokenRequestDto tokenRequestDto) {
         // TODO: 사용된 Access Token 사용하지 못하게 처리
 
-        String refreshToken = request.getHeader("Cookie").substring(14);
+        System.out.println(tokenRequestDto.getRefreshToken());
+
         // Refresh token 제거
-        RefreshToken findRefreshToken = refreshTokenRepository.findByValue(refreshToken)
+        RefreshToken refreshToken = refreshTokenRepository.findByValue(tokenRequestDto.getRefreshToken())
                 .orElseThrow(() -> new RuntimeException("REFRESH_TOKEN_NOT_FOUND"));
 
-        refreshTokenRepository.delete(findRefreshToken);
+        refreshTokenRepository.delete(refreshToken);
     }
 
     // refresh token Cookie 생성 로직

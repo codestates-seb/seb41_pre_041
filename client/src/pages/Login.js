@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import LoginView from "../components/Login/LoginView";
-
+import LoginContainer from "../components/Login/LoginContainer";
 const LoginArticle = styled.article`
   height: 100vh;
   display: flex;
@@ -12,7 +12,9 @@ const LoginArticle = styled.article`
 const Login = () => {
   return (
     <LoginArticle>
-      <LoginView />
+      <LoginContainer>
+        <LoginView />
+      </LoginContainer>
     </LoginArticle>
   );
 };

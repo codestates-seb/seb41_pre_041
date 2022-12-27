@@ -8,7 +8,7 @@ import seb4141preproject.answers.entity.Answer;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface AnswerMapper {
     Answer answerPostToAnswer(AnswerDto.Post requestBody);
     Answer answerPatchToAnswer(AnswerDto.Patch requestBody);

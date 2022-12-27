@@ -12,15 +12,15 @@ import seb4141preproject.answers.mapper.AnswerMapper;
 import seb4141preproject.answers.service.AnswerService;
 import seb4141preproject.dto.MultiResponseDto;
 import seb4141preproject.dto.SingleResponseDto;
+import seb4141preproject.questions.entity.Question;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
 /**
- * - AnswerController_v1
- * - Member/Question 연결 필요
- * - getAnswers 응답 구조 테스트 필요
+ * - AnswerController
+ * - 응답 테스트 완료
  */
 
 @RestController
@@ -40,6 +40,9 @@ public class AnswerController {
     public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post requestBody) {
         Answer answer = mapper.answerPostToAnswer(requestBody);
 
+        answer.setQuestion(new Question());
+        answer.getQuestion().setId(requestBody.getQuestionId());
+
         Answer createdAnswer = answerService.createAnswer(answer);
         AnswerDto.Response response = mapper.answerToAnswerResponse(createdAnswer);
 
@@ -50,8 +53,10 @@ public class AnswerController {
     public ResponseEntity patchAnswer(
             @PathVariable("answer-id") @Positive long answerId,
             @Valid @RequestBody AnswerDto.Patch requestBody) {
-        Answer answer =
-                answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody));
+        requestBody.setAnswerId(answerId);
+
+        Answer answer = answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody));
+
         AnswerDto.Response response = mapper.answerToAnswerResponse(answer);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -1,12 +1,9 @@
 package seb4141preproject.members.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter //get 함수를 일괄적으로 만들어 준다.
@@ -17,10 +14,8 @@ import java.util.List;
 @Builder
 @Table(name = "member")
 public class Member {
-
     @Id // @Id는 해당 프로퍼티가 테이블의 primary key 역할이라는 것을 지정
-    @Column(name ="member_id")
-    @GeneratedValue(strategy =  GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다.
     private long id;
 
     @Column(length = 50, nullable = false)
@@ -29,10 +24,10 @@ public class Member {
     @Column(length = 100, nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(length = 100, nullable = false) // passwordEncoder로
+    @Column(length = 100, nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.EAGER) // 기본값 LAZY 대경님 요청으로 패치타입 변환
     private List<String> roles;
 
 //    마이페이지에서 본인이 작성한 questions 확인 기능이 있을때 mapping 해도 상관 없을듯?

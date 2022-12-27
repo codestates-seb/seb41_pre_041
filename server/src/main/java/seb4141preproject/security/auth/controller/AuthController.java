@@ -13,7 +13,6 @@ import seb4141preproject.security.auth.dto.*;
 import seb4141preproject.security.auth.service.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -29,29 +28,21 @@ public class AuthController {
 
 //        Cookie setting 로직 초안
         TokenDto tokenDto = authService.login(loginDto);
-        Cookie cookie = authService.createCookie(tokenDto);
-        response.addCookie(cookie);
+//        Cookie cookie = authService.createCookie(tokenDto);
+//        response.addCookie(cookie);
 
-        response.setHeader("Authorization", tokenDto.getAccessToken());
-
-        return new ResponseEntity<>("Login Successful!", HttpStatus.OK);
+        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity reissue(HttpServletRequest request, HttpServletResponse response) {
-        TokenDto tokenDto = authService.reissue(request);
-        Cookie cookie = authService.createCookie(tokenDto);
-        response.addCookie(cookie);
-
-        response.setHeader("Authorization", tokenDto.getAccessToken());
-
-        return new ResponseEntity("Reissue Successful!", HttpStatus.OK);
+    public ResponseEntity reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return new ResponseEntity(authService.reissue(tokenRequestDto), HttpStatus.OK);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(HttpServletRequest request,
+    public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto,
                                  @AuthenticationPrincipal User user) {
-        if (user != null) authService.logout(request);
-        return new ResponseEntity<>("Logout Successful!", HttpStatus.OK);
+        if (user != null) authService.logout(tokenRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
