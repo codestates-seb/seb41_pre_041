@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public abstract class Auditable {
     @CreatedBy
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
 
     @CreatedDate

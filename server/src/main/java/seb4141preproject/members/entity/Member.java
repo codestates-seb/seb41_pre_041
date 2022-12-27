@@ -1,12 +1,9 @@
 package seb4141preproject.members.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter //get 함수를 일괄적으로 만들어 준다.
@@ -17,10 +14,8 @@ import java.util.List;
 @Builder
 @Table(name = "member")
 public class Member {
-
     @Id // @Id는 해당 프로퍼티가 테이블의 primary key 역할이라는 것을 지정
-    @Column(name ="member_id")
-    @GeneratedValue(strategy =  GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다.
     private long id;
 
     @Column(length = 50, nullable = false)

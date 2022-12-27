@@ -7,12 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import seb4141preproject.dto.PaginatedResponseDto;
 import seb4141preproject.questions.dto.QuestionRequestDto;
 import seb4141preproject.questions.dto.QuestionResponseDto;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.mapper.QuestionMapper;
 import seb4141preproject.questions.service.QuestionService;
+import seb4141preproject.utils.MultiResponseDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -35,7 +35,7 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginatedResponseDto<QuestionResponseDto>> getQuestions(
+    public ResponseEntity<MultiResponseDto<QuestionResponseDto>> getQuestions(
             @Positive @RequestParam int page,
             @Positive @RequestParam int size,
             @Min(1) @RequestParam(required = false) String q
@@ -43,15 +43,7 @@ public class QuestionController {
         Page<Question> questionPage = questionService.readQuestions(page - 1, size, q);
 
         return new ResponseEntity<>(
-                new PaginatedResponseDto<>(
-                        mapper.questionsToQuestionResponseDtos(questionPage.toList()),
-                        new PaginatedResponseDto.PageInfo(
-                                questionPage.getNumber() + 1,
-                                questionPage.getSize(),
-                                questionPage.getTotalElements(),
-                                questionPage.getTotalPages()
-                        )
-                ),
+                new MultiResponseDto<>(mapper.questionsToQuestionResponseDtos(questionPage.toList()), questionPage),
                 HttpStatus.OK
         );
     }
@@ -66,8 +58,7 @@ public class QuestionController {
     @PatchMapping("/{question-id}")
     public ResponseEntity<QuestionResponseDto> patchQuestion(@Positive @PathVariable("question-id") long id,
                                                              @Valid @RequestBody QuestionRequestDto requestDto) {
-        Question question = mapper.questionRequestDtoToQuestion(requestDto);
-        question.setId(id);
+        Question question = mapper.questionRequestDtoToQuestion(requestDto, id);
 
         Question updatedQuestion = questionService.updateQuestion(question);
 

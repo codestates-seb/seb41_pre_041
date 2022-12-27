@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.utils.Vote;
 import seb4141preproject.questions.entity.QuestionVote;
 import seb4141preproject.questions.repository.QuestionVoteRepository;
+import seb4141preproject.utils.Vote;
 
 @Slf4j
 @AllArgsConstructor
@@ -26,19 +26,11 @@ public class QuestionVoteService {
     }
 
     @Transactional(readOnly = true)
-    public QuestionVote readQuestionVote(long questionId) {
-        // Spring Security에서 인증된 principal을 받아와야 한다.
-        // 인증 구현 전까지는 mock 사용
-        long memberId = 1L;
-
+    public QuestionVote readQuestionVote(long questionId, long memberId) {
         return questionVoteRepository.findByQuestion_IdAndMember_Id(questionId, memberId).orElseThrow();
     }
 
-    public QuestionVote updateQuestionVote(QuestionVote questionVote) {
-        // Spring Security에서 인증된 principal을 받아와야 한다.
-        // 인증 구현 전까지는 mock 사용
-        long memberId = 1L;
-
+    public QuestionVote updateQuestionVote(QuestionVote questionVote, long memberId) {
         QuestionVote foundQuestionVote =
                 questionVoteRepository.findByQuestion_IdAndMember_Id(questionVote.getQuestion().getId(), memberId)
                         .orElseThrow();
