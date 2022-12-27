@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Paging from '../components/Paging';
+import axios from 'axios';
 
 // 테스트용 더미데이터
 const Question = [{
@@ -26,6 +27,23 @@ const Question = [{
 }];
 
 const Questions = () => {
+  const [qData, setQData] = useState([])
+  const getData = async () => {
+    await axios
+      .get('/questions')
+      .then((res) => {
+        setQData(res.data.body)
+        console.log(qData)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  useEffect(() => {
+    getData();
+    console.log('전체질문조회')
+  })
+
   return (
     <Layout>
       <div>
