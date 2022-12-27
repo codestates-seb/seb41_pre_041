@@ -10,9 +10,8 @@ import seb4141preproject.answers.dto.AnswerDto;
 import seb4141preproject.answers.entity.Answer;
 import seb4141preproject.answers.mapper.AnswerMapper;
 import seb4141preproject.answers.service.AnswerService;
-import seb4141preproject.dto.MultiResponseDto;
-import seb4141preproject.dto.SingleResponseDto;
 import seb4141preproject.questions.entity.Question;
+import seb4141preproject.utils.MultiResponseDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
