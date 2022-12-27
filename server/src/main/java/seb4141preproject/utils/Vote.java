@@ -14,6 +14,7 @@ public abstract class Vote extends Auditable {
     private long id;
 
     @Enumerated
+    @Column(nullable = false)
     private VoteStatus voteStatus = VoteStatus.NO_VOTE;
 
     public enum VoteStatus {NO_VOTE, UPVOTE, DOWNVOTE}

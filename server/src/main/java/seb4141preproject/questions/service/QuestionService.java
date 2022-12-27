@@ -3,8 +3,7 @@ package seb4141preproject.questions.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,27 +31,15 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> readQuestions(int page, int size, String q) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-
-        Page<Question> questions =
-                q == null
-                ? questionRepository.findAll(pageRequest)
-                : questionRepository.findByQ(q, pageRequest);
-
-        questions.forEach(question -> {
-            question.setAnswerCount(answerRepository.countByQuestion_Id(question.getId()));
-            question.setVoteCount(questionVoteService.readQuestionVoteCount(question.getId()));
-        });
-
-        return questions;
+    public Page<Question> readQuestions(Pageable pageable, String q) {
+        return q == null
+                ? questionRepository.findAll(pageable)
+                : questionRepository.findByQ(q, pageable);
     }
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
         question.getQuestionView().countView();
-        question.setAnswerCount(answerRepository.countByQuestion_Id(id));
-        question.setVoteCount(questionVoteService.readQuestionVoteCount(id));
 
         return question;
     }

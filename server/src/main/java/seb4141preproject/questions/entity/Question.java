@@ -2,6 +2,7 @@ package seb4141preproject.questions.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import seb4141preproject.utils.Auditable;
 
 import javax.persistence.*;
@@ -21,10 +22,10 @@ public class Question extends Auditable {
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
     private QuestionView questionView;
 
-    // 답변 수와 투표 수를 임시 저장하기 위해 사용
-    @Transient
+    @Formula("(select count(*) from answer a where a.question_id = id)")
     private long answerCount;
 
-    @Transient
+    @Formula("(select count(*) from question_vote qv where qv.question_id = id and qv.vote_status = 1) - " +
+            "(select count(*) from question_vote qv where qv.question_id = id and qv.vote_status = 2)")
     private long voteCount;
 }

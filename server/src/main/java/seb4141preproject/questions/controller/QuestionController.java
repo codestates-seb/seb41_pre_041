@@ -3,6 +3,7 @@ package seb4141preproject.questions.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,11 +37,10 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity<MultiResponseDto<QuestionResponseDto>> getQuestions(
-            @Positive @RequestParam int page,
-            @Positive @RequestParam int size,
+            Pageable pageable,
             @Min(1) @RequestParam(required = false) String q
     ) {
-        Page<Question> questionPage = questionService.readQuestions(page - 1, size, q);
+        Page<Question> questionPage = questionService.readQuestions(pageable, q);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.questionsToQuestionResponseDtos(questionPage.toList()), questionPage),
