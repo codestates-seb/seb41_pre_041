@@ -83,6 +83,7 @@ public class AuthService {
 
     public void logout(HttpServletRequest request) {
         // TODO: 사용된 Access Token 사용하지 못하게 처리
+
         String refreshToken = request.getHeader("Cookie").substring(14);
         // Refresh token 제거
         RefreshToken findRefreshToken = refreshTokenRepository.findByValue(refreshToken)
