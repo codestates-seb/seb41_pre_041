@@ -29,10 +29,10 @@ public class Member {
     @Column(length = 100, nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false) // passwordEncoder로
     private String password;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles;
 
 //    마이페이지에서 본인이 작성한 questions 확인 기능이 있을때 mapping 해도 상관 없을듯?
