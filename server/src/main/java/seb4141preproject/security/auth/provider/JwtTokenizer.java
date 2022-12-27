@@ -1,5 +1,6 @@
 package seb4141preproject.security.auth.provider;
 
+import com.google.gson.Gson;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -7,6 +8,8 @@ import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +17,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.RestTemplate;
+import seb4141preproject.security.auth.dto.TokenDto;
+import seb4141preproject.security.auth.dto.TokenRequestDto;
+import seb4141preproject.security.auth.userdetails.CustomUserDetailsService;
+import seb4141preproject.security.auth.utils.ErrorResponder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
@@ -24,6 +34,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenizer {
     private final Key key;
+    private Gson gson;
 
     @Getter
     @Value("${jwt.ATExpiration}")
@@ -33,12 +44,14 @@ public class JwtTokenizer {
     @Value("${jwt.RTExpiration}")
     private int RTExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     public JwtTokenizer(@Value("${jwt.key}") String secretKey, // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
-                        UserDetailsService userDetailsService) {
+                        CustomUserDetailsService userDetailsService,
+                        Gson gson) {
         this.key = getKeyFromEncodedSecretKey(secretKey);
         this.userDetailsService = userDetailsService;
+        this.gson = gson;
     }
 
     public String encodeSecretKey(String secretKey) {
@@ -114,14 +127,20 @@ public class JwtTokenizer {
     }
 
     // 토큰 정보를 검증
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, HttpServletRequest request) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
+
             log.info("만료된 JWT 토큰입니다.");
+            // 바로 reissue 로직으로 redirect 하는 로직 필요 -> 완료
+            // TODO : request header 의 AT, RT를 새로 발급받은 값으로 바꿔주는 로직 필요
+            directToReissue(token, request);
+            return true;
+
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
@@ -131,11 +150,27 @@ public class JwtTokenizer {
     }
 
     // 만료된 토큰이어도 정보를 꺼내는 로직
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    private void directToReissue(String accessToken, HttpServletRequest request) {
+        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+
+        HttpHeaders headers = new HttpHeaders(); // Header 인스턴스 생성
+        headers.setContentType(MediaType.APPLICATION_JSON); // 서버가 받는 데이터 타입을 JSON으로 설정
+        headers.set("Cookie", request.getHeader("Cookie"));
+
+        TokenRequestDto requestDto = new TokenRequestDto(accessToken, request.getHeader("Cookie").substring(14));
+        String content = gson.toJson(requestDto);
+
+        HttpEntity<String> httpRequest = new HttpEntity<>(content, headers);
+
+        ResponseEntity<String> response =
+                restTemplate.postForEntity("http://localhost:8080/api/auths/reissue", httpRequest, String.class);
     }
 }

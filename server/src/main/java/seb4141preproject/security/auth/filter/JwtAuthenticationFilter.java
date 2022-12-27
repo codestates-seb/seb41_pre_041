@@ -24,12 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         // 1. Request Header 에서 토큰 꺼냄
-        String jws = resolveToken(request);
+        String accessToken = resolveToken(request);
 
         // 2. validationToken 으로 토큰 유효성 검사
         // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
-        if (StringUtils.hasText(jws) && jwtTokenizer.validateToken(jws)) {
-            Authentication authentication = jwtTokenizer.getAuthentication(jws);
+        if (StringUtils.hasText(accessToken) && jwtTokenizer.validateToken(accessToken, request)) {
+            Authentication authentication = jwtTokenizer.getAuthentication(accessToken);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
