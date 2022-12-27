@@ -3,11 +3,12 @@ package seb4141preproject.questions.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.answers.repository.AnswerRepository;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.entity.QuestionView;
 import seb4141preproject.questions.repository.QuestionRepository;
@@ -20,8 +21,6 @@ import java.util.Optional;
 @Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final QuestionVoteService questionVoteService;
-    private final AnswerRepository answerRepository;
 
     public Question createQuestion(Question question) {
         question.setQuestionView(new QuestionView());
@@ -31,7 +30,9 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> readQuestions(Pageable pageable, String q) {
+    public Page<Question> readQuestions(int page, int size, Sort sort, String q) {
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
         return q == null
                 ? questionRepository.findAll(pageable)
                 : questionRepository.findByQ(q, pageable);
