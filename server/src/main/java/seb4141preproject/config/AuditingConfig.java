@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import seb4141preproject.members.entity.Member;
 
 import java.util.Optional;
@@ -13,13 +16,13 @@ import java.util.Optional;
 public class AuditingConfig {
     @Bean
     public AuditorAware<Member> auditorProvider() {
-        return () -> {
-            // Spring Security에서 인증된 principal을 받아와야 한다.
-            // 인증 구현 전까지는 mock 사용
-            Member member = new Member();
-            member.setId(1L);
-
-            return Optional.of(member);
-        };
+        // 메소드 실행 단계마다 null이 반환될 수 있어서 NullPointerException을 피하기 위해 map, filter 사용
+        // 중간 과정에 문제가 있었던 경우 Optional.empty()가 반환된다.
+        return () ->
+                Optional.ofNullable(SecurityContextHolder.getContext())
+                        .map(SecurityContext::getAuthentication)
+                        .filter(Authentication::isAuthenticated)
+                        .map(Authentication::getPrincipal)
+                        .map(Member.class::cast);
     }
 }

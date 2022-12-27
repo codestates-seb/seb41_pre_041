@@ -5,11 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import seb4141preproject.answers.repository.AnswerRepository;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.entity.QuestionView;
 import seb4141preproject.questions.repository.QuestionRepository;
+
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -18,7 +22,7 @@ import seb4141preproject.questions.repository.QuestionRepository;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionVoteService questionVoteService;
-//    private final AnswerService answerService;
+    private final AnswerRepository answerRepository;
 
     public Question createQuestion(Question question) {
         question.setQuestionView(new QuestionView());
@@ -37,7 +41,7 @@ public class QuestionService {
                 : questionRepository.findByQ(q, pageRequest);
 
         questions.forEach(question -> {
-//            question.setAnswerCount(answerService.readAnswerCount(question.getId());
+            question.setAnswerCount(answerRepository.countByQuestion_Id(question.getId()));
             question.setVoteCount(questionVoteService.readQuestionVoteCount(question.getId()));
         });
 
@@ -47,7 +51,7 @@ public class QuestionService {
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
         question.getQuestionView().countView();
-//        question.setAnswerCount(answerService.readAnswerCount(id);
+        question.setAnswerCount(answerRepository.countByQuestion_Id(id));
         question.setVoteCount(questionVoteService.readQuestionVoteCount(id));
 
         return question;
@@ -63,5 +67,12 @@ public class QuestionService {
 
     public void deleteQuestion(long id) {
         questionRepository.deleteById(id);
+    }
+
+    public boolean checkMember(Authentication authentication, long id) {
+        Optional<Question> optionalQuestion = questionRepository.findById(id);
+
+        return optionalQuestion.isPresent()
+                && optionalQuestion.get().getMember().getEmail().equals(authentication.getName());
     }
 }
