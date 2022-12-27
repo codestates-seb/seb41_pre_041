@@ -11,8 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -33,8 +33,12 @@ public class JwtTokenizer {
     @Value("${jwt.RTExpiration}")
     private int RTExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
 
-    public JwtTokenizer(@Value("${jwt.key}") String secretKey) { // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
+    private final UserDetailsService userDetailsService;
+
+    public JwtTokenizer(@Value("${jwt.key}") String secretKey, // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
+                        UserDetailsService userDetailsService) {
         this.key = getKeyFromEncodedSecretKey(secretKey);
+        this.userDetailsService = userDetailsService;
     }
 
     public String encodeSecretKey(String secretKey) {
@@ -104,7 +108,7 @@ public class JwtTokenizer {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }

@@ -12,6 +12,8 @@ import java.util.List;
 public interface QuestionMapper {
     Question questionRequestDtoToQuestion(QuestionRequestDto requestDto);
 
+    Question questionRequestDtoToQuestion(QuestionRequestDto requestDto, long id);
+
     @Mapping(target = "memberId", source = "member.id")
     @Mapping(target = "memberName", source = "member.name")
     @Mapping(target = "viewCount", source = "questionView.viewCount")

@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import seb4141preproject.questions.service.QuestionVoteService;
+import seb4141preproject.members.entity.Member;
 import seb4141preproject.questions.dto.QuestionVoteCountDto;
 import seb4141preproject.questions.dto.QuestionVoteRequestDto;
 import seb4141preproject.questions.dto.QuestionVoteResponseDto;
-import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.entity.QuestionVote;
 import seb4141preproject.questions.mapper.QuestionVoteMapper;
+import seb4141preproject.questions.service.QuestionVoteService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -31,9 +32,7 @@ public class QuestionVoteController {
             @Positive @PathVariable("question-id") long questionId,
             @Valid @RequestBody QuestionVoteRequestDto requestDto
     ) {
-        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
-        questionVote.setQuestion(new Question());
-        questionVote.getQuestion().setId(questionId);
+        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto, questionId);
 
         QuestionVote createdQuestionVote = questionVoteService.createQuestionVote(questionVote);
 
@@ -54,9 +53,10 @@ public class QuestionVoteController {
 
     @GetMapping("/votes/me")
     public ResponseEntity<QuestionVoteResponseDto> getQuestionVote(
-            @Positive @PathVariable("question-id") long questionId
+            @Positive @PathVariable("question-id") long questionId,
+            @AuthenticationPrincipal Member member
     ) {
-        QuestionVote questionVote = questionVoteService.readQuestionVote(questionId);
+        QuestionVote questionVote = questionVoteService.readQuestionVote(questionId, member.getId());
 
         return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(questionVote), HttpStatus.OK);
     }
@@ -64,13 +64,12 @@ public class QuestionVoteController {
     @PatchMapping("/votes/me")
     public ResponseEntity<QuestionVoteResponseDto> patchQuestionVote(
             @Positive @PathVariable("question-id") long questionId,
-            @Valid @RequestBody QuestionVoteRequestDto requestDto
+            @Valid @RequestBody QuestionVoteRequestDto requestDto,
+            @AuthenticationPrincipal Member member
     ) {
-        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto);
-        questionVote.setQuestion(new Question());
-        questionVote.getQuestion().setId(questionId);
+        QuestionVote questionVote = mapper.questionVoteRequestDtoToQuestionVote(requestDto, questionId);
 
-        QuestionVote updatedQuestionVote = questionVoteService.updateQuestionVote(questionVote);
+        QuestionVote updatedQuestionVote = questionVoteService.updateQuestionVote(questionVote, member.getId());
 
         return new ResponseEntity<>(mapper.questionVoteToQuestionVoteResponseDto(updatedQuestionVote), HttpStatus.OK);
     }
