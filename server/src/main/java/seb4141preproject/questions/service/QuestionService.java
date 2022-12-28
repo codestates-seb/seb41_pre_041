@@ -33,10 +33,11 @@ public class QuestionService {
     public Page<Question> readQuestions(int page, int size, Sort sort, String q) {
         Pageable pageable = PageRequest.of(page - 1, size, sort);
 
-        return q == null
-                ? questionRepository.findAll(pageable)
-                : questionRepository.findByQ(q, pageable);
+        return Optional.ofNullable(q)
+                .map(string -> questionRepository.findByQ(string, pageable))
+                .orElse(questionRepository.findAll(pageable));
     }
+
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();

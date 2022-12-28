@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +17,8 @@ import seb4141preproject.questions.service.QuestionService;
 import seb4141preproject.utils.MultiResponseDto;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Slf4j
 @AllArgsConstructor
@@ -39,8 +40,8 @@ public class QuestionController {
     public ResponseEntity<MultiResponseDto<QuestionResponseDto>> getQuestions(
             @Positive @RequestParam(defaultValue = "1") int page,
             @Positive @RequestParam(defaultValue = "15") int size,
-            Sort sort,
-            @Min(1) @RequestParam(required = false) String q
+            @SortDefault(sort = "id", direction = Sort.Direction.DESC) Sort sort,
+            @Size(min = 1, max = 65535) @RequestParam(required = false) String q
     ) {
         Page<Question> questionPage = questionService.readQuestions(page, size, sort, q);
 

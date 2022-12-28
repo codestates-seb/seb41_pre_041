@@ -3,6 +3,7 @@ package seb4141preproject.questions.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
 import seb4141preproject.utils.Auditable;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Question extends Auditable {
 
     private String title;
 
+    @Type(type = "text")
     private String content;
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
