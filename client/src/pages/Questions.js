@@ -117,34 +117,41 @@ const Ask = styled.div`
 const AskButton = styled.button`
   background-color: #137eff;
   color: white;
-  border-radius: 2px;
-  width: 94px;
-  height: 36px;
+  border-radius: 3px;
+  width: 98px;
+  height: 40px;
   border: 1px;
   margin: 0 5px;
   float: right;
 
+  > a {
+    color: white;
+  }
+
   &:hover {
-    background: #339af0;
+    background-color: #339af0;
   }
   &:active {
-    background: #1c7ed6;
+    background-color: #1c7ed6;
   }
 `;
 
 const Stats = styled.div`
   flex-direction: column;
+  flex: 1;
   padding: 7px 7px 7px 50px;
 `;
 
 const Title = styled.div`
   flex-direction: column;
+  flex: 7;
   padding: 7px;
 `;
 
 const UserContainer = styled.div`
   margin-top: auto;
   margin-left: auto;
+  flex: 1.5;
   padding: 7px;
 `;
 
