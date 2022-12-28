@@ -28,9 +28,7 @@ const EditQuestion = () => {
       .get('/questions/{question-id}')
       .then((res) => {
         setQData([res.data.body]);
-        // 리덕스??
-        // dispatch(setTitle(res.data.body.question.title));
-        // dispatch(setPost(res.data.body.question.question));
+
       })
       .catch((err) => {
         console.log(err)
@@ -51,6 +49,10 @@ const EditQuestion = () => {
         console.log(res)
       })
   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    editSubmit();
+  };
 
 
   const headPrecaution = `Your edit will be placed in queue until it is peer reviewed.
@@ -87,7 +89,7 @@ const EditQuestion = () => {
           ]}
           useCommandShortcut={false} // 키보드 입력 컨트롤 방지
         ></Editor>
-        <button onClick={editSubmit} onChange={event => setPost(event.target.value)}>Save edits</button>
+        <button onClick={handleSubmit} onChange={event => setPost(event.target.value)}>Save edits</button>
         <button onClick={() => setPost(false)}>Cancel</button>
 
       </div>
