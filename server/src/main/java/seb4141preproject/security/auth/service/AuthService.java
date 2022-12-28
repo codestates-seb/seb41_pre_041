@@ -1,12 +1,14 @@
 package seb4141preproject.security.auth.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseCookie;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import seb4141preproject.security.auth.provider.*;
 import seb4141preproject.security.auth.dto.*;
 import seb4141preproject.security.auth.entity.*;
@@ -44,14 +46,13 @@ public class AuthService {
         return tokenDto;
     }
 
-    public TokenDto reissue(TokenRequestDto requestDto, HttpServletRequest request) {
+    public TokenDto reissue(HttpServletRequest request) {
 
         // 1. Refresh Token 검증
-        String accessToken = requestDto.getAccessToken();
-        String refreshToken = request.getHeader("Cookie").substring(14);
-        System.out.println("refreshToken : " + refreshToken);
+        String accessToken = request.getHeader("Authorization").substring(7);
+        String refreshToken = request.getHeader("refreshToken").substring(7);
 
-        if (!jwtTokenizer.validateToken(refreshToken, request)) {
+        if (jwtTokenizer.validateToken(refreshToken, request) == 1) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
         }
 
@@ -74,8 +75,6 @@ public class AuthService {
         // 6. 저장소 정보 업데이트
         RefreshToken newRefreshToken = findRefreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
-        System.out.println("new RT : " + tokenDto.getRefreshToken());
-        System.out.println("new AT : " + tokenDto.getAccessToken());
 
         // 토큰 발급
         return tokenDto;
@@ -83,7 +82,7 @@ public class AuthService {
 
     public void logout(HttpServletRequest request) {
 
-        String refreshToken = request.getHeader("Cookie").substring(14);
+        String refreshToken = request.getHeader("refreshToken").substring(7);
         System.out.println("refresh Token : " + refreshToken);
         // TODO: 사용된 토큰은 폐기 -> accessToken 의 expiration 을 짧게 설정
 
@@ -92,16 +91,6 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("REFRESH_TOKEN_NOT_FOUND"));
 
         refreshTokenRepository.delete(findRefreshToken);
-    }
-
-    // refresh token Cookie 생성 로직
-    public ResponseCookie createCookie(TokenDto tokenDto) {
-        ResponseCookie cookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
-                        .path("/")
-                        .sameSite("Lax")
-                        .httpOnly(true)
-                        .build();
-        return cookie;
     }
 
     // 클래스 내부에서만 사용 가능한 토큰 생성하는 로직

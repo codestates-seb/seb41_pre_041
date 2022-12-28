@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", exposedHeaders = {"Authorization", "set-cookie"}, allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", exposedHeaders = {"Authorization", "refreshToken"}, allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 
@@ -27,24 +27,21 @@ public class AuthController {
     public ResponseEntity login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
 
         TokenDto tokenDto = authService.login(loginDto);
-        ResponseCookie cookie = authService.createCookie(tokenDto);
 
-        response.addHeader("Set-Cookie", cookie.toString());
         response.addHeader("Authorization", tokenDto.getAccessToken());
+        response.addHeader("refreshToken", tokenDto.getRefreshToken());
 
         return new ResponseEntity<>("Login Successful!", HttpStatus.OK);
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity reissue(@RequestBody TokenRequestDto requestDto,
-                                  HttpServletResponse response,
+    public ResponseEntity reissue(HttpServletResponse response,
                                   HttpServletRequest request) {
 
-        TokenDto tokenDto = authService.reissue(requestDto, request);
-        ResponseCookie cookie = authService.createCookie(tokenDto);
+        TokenDto tokenDto = authService.reissue(request);
 
-        response.addHeader("Set-Cookie", cookie.toString());
         response.addHeader("Authorization", tokenDto.getAccessToken());
+        response.addHeader("refreshToken", tokenDto.getRefreshToken());
 
         return new ResponseEntity("Reissue Successful!", HttpStatus.OK);
     }

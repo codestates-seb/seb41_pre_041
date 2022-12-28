@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestTemplate;
 import seb4141preproject.security.auth.dto.TokenDto;
 import seb4141preproject.security.auth.dto.TokenRequestDto;
+import seb4141preproject.security.auth.service.AuthService;
 import seb4141preproject.security.auth.userdetails.CustomUserDetailsService;
 import seb4141preproject.security.auth.utils.ErrorResponder;
 
@@ -81,8 +82,8 @@ public class JwtTokenizer {
                 .setSubject(authentication.getName())    // JWT 제목 payload "sub": "email"
                 .setIssuedAt(Calendar.getInstance().getTime())  // JWT 발행일자 payload "iat": "발행일자"
                 .setExpiration(accessTokenExpiresIn)  // 만료일자 payload "exp": "발행시간 + 설정 시간(ATExpiration)"
-                .signWith(key)  // signature header "alg": "HS512"
-                .compact(); // 생성
+                .signWith(key)
+                .compact();
     }
 
     public String generateRefreshToken(Authentication authentication) {
@@ -127,26 +128,21 @@ public class JwtTokenizer {
     }
 
     // 토큰 정보를 검증
-    public boolean validateToken(String token, HttpServletRequest request) {
+    public int validateToken(String token, HttpServletRequest request) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
+            return 0;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            log.error("잘못된 JWT 서명입니다.", e);
         } catch (ExpiredJwtException e) {
-
-            log.info("만료된 JWT 토큰입니다.");
-            // 바로 reissue 로직으로 redirect 하는 로직 필요 -> 완료
-            // TODO : request header 의 AT, RT를 새로 발급받은 값으로 바꿔주는 로직 필요
-            directToReissue(token, request);
-            return true;
-
+            log.error("만료된 JWT 토큰입니다.", e);
+            return 2;
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            log.error("지원되지 않는 JWT 토큰입니다.", e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
+            log.error("JWT 토큰이 잘못되었습니다.", e);
         }
-        return false;
+        return 1;
     }
 
     // 만료된 토큰이어도 정보를 꺼내는 로직
@@ -158,19 +154,23 @@ public class JwtTokenizer {
         }
     }
 
-    private void directToReissue(String accessToken, HttpServletRequest request) {
+    public Map postReissue(HttpServletRequest request) {
         RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
-
         HttpHeaders headers = new HttpHeaders(); // Header 인스턴스 생성
+
         headers.setContentType(MediaType.APPLICATION_JSON); // 서버가 받는 데이터 타입을 JSON으로 설정
-        headers.set("Cookie", request.getHeader("Cookie"));
+        headers.set("Authorization", request.getHeader("Authorization"));
+        headers.set("refreshToken", request.getHeader("refreshToken"));
 
-        TokenRequestDto requestDto = new TokenRequestDto(accessToken, request.getHeader("Cookie").substring(14));
-        String content = gson.toJson(requestDto);
-
-        HttpEntity<String> httpRequest = new HttpEntity<>(content, headers);
+        HttpEntity<String> httpRequest = new HttpEntity<>(headers);
 
         ResponseEntity<String> response =
                 restTemplate.postForEntity("http://localhost:8080/api/auths/reissue", httpRequest, String.class);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("authorization", response.getHeaders().getFirst("Authorization"));
+        map.put("refreshToken", response.getHeaders().getFirst("RefreshToken"));
+
+        return map;
     }
 }

@@ -18,6 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/members")
+@CrossOrigin
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
