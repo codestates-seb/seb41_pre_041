@@ -10,8 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.questions.entity.Question;
+import seb4141preproject.questions.entity.QuestionResponse;
 import seb4141preproject.questions.entity.QuestionView;
 import seb4141preproject.questions.repository.QuestionRepository;
+import seb4141preproject.questions.repository.QuestionResponseRepository;
 
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuestionResponseRepository questionDetailRepository;
 
     public Question createQuestion(Question question) {
         question.setQuestionView(new QuestionView());
@@ -30,14 +33,13 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> readQuestions(int page, int size, Sort sort, String q) {
+    public Page<QuestionResponse> readQuestions(int page, int size, Sort sort, String q) {
         Pageable pageable = PageRequest.of(page - 1, size, sort);
 
         return Optional.ofNullable(q)
-                .map(string -> questionRepository.findByQ(string, pageable))
-                .orElse(questionRepository.findAll(pageable));
+                .map(string -> questionDetailRepository.findByQ(string, pageable))
+                .orElse(questionDetailRepository.findAll(pageable));
     }
-
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
@@ -51,7 +53,7 @@ public class QuestionService {
         foundQuestion.setTitle(question.getTitle());
         foundQuestion.setContent(question.getContent());
 
-        return questionRepository.save(foundQuestion);
+        return foundQuestion;
     }
 
     public void deleteQuestion(long id) {

@@ -36,6 +36,6 @@ public class QuestionVoteService {
                         .orElseThrow();
         foundQuestionVote.setVoteStatus(questionVote.getVoteStatus());
 
-        return questionVoteRepository.save(foundQuestionVote);
+        return foundQuestionVote;
     }
 }
