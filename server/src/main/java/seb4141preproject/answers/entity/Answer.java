@@ -19,12 +19,11 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Answer extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answerId;
+    private long id;
 
     // 글자 수 지정
     @Column(nullable = false)
@@ -33,6 +32,9 @@ public class Answer extends Auditable {
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
+
+    @Transient
+    private long voteCount;
 
 //    @ManyToOne
 //    @JoinColumn(name = "MEMBER_ID")
