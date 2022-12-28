@@ -22,7 +22,6 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
-    // TODO : passwordEncoder
 
     @Autowired // 스프링 DI(Dependency Injection)에서 사용되는 어노테이션 즉 의존성 주입 어노테이션
     public MemberController(MemberService memberService, MemberMapper mapper) {
@@ -41,8 +40,6 @@ public class MemberController {
         return new ResponseEntity(mapper.memberToMemberResponseDto(createdMember),
                HttpStatus.CREATED);
     }
-
-// TODO : 로그인 로그아웃 - AutnController에서 구현
 
 // 사용자 정보 조회 (마이페이지 조회)
      @ApiOperation(value="특정 회원 조회", notes = "회원-식별자를 이용하여 특정 회원을 조회")

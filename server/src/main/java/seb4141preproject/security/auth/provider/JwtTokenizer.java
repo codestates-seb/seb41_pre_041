@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenizer {
     private final Key key;
-    private Gson gson;
 
     @Getter
     @Value("${jwt.ATExpiration}")
@@ -48,11 +47,9 @@ public class JwtTokenizer {
     private final CustomUserDetailsService userDetailsService;
 
     public JwtTokenizer(@Value("${jwt.key}") String secretKey, // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
-                        CustomUserDetailsService userDetailsService,
-                        Gson gson) {
+                        CustomUserDetailsService userDetailsService) {
         this.key = getKeyFromEncodedSecretKey(secretKey);
         this.userDetailsService = userDetailsService;
-        this.gson = gson;
     }
 
     public String encodeSecretKey(String secretKey) {
@@ -135,7 +132,7 @@ public class JwtTokenizer {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.error("잘못된 JWT 서명입니다.", e);
         } catch (ExpiredJwtException e) {
-            log.error("만료된 JWT 토큰입니다.", e);
+            log.error("만료된 JWT 토큰입니다.");
             return 2;
         } catch (UnsupportedJwtException e) {
             log.error("지원되지 않는 JWT 토큰입니다.", e);
