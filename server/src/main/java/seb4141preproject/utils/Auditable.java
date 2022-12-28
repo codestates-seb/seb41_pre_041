@@ -19,7 +19,7 @@ public abstract class Auditable {
 
     @CreatedBy
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @CreatedDate

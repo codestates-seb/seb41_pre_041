@@ -29,8 +29,8 @@ public class Question extends Auditable {
     private long answerCount;
 
     @Formula(
-            "(select count(*) from question_vote qv where qv.question_id = id and qv.vote_status = 1) - " +
-                    "(select count(*) from question_vote qv where qv.question_id = id and qv.vote_status = 2)"
+            "(select count(*) from question_vote qv where qv.question_id = id and qv.vote_status = 1) " +
+            "- (select count(*) from question_vote qv where qv.question_id = id and qv.vote_status = 2)"
     )
     private long voteCount;
 }

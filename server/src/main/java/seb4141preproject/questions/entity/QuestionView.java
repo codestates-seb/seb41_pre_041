@@ -15,7 +15,7 @@ public class QuestionView {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "id")
     private Question question;
 
     private long viewCount;
