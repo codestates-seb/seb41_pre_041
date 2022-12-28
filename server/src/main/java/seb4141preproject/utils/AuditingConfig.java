@@ -1,4 +1,4 @@
-package seb4141preproject.config;
+package seb4141preproject.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
