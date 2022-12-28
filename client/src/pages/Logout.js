@@ -1,40 +1,33 @@
-import React from "react";
+import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
-import faviconSprite from '../assets/faviconSprite.png';
+import faviconSprite from "../assets/faviconSprite.png";
 
 // 현재 사이트와 연동된 서비스 목록
 const serviceList = [
-  { name: 'askubuntu',
-    domain: '.com', 
-    link: 'https://askubuntu.com/' },
+  { name: "askubuntu", domain: ".com", link: "https://askubuntu.com/" },
   {
-    name: 'mathoverflow',
-    domain: '.net',
-    link: 'https://mathoverflow.net/',
+    name: "mathoverflow",
+    domain: ".net",
+    link: "https://mathoverflow.net/",
   },
   {
-    name: 'serverfault',
-    domain: '.com',
-    link: 'https://serverfault.com/',
+    name: "serverfault",
+    domain: ".com",
+    link: "https://serverfault.com/",
   },
-  { name: 'stackapps',
-    domain: '.com', 
-    link: 'https://stackapps.com/' },
+  { name: "stackapps", domain: ".com", link: "https://stackapps.com/" },
   {
-    name: 'stackexchange',
-    domain: '.com',
-    link: 'https://stackexchange.com/',
+    name: "stackexchange",
+    domain: ".com",
+    link: "https://stackexchange.com/",
   },
   {
-    name: 'stackoverflow',
-    domain: '.com',
-    link: 'https://stackoverflow.com/',
+    name: "stackoverflow",
+    domain: ".com",
+    link: "https://stackoverflow.com/",
   },
-  { name: 'superuser', 
-    domain: '.com', 
-    link: 'https://superuser.com/' },
+  { name: "superuser", domain: ".com", link: "https://superuser.com/" },
 ];
 
 // CSS
@@ -46,7 +39,7 @@ const LogoutWrap = styled.div`
   height: calc(100vh - 53px);
 
   background: #f1f2f3;
-`
+`;
 
 const LogoutContainer = styled.div`
   display: flex;
@@ -60,7 +53,7 @@ const LogoutContainer = styled.div`
     font-size: 21px;
     font-weight: 400;
   }
-`
+`;
 
 const Service = styled.div`
   width: 320px;
@@ -149,23 +142,36 @@ const Service = styled.div`
     font-size: 12px;
     color: #6a737c;
   }
-`
+`;
 
-const Logout = () => {
+const Logout = ({ setIsLogin }) => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    navigate('/');
-  }
+  const handleLogout = async () => {
+    await axios
+      .post("/api/auths/logout", {})
+      .then((response) => {
+        if (response) {
+          window.sessionStorage.removeItem("accessToken");
+          window.sessionStorage.removeItem("refreshToken");
+          setIsLogin(false);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
   const handleCancel = () => {
     navigate(-1);
-  }
-  
+  };
+
   return (
     <LogoutWrap>
       <LogoutContainer>
         <h3>
-          Clicking "Log Out" will log you out of the follwing<br/>
+          Clicking "Log Out" will log you out of the follwing
+          <br />
           domains on this device:
         </h3>
         <Service>
@@ -174,19 +180,23 @@ const Logout = () => {
               return (
                 <li key={service.name}>
                   <a href={service.link}>
-                    <div className={service.name + ' favicon'}></div>
+                    <div className={service.name + " favicon"}></div>
                     <span>{service.name + service.domain}</span>
                   </a>
                 </li>
-              )
+              );
             })}
           </ul>
           <div className="check">
             <input type="checkbox" id="checkAll" />
             <label htmlFor="checkAll">Log Out on all devices</label>
           </div>
-          <button className="logout" onClick={() => handleLogout()}>Log out</button>
-          <button className="cancel" onClick={() => handleCancel()}>Cancel</button>
+          <button className="logout" onClick={() => handleLogout()}>
+            Log out
+          </button>
+          <button className="cancel" onClick={() => handleCancel()}>
+            Cancel
+          </button>
           <p className="alarm">
             If you’re on a shared computer, remember to log out of your Open ID
             provider (Facebook, Google, Stack Exchange, etc.) as well.
@@ -194,7 +204,7 @@ const Logout = () => {
         </Service>
       </LogoutContainer>
     </LogoutWrap>
-  )
+  );
 };
 
 export default Logout;

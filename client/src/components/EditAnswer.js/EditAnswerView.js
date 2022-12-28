@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "../../api/axios";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
 import { useState, useRef } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -77,6 +77,7 @@ const answerDummy = {
 
 const EditAnswerView = () => {
   const editARef = useRef();
+  const navigate = useNavigate();
   const [newAnswer, setnewAnswer] = useState(false);
   const [newAnswerValue, setNewAnswerValue] = useState("");
 
@@ -94,17 +95,20 @@ const EditAnswerView = () => {
   const handleUpdate = async () => {
     if (newAnswerValue.length) {
       await axios
-        .patch(`/answer/${answerDummy.answerId}`, {
+        .patch(`/api/answer/${answerDummy.answerId}`, {
           content: newAnswerValue,
         })
         .then(() => {
-          /*해당 답변의 질문글 상세 페이지로 이동하도록 수정 필요*/
-          window.location.replace("/");
+          navigate(-1);
         })
         .catch((error) => {
           console.log(`ERROR RESPONSE : ${error.status}`);
         });
     }
+  };
+
+  const handleCancel = () => {
+    navigate(-1);
   };
 
   return (
@@ -143,9 +147,9 @@ const EditAnswerView = () => {
         >
           Save edits
         </button>
-        <Link to="/">
-          <button className="cancle-btn">Cancle</button>
-        </Link>
+        <button className="cancle-btn" onClick={handleCancel}>
+          Cancle
+        </button>
       </div>
     </EditASection>
   );
