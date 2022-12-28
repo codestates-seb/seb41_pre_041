@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import AnswerForm from "../components/AnswerForm";
 
 
 // CSS
@@ -144,6 +145,8 @@ const AnswerArea = styled.div`
   display: flex;
   flex-direction: column;
 
+  h1 { color: #3b4045; }
+
   .answer-count {
     margin: 20px 0px;
   }
@@ -153,12 +156,19 @@ const AnswerContent = styled.div`
   display: flex;
   padding: 16px 0px;
   border-bottom: 1px solid #e3e6e8;
+
 `
 
 const AnswerCreate = styled.div`
+  .answer-header {
+    margin: 20px 0px;
+  }
 `
-// 변수 작성란
 
+// 변수 작성란
+const handleAnswerSubmit = async (body) => {
+  
+}
 // 
 
 function Question() {
@@ -233,7 +243,7 @@ function Question() {
             </LeftBtn>
             <Content>
               <div className="post-area">
-                <p>작성한 대답이 도착할 영억</p>
+                <p>작성한 대답이 도착할 영역</p>
               </div>
               <div className="writer-area">
                 <div>
@@ -263,6 +273,10 @@ function Question() {
         {/* 답변 작성 */}
           {/* 답변을 작성한다. */}
           <AnswerCreate>
+            <div className="answer-header">
+              <h1>Your Answer</h1>
+            </div>
+            <AnswerForm onClickHandler={handleAnswerSubmit}/>
           </AnswerCreate>
         </AnswerArea>
       </Section>
