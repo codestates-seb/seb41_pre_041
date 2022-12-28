@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-// import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
+import axios from "axios";
 import { ReactComponent as Google } from "../assets/google-icon.svg";
 import { ReactComponent as Github } from "../assets/github-icon.svg";
 import { ReactComponent as Facebook } from "../assets/facebook-icon.svg";
@@ -48,8 +48,24 @@ const Signup = () => {
     }
   }
 
-  const onSubmitHandler = (event) => {
+  const navigate = useNavigate();
+  // 기존 아이디/ 이메일이 중복될 경우?
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
+    await axios
+      .post("/members", {
+        name,
+        email,
+        password,
+      })
+      .then((response) => {
+        console.log(response)
+        navigate('/login')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
   }
 
   const passwordVaild = `Passwords must contain at least eight characters, including at least 1 special letter and 1 number.`
@@ -59,15 +75,15 @@ const Signup = () => {
       <Container>
         <LeftSideContainer>
           <h1>Join the Stack Overflow community</h1>
-          <ul>
-            <li>Get unstuck — ask a question</li>
-            <li>Unlock new privileges like voting and commenting</li>
-            <li>Save your favorite tags, filters, and jobs</li>
-            <li>Earn reputation and badges</li>
-            <div>Collaborate and share knowledge with a private group for FREE.
-              <Link to="https://stackoverflow.co/teams/?utm_source=so-owned&utm_medium=product&utm_campaign=free-50&utm_content=public-sign-up"><div>Get Stack Overflow for Teams free for up to 50 users.</div></Link>
+          <div><br />
+            <div><img className="signupImage" width="24" alt="logo1" src="/img/quesiton.png" /> Get unstuck — ask a question</div><br />
+            <div><img className="signupImage" width="24" alt="logo2" src="/img/arrow.png" /> Unlock new privileges like voting and commenting</div><br />
+            <div><img className="signupImage" width="24" alt="logo3" src="/img/bookmark.png" /> Save your favorite tags, filters, and jobs</div><br />
+            <div><img className="signupImage" width="24" alt="logo4" src="/img/trophy.png" /> Earn reputation and badges</div><br />
+            <div className="greyfont">Collaborate and share knowledge with a private group for FREE.</div>
+            <div><Link to="https://stackoverflow.co/teams/?utm_source=so-owned&utm_medium=product&utm_campaign=free-50&utm_content=public-sign-up"><div>Get Stack Overflow for Teams free for up to 50 users.</div></Link>
             </div>
-          </ul>
+          </div>
         </LeftSideContainer>
         < SignupContainer >
           {/*소셜 로그인 폼*/}
@@ -115,7 +131,7 @@ const Signup = () => {
                 </div>
                 <div className="password-valid">{passwordVaild}</div>
               </div>
-              <div classsName="checkbox-wrap"><input type="checkbox" id="sentence" /><label for="sentence">{signupCheckbox}</label></div>
+              <div classsName="checkbox-wrap"><input type="checkbox" /><label>{signupCheckbox}</label></div>
               <div className="Signup">
                 <button className="signup-btn" type="submit">Sign up</button>
               </div>
@@ -131,21 +147,24 @@ const Signup = () => {
 const Container = styled.section`
 display: flex;
 background-color: rgb(237, 239, 240);
+justify-content: center;
 `
 
 const LeftSideContainer = styled.div`
 display: flex;
 flex-direction: column;
 align-items: center;
+margin: 250px 30px 20px 100px;
+.greyfont {
+  color: grey;
+}
 `
 
 const SignupContainer = styled.section`
       width: 400px;
       display: flex;
       flex-direction: column;
-      float: right;
-      margin: 50px 0;
-      margin-right: 50px;
+      margin: 50px 40px 20px 100px;
 
       .social-signup-container {
         width: 400px;
