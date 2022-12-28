@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import seb4141preproject.questions.entity.QuestionResponse;
 
 public interface QuestionResponseRepository extends JpaRepository<QuestionResponse, Long> {
+
     @Query("select x from QuestionResponse x where x.title like %?1% or x.content like %?1%")
     Page<QuestionResponse> findByQ(String q, Pageable pageable);
 }

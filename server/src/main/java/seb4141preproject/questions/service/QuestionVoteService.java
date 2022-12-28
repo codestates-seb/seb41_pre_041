@@ -13,6 +13,7 @@ import seb4141preproject.utils.Vote;
 @Service
 @Transactional
 public class QuestionVoteService {
+
     private final QuestionVoteRepository questionVoteRepository;
 
     public QuestionVote createQuestionVote(QuestionVote questionVote) {

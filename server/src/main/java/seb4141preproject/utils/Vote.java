@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @MappedSuperclass
 public abstract class Vote extends Auditable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

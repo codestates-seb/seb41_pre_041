@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable {
+
     @CreatedBy
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID", nullable = false)

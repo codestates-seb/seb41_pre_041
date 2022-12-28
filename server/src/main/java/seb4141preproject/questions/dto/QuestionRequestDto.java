@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 public class QuestionRequestDto {
+
     @NotNull
     @Size(min = 15, max = 150)
     private String title;

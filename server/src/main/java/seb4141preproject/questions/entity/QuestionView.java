@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class QuestionView {
+
     @Id
     private long id;
 

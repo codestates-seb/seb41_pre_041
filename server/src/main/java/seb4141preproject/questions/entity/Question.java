@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Question extends Auditable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

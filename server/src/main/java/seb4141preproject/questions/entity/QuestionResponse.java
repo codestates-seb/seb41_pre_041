@@ -29,15 +29,25 @@ import java.time.LocalDateTime;
 )
 @Synchronize({"question", "member", "question_view", "answer", "question_vote"})
 public class QuestionResponse {
+
     @Id
     private long id;
+
     private String title;
+
     private String content;
+
     private long memberId;
+
     private String memberName;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime modifiedAt;
+
     private long viewCount;
+
     private long answerCount;
+
     private long voteCount;
 }

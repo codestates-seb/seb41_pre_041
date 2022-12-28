@@ -8,6 +8,7 @@ import seb4141preproject.questions.entity.QuestionResponse;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
+
     Question questionRequestDtoToQuestion(QuestionRequestDto requestDto);
 
     Question questionRequestDtoToQuestion(QuestionRequestDto requestDto, long id);

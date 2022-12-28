@@ -24,7 +24,9 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/api/questions/{question-id}")
 public class QuestionVoteController {
+
     private final QuestionVoteService questionVoteService;
+
     private final QuestionVoteMapper mapper;
 
     @PostMapping("/votes")

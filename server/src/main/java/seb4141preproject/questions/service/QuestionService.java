@@ -22,7 +22,9 @@ import java.util.Optional;
 @Service
 @Transactional
 public class QuestionService {
+
     private final QuestionRepository questionRepository;
+
     private final QuestionResponseRepository questionDetailRepository;
 
     public Question createQuestion(Question question) {

@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 public class MultiResponseDto<T> {
+
     private final List<T> data;
 
     private final PageInfo pageInfo;
@@ -20,9 +21,13 @@ public class MultiResponseDto<T> {
     @Getter
     @AllArgsConstructor
     private static class PageInfo {
+
         private int page;
+
         private int size;
+
         private long totalElements;
+
         private int totalPages;
     }
 }
