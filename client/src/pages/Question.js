@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AnswerForm from "../components/AnswerForm";
-import Pagination from "../components/Pagination";
+// import Pagination from "../components/Pagination";
 
 // CSS
 const QuestionContainer = styled.div`
@@ -210,32 +210,32 @@ const DeleteButton = styled.button`
 function Question({ isLogin }) {
   const { id } = useParams();
   const [singleQ, setSingleQ] = useState({});
-  const [dataA, setdataA] = useState([]);
+  const [dataA, setDataA] = useState([]);
 
   // pagination
-  const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostPerPage] = useState(5);
+  // const [posts, setPosts] = useState([]);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [postsPerPage, setPostPerPage] = useState(5);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await axios.get(
 
-      );
-      setPosts(response.data)
-    };
-    fetchData();
-  }, []);
+  //     );
+  //     setPosts(response.data)
+  //   };
+  //   fetchData();
+  // }, []);
 
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = (posts) => {
-    let currentPosts = 0;
-    currentPosts = posts.slice(indexOfFirst, indexOfLast);
-    return currentPosts;
-  }
-  /*단일 질문글 정보 받아오기*/
+  // const indexOfLast = currentPage * postsPerPage;
+  // const indexOfFirst = indexOfLast - postsPerPage;
+  // const currentPosts = (posts) => {
+  //   let currentPosts = 0;
+  //   currentPosts = posts.slice(indexOfFirst, indexOfLast);
+  //   return currentPosts;
+  // }
 
+  /*단일 질문글 받아오기*/
   const getSingleQ = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/api/questions/${id}`)
@@ -248,39 +248,44 @@ function Question({ isLogin }) {
       });
   };
 
+  /*답변 목록 받아오기*/
   const getDataA = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/api/answers`)
       .then((response) => {
-        setdataA(response.data.data);
-        console.log(dataA);
+        console.log(response);
+        // setDataA(response.data.data);
+        // console.log(dataA);
       })
       .catch((error) => {
         console.log(`ERROR RESPONSE : ${error.status}`);
       });
   };
 
+  /*무한 랜더링 방지*/
   useEffect(() => {
     getSingleQ();
     getDataA();
   }, []);
 
+  // /*질문 삭제*/
   const removeQuestion = async () => {
     await instance
       .delete(`/api/questions/${id}`)
       .then(() => {
-        getSingleQ();
+        window.location.replace("/");
       })
       .catch((error) => {
         console.log(`ERROR RESPONSE : ${error.status}`);
       });
   };
 
-  const removeAnswer = async () => {
-    await axios
-      .delete(`/api/answers/${dataA.id}`)
+  /*답변 삭제*/
+  const removeAnswer = async (id) => {
+    await instance
+      .delete(`/api/answers/${id}`)
       .then(() => {
-        getSingleQ();
+        getDataA();
       })
       .catch((error) => {
         console.log(`ERROR RESPONSE : ${error.status}`);
@@ -301,13 +306,13 @@ function Question({ isLogin }) {
       </QuestionHeader>
       <AskDate>
         <div>
-          Asked <time>{singleQ.createdAt.slice(0, 10)}</time>
+          Asked <time>{`${singleQ.createdAt}`.slice(0, 10)}</time>
         </div>
         <div>
-          Modified <time>{singleQ.updateAt.slice(0, 10)}</time>
+          Modified <time>{`${singleQ.modifiedAt}`.slice(0, 10)}</time>
         </div>
         <div>
-          Viewd <time>{singleQ.view}</time>
+          Viewd <time>{singleQ.viewCount}</time>
         </div>
       </AskDate>
 
@@ -319,7 +324,7 @@ function Question({ isLogin }) {
                 <path d="M2 25h32L18 9 2 25Z"></path>
               </svg>
             </button>
-            <div className="count">1</div>
+            <div className="count">{singleQ.voteCount}</div>
             <button>
               <svg className="icon" width="36" height="36" viewBox="0 0 36 36">
                 <path d="M2 11h32L18 27 2 11Z"></path>
@@ -340,13 +345,13 @@ function Question({ isLogin }) {
               </div>
               <div>
                 <span>
-                  Edited <time>{singleQ.updateAt.slice(0, 10)}</time>
+                  Edited <time>{`${singleQ.modifiedAt}`.slice(0, 10)}</time>
                 </span>
               </div>
               <div className="flex">
                 <div className="user-info">
                   <span className="asked">
-                    Asked <time>{singleQ.createdAt.slice(0, 10)}</time>
+                    Asked <time>{`${singleQ.createdAt}`.slice(0, 10)}</time>
                   </span>
                   <div className="user-container">
                     <div className="user">
@@ -359,7 +364,7 @@ function Question({ isLogin }) {
                         <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
                       </svg>
                     </div>
-                    <span className="user-name">{singleQ.author}</span>
+                    <span className="user-name">{singleQ.memberName}</span>
                   </div>
                 </div>
                 <DeleteButton onClick={removeQuestion}>Delete</DeleteButton>
@@ -369,12 +374,10 @@ function Question({ isLogin }) {
         </QuestionArea>
         <AnswerArea>
           {/* 답변 갯수 */}
-          {/* if 답변이 등록되어 있다면, 등록된 갯수를 출력한다. */}
           <div className="answer-count">
-            <h1>{/*카운트 된 갯수*/} Answer</h1>
+            <h1>{dataA.length} Answer</h1>
           </div>
           {/* 답변 내용 */}
-          {/* if 답변이 등록되어 있다면, 등록된 답변을 출력한다. */}
           {dataA.map((singleA) => (
             <AnswerContent key={singleA.id}>
               <LeftBtn>
@@ -388,7 +391,7 @@ function Question({ isLogin }) {
                     <path d="M2 25h32L18 9 2 25Z"></path>
                   </svg>
                 </button>
-                <div className="count">1</div>
+                <div className="count">{singleA.voteCount}</div>
                 <button>
                   <svg
                     className="icon"
@@ -407,18 +410,19 @@ function Question({ isLogin }) {
                 <div className="writer-area">
                   <div>
                     <span>Share</span>
+                    {/*답변에는 맴버 네임 속성이 없는지 확인 필수!*/}
                     <Link to={`/edit/answer/${singleA.id}`}>Edit</Link>
                     <span>Follow</span>
                   </div>
                   <div>
                     <span>
-                      Edited <time>{singleA.updateAt.slice(0, 10)}</time>
+                      Edited <time>{`${singleA.modifiedAt}`.slice(0, 10)}</time>
                     </span>
                   </div>
                   <div className="flex">
                     <div className="user-info">
                       <span className="asked">
-                        Asked <time>{singleA.createdAt.slice(0, 10)}</time>
+                        Asked <time>{`${singleA.createdAt}`.slice(0, 10)}</time>
                       </span>
                       <div className="user-container">
                         <div className="user">
@@ -431,10 +435,12 @@ function Question({ isLogin }) {
                             <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
                           </svg>
                         </div>
-                        <span className="user-name">{singleA.author}</span>
+                        <span className="user-name">{singleA.memberId}</span>
                       </div>
                     </div>
-                    <DeleteButton onClick={removeAnswer}>Delete</DeleteButton>
+                    <DeleteButton onClick={() => removeAnswer(singleA.id)}>
+                      Delete
+                    </DeleteButton>
                   </div>
                 </div>
               </Content>
@@ -448,7 +454,7 @@ function Question({ isLogin }) {
             </div>
             <AnswerForm isLogin={isLogin} />
           </AnswerCreate>
-          <Pagination />
+          {/* <Pagination/> */}
         </AnswerArea>
       </Section>
     </QuestionContainer>
