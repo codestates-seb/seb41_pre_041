@@ -12,9 +12,6 @@ public class AnswerDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Post {
-
-        // private long memberId;
-
         private long questionId;
         @NotBlank
         private String content;
@@ -40,9 +37,8 @@ public class AnswerDto {
         long memberId;
         long questionId;
         String content;
-
+        long voteCount;
         LocalDateTime createdAt;
-
         LocalDateTime modifiedAt;
 
 
