@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 public class QuestionVoteRequestDto {
+
     @NotNull
     private Vote.VoteStatus voteStatus;
 }

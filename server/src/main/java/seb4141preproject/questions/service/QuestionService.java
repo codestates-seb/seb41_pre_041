@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.answers.repository.AnswerRepository;
 import seb4141preproject.questions.entity.Question;
+import seb4141preproject.questions.entity.QuestionResponse;
 import seb4141preproject.questions.entity.QuestionView;
 import seb4141preproject.questions.repository.QuestionRepository;
+import seb4141preproject.questions.repository.QuestionResponseRepository;
 
 import java.util.Optional;
 
@@ -20,9 +22,10 @@ import java.util.Optional;
 @Service
 @Transactional
 public class QuestionService {
+
     private final QuestionRepository questionRepository;
-    private final QuestionVoteService questionVoteService;
-    private final AnswerRepository answerRepository;
+
+    private final QuestionResponseRepository questionDetailRepository;
 
     public Question createQuestion(Question question) {
         question.setQuestionView(new QuestionView());
@@ -32,27 +35,17 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> readQuestions(int page, int size, String q) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+    public Page<QuestionResponse> readQuestions(int page, int size, Sort sort, String q) {
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
-        Page<Question> questions =
-                q == null
-                ? questionRepository.findAll(pageRequest)
-                : questionRepository.findByQ(q, pageRequest);
-
-        questions.forEach(question -> {
-            question.setAnswerCount(answerRepository.countByQuestion_Id(question.getId()));
-            question.setVoteCount(questionVoteService.readQuestionVoteCount(question.getId()));
-        });
-
-        return questions;
+        return Optional.ofNullable(q)
+                .map(string -> questionDetailRepository.findByQ(string, pageable))
+                .orElse(questionDetailRepository.findAll(pageable));
     }
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id).orElseThrow();
         question.getQuestionView().countView();
-        question.setAnswerCount(answerRepository.countByQuestion_Id(id));
-        question.setVoteCount(questionVoteService.readQuestionVoteCount(id));
 
         return question;
     }
@@ -62,7 +55,7 @@ public class QuestionService {
         foundQuestion.setTitle(question.getTitle());
         foundQuestion.setContent(question.getContent());
 
-        return questionRepository.save(foundQuestion);
+        return foundQuestion;
     }
 
     public void deleteQuestion(long id) {

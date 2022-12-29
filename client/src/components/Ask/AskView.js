@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../api/axios";
 import styled from "styled-components";
 import { Editor } from "@toast-ui/react-editor";
 import { useState, useEffect, useRef } from "react";
@@ -169,9 +169,9 @@ const AskView = () => {
     window.location.reload();
   };
 
-  const addQuestion = async () => {
+  const addQuestion = async (title, body) => {
     await axios
-      .post("/questions", {
+      .post("/api/questions", {
         title,
         content: body,
       })

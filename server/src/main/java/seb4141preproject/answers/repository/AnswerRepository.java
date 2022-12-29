@@ -7,6 +7,4 @@ import seb4141preproject.answers.entity.Answer;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     Page<Answer> findByQuestionId(long questionId, PageRequest pageRequest);
-
-    long countByQuestion_Id(long questionId);
 }

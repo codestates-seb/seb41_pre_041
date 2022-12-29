@@ -14,6 +14,7 @@ import java.util.Optional;
 @Configuration
 @EnableJpaAuditing
 public class AuditingConfig {
+
     @Bean
     public AuditorAware<Member> auditorProvider() {
         // 메소드 실행 단계마다 null이 반환될 수 있어서 NullPointerException을 피하기 위해 map, filter 사용

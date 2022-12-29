@@ -1,13 +1,11 @@
-package seb4141preproject.questions.dto;
+package seb4141preproject.answers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class QuestionVoteCountDto {
-
-    private long questionId;
-
+public class AnswerVoteCountDto {
+    private long answerId;
     private long voteCount;
 }
