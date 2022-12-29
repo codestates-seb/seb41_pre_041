@@ -18,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * - Service 테스트 완료
- */
 
 @Service
 @Transactional
@@ -87,11 +84,4 @@ public class AnswerService {
         return findQuestion;
     }
 
-    private Sort sortByVoteCount() {
-        return Sort.by(Sort.Direction.ASC, "voteCount");
-    }
-
-    private Sort sortById() {
-        return Sort.by("id").descending();
-    }
 }
