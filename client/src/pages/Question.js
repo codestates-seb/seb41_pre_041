@@ -113,11 +113,16 @@ const Content = styled.div`
     margin: 16px 0px;
 
     font-size: 13px;
+
+    span { 
+      margin : 4px;
+      color : #6a737c; 
+    }
     a {
       margin: 4px;
       color: #6a737c;
     }
-    a:first-child {
+    span:first-child {
       margin-left: 0px;
     }
   }
@@ -135,7 +140,7 @@ const Content = styled.div`
       color: #6a737c;
     }
 
-    .user-wrap {
+    .user-container {
       display: flex;
       align-items: center;
     }
@@ -147,6 +152,11 @@ const Content = styled.div`
     .user-name {
       color: #0074cc;
     }
+  }
+
+  .flex {
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -174,6 +184,19 @@ const AnswerCreate = styled.div`
     margin: 20px 0px;
   }
 `;
+
+const DeleteButton = styled.button`
+  background: #0a95ff;
+  border: transparent;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 10px;
+  color: #ffffff;
+
+  &:hover {
+    background: #0074cc;
+  }
+`
 
 // 변수 작성란
 const handleAnswerSubmit = async (body) => {};
@@ -228,21 +251,21 @@ function Question() {
             </div>
             <div className="writer-area">
               <div>
-                <Link to="/notfound">Share</Link>
+                <span>Share</span>
                 <Link to="/edit/question">Edit</Link>
-                <Link to="/notfound">Follow</Link>
+                <span>Follow</span>
               </div>
               <div>
-                <Link to="/notfound">
+                <span>
                   Edited <time>{/*작성시간*/}</time>
-                </Link>
+                </span>
               </div>
-              <div>
+              <div className="flex">
                 <div className="user-info">
                   <span className="asked">
                     Asked <time>{/*작성시간*/}</time>
                   </span>
-                  <div className="user-wrap">
+                  <div>
                     <div className="user">
                       <svg
                         className="user-icon"
@@ -256,6 +279,7 @@ function Question() {
                     <span className="user-name">유저이름{/*유저네임*/}</span>
                   </div>
                 </div>
+                <DeleteButton>Delete</DeleteButton>
               </div>
             </div>
           </Content>
@@ -298,21 +322,21 @@ function Question() {
               </div>
               <div className="writer-area">
                 <div>
-                  <Link to="/notfound">Share</Link>
+                  <span>Share</span>
                   <Link to="/edit/answer">Edit</Link>
-                  <Link to="/notfound">Follow</Link>
+                  <span>Follow</span>
                 </div>
                 <div>
-                  <Link to="/notfound">
+                  <span>
                     Edited <time>{/*작성시간*/}</time>
-                  </Link>
+                  </span>
                 </div>
-                <div>
+                <div className="flex">
                   <div className="user-info">
                     <span className="asked">
                       Asked <time>{/*작성시간*/}</time>
                     </span>
-                    <div className="user-wrap">
+                    <div className="user-container">
                       <div className="user">
                         <svg
                           className="user-icon"
@@ -326,6 +350,7 @@ function Question() {
                       <span className="user-name">유저이름{/*유저네임*/}</span>
                     </div>
                   </div>
+                  <DeleteButton>Delete</DeleteButton>
                 </div>
               </div>
             </Content>
