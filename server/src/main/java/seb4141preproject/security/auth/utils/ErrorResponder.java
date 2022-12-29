@@ -1,9 +1,9 @@
 package seb4141preproject.security.auth.utils;
 
-import org.springframework.http.HttpStatus;
-
 import com.google.gson.Gson;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import seb4141preproject.utils.ErrorResponse;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
