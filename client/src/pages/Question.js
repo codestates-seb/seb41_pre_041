@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AnswerForm from "../components/AnswerForm";
+// import Pagination from "../components/Pagination";
 
 // CSS
 const QuestionContainer = styled.div`
@@ -211,19 +212,57 @@ const questionData = {
   view: 348,
 };
 
-const answerData = {
-  id: 1,
-  author: "백엔드",
-  content: "이건 답변 예시입니다. 이게 화면에 잘 뜨면 됩니다. 화이팅.",
-  createdAt: 20221219,
-  updateAt: 20221229,
-};
+const answerData = [
+  {
+    id: 1,
+    author: "백엔드",
+    content: "이건 답변 예시입니다. 이게 화면에 잘 뜨면 됩니다. 화이팅.",
+    createdAt: 20221219,
+    updateAt: 20221229,
+  },
+  {
+    id: 2,
+    author: "프론트엔드",
+    content: "살려주세요.",
+    createdAt: 20221220,
+    updateAt: 20221228,
+  },
+  {
+    id: 3,
+    author: "갓희진",
+    content: "제가 살려드리겠습니다.",
+    createdAt: 20221220,
+    updateAt: 20221228,
+  }
+];
 
 function Question({ isLogin }) {
   const { id } = useParams();
   const [singleQ, setSingleQ] = useState(questionData);
   //const [dataA, setdataA] = useState(answersData);
 
+  // pagination
+  // const [posts, setPosts] = useState([]);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [postsPerPage, setPostPerPage] = useState(5);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await axios.get(
+        
+  //     );
+  //     setPosts(response.data)
+  //   };
+  //   fetchData();
+  // }, []);
+
+  // const indexOfLast = currentPage * postsPerPage;
+  // const indexOfFirst = indexOfLast - postsPerPage;
+  // const currentPosts = (posts) => {
+  //   let currentPosts = 0;
+  //   currentPosts = posts.slice(indexOfFirst, indexOfLast);
+  //   return currentPosts;
+  // }
   /*단일 질문글 정보 받아오기*/
 
   const getSingleQ = async () => {
@@ -352,7 +391,8 @@ function Question({ isLogin }) {
           </div>
           {/* 답변 내용 */}
           {/* if 답변이 등록되어 있다면, 등록된 답변을 출력한다. */}
-          <AnswerContent>
+          {answerData.map((answerData) => (
+          <AnswerContent key={answerData.id}>
             <LeftBtn>
               <button>
                 <svg
@@ -415,6 +455,7 @@ function Question({ isLogin }) {
               </div>
             </Content>
           </AnswerContent>
+          ))}
           {/* 답변 작성 */}
           {/* 답변을 작성한다. */}
           <AnswerCreate>
@@ -423,6 +464,7 @@ function Question({ isLogin }) {
             </div>
             <AnswerForm getSingleQ={getSingleQ} isLogin={isLogin} />
           </AnswerCreate>
+          {/* <Pagination/> */}
         </AnswerArea>
       </Section>
     </QuestionContainer>
