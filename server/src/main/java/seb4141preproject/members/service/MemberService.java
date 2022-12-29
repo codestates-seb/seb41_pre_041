@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.members.entity.*;
 import seb4141preproject.members.repository.*;
+import seb4141preproject.security.auth.redis.RedisDao;
 import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+
+    private final RedisDao redisDao;
 
     public Member createMember(Member member) {
 
@@ -45,7 +48,7 @@ public class MemberService {
         Optional.ofNullable(member.getName())
                 .ifPresent(name -> findMember.setName(name));
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(password)); // TODO : passwordEncoder 적용 필요
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
 
         Member savedMember = memberRepository.save(findMember);
 
@@ -55,6 +58,12 @@ public class MemberService {
        return findVerifiedMember(id);
    }
    public void deleteMember (long id) {
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        Member member = optionalMember.orElseThrow(() ->
+                new RuntimeException("존재하지 않는 회원입니다."));
+
+        redisDao.deleteValues(member.getEmail()); // 해당 회원의 refreshToken 을 redis 에서 삭제
+
         memberRepository.deleteById(id);
    }
 
