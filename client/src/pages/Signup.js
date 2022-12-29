@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import logo1 from "../assets/quesiton.png";
-import logo2 from "../assets/arrow.png";
-import logo3 from "../assets/bookmark.png";
-import logo4 from "../assets/trophy.png";
 import { ReactComponent as Google } from "../assets/google-icon.svg";
 import { ReactComponent as Github } from "../assets/github-icon.svg";
 import { ReactComponent as Facebook } from "../assets/facebook-icon.svg";
@@ -57,11 +53,13 @@ const Signup = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     await axios
-      .post("/members", {
+      .post(`${process.env.REACT_APP_API_URL}/api/members`, {
         name,
         email,
         password,
-      })
+      },
+        // { withCredentials: true }
+      )
       .then((response) => {
         console.log(response);
         navigate("/login");
@@ -81,22 +79,42 @@ const Signup = () => {
           <div>
             <br />
             <div>
-              <img className="signupImage" width="24" alt="logo1" src={logo1} />{" "}
+              <img
+                className="signupImage"
+                width="24"
+                alt="logo1"
+                src="../assets/quesiton.png"
+              />{" "}
               Get unstuck — ask a question
             </div>
             <br />
             <div>
-              <img className="signupImage" width="24" alt="logo2" src={logo2} />{" "}
+              <img
+                className="signupImage"
+                width="24"
+                alt="logo2"
+                src="../assets/arrow.png"
+              />{" "}
               Unlock new privileges like voting and commenting
             </div>
             <br />
             <div>
-              <img className="signupImage" width="24" alt="logo3" src={logo3} />{" "}
+              <img
+                className="signupImage"
+                width="24"
+                alt="logo3"
+                src="../assets/bookmark.png"
+              />{" "}
               Save your favorite tags, filters, and jobs
             </div>
             <br />
             <div>
-              <img className="signupImage" width="24" alt="logo4" src={logo4} />{" "}
+              <img
+                className="signupImage"
+                width="24"
+                alt="logo4"
+                src="../assets/trophy.png"
+              />{" "}
               Earn reputation and badges
             </div>
             <br />
@@ -104,7 +122,7 @@ const Signup = () => {
               Collaborate and share knowledge with a private group for FREE.
             </div>
             <div>
-              <Link to="https://stackoverflow.co/teams/?utm_source=so-owned&utm_medium=product&utm_campaign=free-50&utm_content=public-sign-up">
+              <Link to="https://stackoverflow.co/teams/?utm_source=so-owned&utm_medium=product&utm_campaign=free-50&utm_content=public-sign-up" className="signuplink">
                 <div>Get Stack Overflow for Teams free for up to 50 users.</div>
               </Link>
             </div>
@@ -169,7 +187,7 @@ const Signup = () => {
                 </div>
                 <div className="password-valid">{passwordVaild}</div>
               </div>
-              <div classsName="checkbox-wrap">
+              <div className="checkbox-wrap">
                 <input type="checkbox" />
                 <label>{signupCheckbox}</label>
               </div>
@@ -181,14 +199,14 @@ const Signup = () => {
             </form>
             <Policy>
               By clicking “Sign up”, you agree to our
-              <Link to="https://stackoverflow.com/legal/terms-of-service/public">
+              <Link to="https://stackoverflow.com/legal/terms-of-service/public" className="signuplink">
                 <div>terms of service,</div>
               </Link>
-              <Link to="https://stackoverflow.com/legal/privacy-policy">
+              <Link to="https://stackoverflow.com/legal/privacy-policy" className="signuplink">
                 <div>privacy policy</div>
               </Link>{" "}
               and{" "}
-              <Link to="https://stackoverflow.com/legal/cookie-policy">
+              <Link to="https://stackoverflow.com/legal/cookie-policy" className="signuplink">
                 <div>cookie policy</div>
               </Link>
             </Policy>
@@ -201,7 +219,6 @@ const Signup = () => {
 
 const Container = styled.section`
   display: flex;
-  height: 100vh;
   background-color: rgb(237, 239, 240);
   justify-content: center;
 `;

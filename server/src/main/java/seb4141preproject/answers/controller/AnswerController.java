@@ -2,6 +2,8 @@ package seb4141preproject.answers.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,15 +19,12 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
-/**
- * - AnswerController
- * - 응답 테스트 완료
- */
 
 @RestController
 @RequestMapping("/api/answers")
 @Validated
 @Slf4j
+@CrossOrigin
 public class AnswerController {
     private final AnswerService answerService;
     private final AnswerMapper mapper;
@@ -70,10 +69,14 @@ public class AnswerController {
     }
 
     @GetMapping
-    public ResponseEntity getAnswers(@Positive @RequestParam int page,
-                                    @Positive @RequestParam int size,
-                                     @Positive @RequestParam long questionId) {
-        Page<Answer> answers = answerService.findAnswers(page - 1, size, questionId);
+    public ResponseEntity getAnswers(@Positive @RequestParam(defaultValue = "1") int page,
+                                     @Positive @RequestParam(defaultValue = "15") int size,
+                                     @Positive @RequestParam long questionId,
+                                     @SortDefault.SortDefaults({
+                                             @SortDefault(sort = "voteCount", direction = Sort.Direction.DESC),
+                                             @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                     }) Sort sort) {
+        Page<Answer> answers = answerService.findAnswers(page - 1, size, questionId, sort);
         List<Answer> answerList = answers.getContent();
 
         return new ResponseEntity<>(
