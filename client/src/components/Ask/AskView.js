@@ -169,7 +169,7 @@ const AskView = () => {
     window.location.reload();
   };
 
-  const addQuestion = async () => {
+  const addQuestion = async (title, body) => {
     await axios
       .post("/api/questions", {
         title,

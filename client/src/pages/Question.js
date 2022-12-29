@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import instance from "../api/axios";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AnswerForm from "../components/AnswerForm";
 
@@ -113,11 +116,16 @@ const Content = styled.div`
     margin: 16px 0px;
 
     font-size: 13px;
+
+    span {
+      margin: 4px;
+      color: #6a737c;
+    }
     a {
       margin: 4px;
       color: #6a737c;
     }
-    a:first-child {
+    span:first-child {
       margin-left: 0px;
     }
   }
@@ -135,7 +143,7 @@ const Content = styled.div`
       color: #6a737c;
     }
 
-    .user-wrap {
+    .user-container {
       display: flex;
       align-items: center;
     }
@@ -147,6 +155,11 @@ const Content = styled.div`
     .user-name {
       color: #0074cc;
     }
+  }
+
+  .flex {
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -175,16 +188,87 @@ const AnswerCreate = styled.div`
   }
 `;
 
-// 변수 작성란
-const handleAnswerSubmit = async (body) => {};
-//
+const DeleteButton = styled.button`
+  background: #0a95ff;
+  border: transparent;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 10px;
+  color: #ffffff;
 
-function Question() {
+  &:hover {
+    background: #0074cc;
+  }
+`;
+
+const questionData = {
+  id: 1,
+  title: "테스트 내용입니다. 본 내용이 제대로 떠야 합니다.",
+  author: "프론트엔드",
+  content: "이게 제대로 떠야 하는데 걱정이 큽니다 그래도 화이팅입니다",
+  createdAt: 20221219,
+  updateAt: 20221229,
+  view: 348,
+};
+
+const answerData = {
+  id: 1,
+  author: "백엔드",
+  content: "이건 답변 예시입니다. 이게 화면에 잘 뜨면 됩니다. 화이팅.",
+  createdAt: 20221219,
+  updateAt: 20221229,
+};
+
+function Question({ isLogin }) {
+  const { id } = useParams();
+  const [singleQ, setSingleQ] = useState(questionData);
+  //const [dataA, setdataA] = useState(answersData);
+
+  /*단일 질문글 정보 받아오기*/
+
+  const getSingleQ = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/questions/${id}`)
+      .then((response) => {
+        setSingleQ(response.data);
+        console.log(singleQ);
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
+  useEffect(() => {
+    getSingleQ();
+  }, []);
+
+  const removeQuestion = async () => {
+    await instance
+      .delete(`/api/questions/${id}`)
+      .then(() => {
+        getSingleQ();
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
+  const removeAnswer = async () => {
+    await axios
+      .delete(`/api/answers/${answerData.id}`)
+      .then(() => {
+        getSingleQ();
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
   return (
     <QuestionContainer>
       <QuestionHeader>
         <h1>
-          <Link to="/question">Question 질문글 제목란</Link>
+          <Link to={`/question/${id}`}>{singleQ.title}</Link>
         </h1>
         <div>
           <Link to="/ask">
@@ -192,16 +276,15 @@ function Question() {
           </Link>
         </div>
       </QuestionHeader>
-
       <AskDate>
         <div>
-          Asked <time>{/*작성시간*/}</time>
+          Asked <time>{singleQ.createdAt}</time>
         </div>
         <div>
-          Modified <time>{/*수정시간*/}</time>
+          Modified <time>{singleQ.updateAt}</time>
         </div>
         <div>
-          Viewd <time>{/*본 횟수*/}</time>
+          Viewd <time>{singleQ.view}</time>
         </div>
       </AskDate>
 
@@ -224,25 +307,25 @@ function Question() {
           {/* 게시글 내용 */}
           <Content>
             <div className="post-area">
-              <p>질문 작성한 내용이 와야될 부분입니다.</p>
+              <p>{singleQ.content}</p>
             </div>
             <div className="writer-area">
               <div>
-                <Link to="/notfound">Share</Link>
-                <Link to="/edit/question">Edit</Link>
-                <Link to="/notfound">Follow</Link>
+                <span>Share</span>
+                <Link to={`/edit/question/${singleQ.id}`}>Edit</Link>
+                <span>Follow</span>
               </div>
               <div>
-                <Link to="/notfound">
-                  Edited <time>{/*작성시간*/}</time>
-                </Link>
+                <span>
+                  Edited <time>{singleQ.updateAt}</time>
+                </span>
               </div>
-              <div>
+              <div className="flex">
                 <div className="user-info">
                   <span className="asked">
-                    Asked <time>{/*작성시간*/}</time>
+                    Asked <time>{singleQ.createdAt}</time>
                   </span>
-                  <div className="user-wrap">
+                  <div className="user-container">
                     <div className="user">
                       <svg
                         className="user-icon"
@@ -253,9 +336,10 @@ function Question() {
                         <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
                       </svg>
                     </div>
-                    <span className="user-name">유저이름{/*유저네임*/}</span>
+                    <span className="user-name">{singleQ.author}</span>
                   </div>
                 </div>
+                <DeleteButton onClick={removeQuestion}>Delete</DeleteButton>
               </div>
             </div>
           </Content>
@@ -294,25 +378,25 @@ function Question() {
             </LeftBtn>
             <Content>
               <div className="post-area">
-                <p>작성한 대답이 도착할 영역</p>
+                <p>{answerData.content}</p>
               </div>
               <div className="writer-area">
                 <div>
-                  <Link to="/notfound">Share</Link>
-                  <Link to="/edit/answer">Edit</Link>
-                  <Link to="/notfound">Follow</Link>
+                  <span>Share</span>
+                  <Link to={`/edit/answer/${answerData.id}`}>Edit</Link>
+                  <span>Follow</span>
                 </div>
                 <div>
-                  <Link to="/notfound">
-                    Edited <time>{/*작성시간*/}</time>
-                  </Link>
+                  <span>
+                    Edited <time>{answerData.updateAt}</time>
+                  </span>
                 </div>
-                <div>
+                <div className="flex">
                   <div className="user-info">
                     <span className="asked">
-                      Asked <time>{/*작성시간*/}</time>
+                      Asked <time>{answerData.createdAt}</time>
                     </span>
-                    <div className="user-wrap">
+                    <div className="user-container">
                       <div className="user">
                         <svg
                           className="user-icon"
@@ -323,9 +407,10 @@ function Question() {
                           <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
                         </svg>
                       </div>
-                      <span className="user-name">유저이름{/*유저네임*/}</span>
+                      <span className="user-name">{answerData.author}</span>
                     </div>
                   </div>
+                  <DeleteButton onClick={removeAnswer}>Delete</DeleteButton>
                 </div>
               </div>
             </Content>
@@ -336,7 +421,7 @@ function Question() {
             <div className="answer-header">
               <h1>Your Answer</h1>
             </div>
-            <AnswerForm onClickHandler={handleAnswerSubmit} />
+            <AnswerForm getSingleQ={getSingleQ} isLogin={isLogin} />
           </AnswerCreate>
         </AnswerArea>
       </Section>
