@@ -1,6 +1,6 @@
 import axios from "../../api/axios";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
 import { useState, useRef } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -70,12 +70,8 @@ const EditASection = styled.section`
   }
 `;
 
-const answerDummy = {
-  answerId: 1,
-  content: "요구사항 정의서부터 작성하세요. 화이팅~",
-};
-
-const EditAnswerView = () => {
+const EditAnswerView = ({ title, question, content }) => {
+  const { id } = useParams();
   const editARef = useRef();
   const navigate = useNavigate();
   const [newAnswer, setnewAnswer] = useState(false);
@@ -95,7 +91,7 @@ const EditAnswerView = () => {
   const handleUpdate = async () => {
     if (newAnswerValue.length) {
       await axios
-        .patch(`/api/answer/${answerDummy.answerId}`, {
+        .patch(`/api/answer/${id}`, {
           content: newAnswerValue,
         })
         .then(() => {
@@ -125,13 +121,13 @@ const EditAnswerView = () => {
         </p>
       </div>
       <div className="question-inform">
-        <span className="question-title">해당 답변의 제목</span>
-        <p className="question-body">해당 답변의 내용</p>
+        <span className="question-title">{title}</span>
+        <p className="question-body">{question}</p>
       </div>
       <h3>Answer</h3>
       <Editor
         id="input-body"
-        initialValue={answerDummy.content}
+        initialValue={content}
         previewStyle="vertical"
         height="300px"
         initialEditType="wysiwyg"
