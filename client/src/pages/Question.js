@@ -10,7 +10,7 @@ import AnswerForm from "../components/AnswerForm";
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 900px;
 
   padding: 24px;
   border-left: 1px solid #d6d9dc;
@@ -24,13 +24,16 @@ const QuestionHeader = styled.div`
 
   h1 {
     font-size: 27px;
+    width: 700px;
+    overflow-wrap: break-word;
   }
   a {
     color: #3b4045;
   }
 `;
 
-const AskButton = styled.div`
+const AskButton = styled.button`
+  width: 120px;
   padding: 10px;
   color: #ffffff;
   font-size: 13px;
@@ -108,6 +111,8 @@ const Content = styled.div`
   width: 100%;
 
   .post-area {
+    width: 700px;
+    overflow-wrap: break-word;
     font-size: 15px;
     margin: 10px 0px;
   }
@@ -296,10 +301,10 @@ function Question({ isLogin }) {
       </QuestionHeader>
       <AskDate>
         <div>
-          Asked <time>{singleQ.createdAt}</time>
+          Asked <time>{singleQ.createdAt.slice(0, 10)}</time>
         </div>
         <div>
-          Modified <time>{singleQ.updateAt}</time>
+          Modified <time>{singleQ.updateAt.slice(0, 10)}</time>
         </div>
         <div>
           Viewd <time>{singleQ.view}</time>
@@ -335,13 +340,13 @@ function Question({ isLogin }) {
               </div>
               <div>
                 <span>
-                  Edited <time>{singleQ.updateAt}</time>
+                  Edited <time>{singleQ.updateAt.slice(0, 10)}</time>
                 </span>
               </div>
               <div className="flex">
                 <div className="user-info">
                   <span className="asked">
-                    Asked <time>{singleQ.createdAt}</time>
+                    Asked <time>{singleQ.createdAt.slice(0, 10)}</time>
                   </span>
                   <div className="user-container">
                     <div className="user">
@@ -407,13 +412,13 @@ function Question({ isLogin }) {
                   </div>
                   <div>
                     <span>
-                      Edited <time>{singleA.updateAt}</time>
+                      Edited <time>{singleA.updateAt.slice(0, 10)}</time>
                     </span>
                   </div>
                   <div className="flex">
                     <div className="user-info">
                       <span className="asked">
-                        Asked <time>{singleA.createdAt}</time>
+                        Asked <time>{singleA.createdAt.slice(0, 10)}</time>
                       </span>
                       <div className="user-container">
                         <div className="user">
