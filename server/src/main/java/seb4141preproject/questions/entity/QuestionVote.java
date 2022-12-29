@@ -13,8 +13,9 @@ import javax.persistence.*;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"MEMBER_ID", "QUESTION_ID"}))
 public class QuestionVote extends Vote {
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUESTION_ID")
+    @JoinColumn(name = "question_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Question question;
 }

@@ -9,11 +9,13 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class QuestionView {
+
     @Id
     private long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JoinColumn(name = "id")
     private Question question;
 
     private long viewCount;

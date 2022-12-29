@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class QuestionVoteCountDto {
+
     private long questionId;
+
     private long voteCount;
 }
