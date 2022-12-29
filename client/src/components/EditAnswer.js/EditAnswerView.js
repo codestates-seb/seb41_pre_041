@@ -2,7 +2,7 @@ import axios from "../../api/axios";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
 const EditASection = styled.section`
@@ -57,8 +57,7 @@ const EditASection = styled.section`
     }
   }
 
-  .cancle-btn {
-    font-size: 16px;
+  .button-box > .cancle-btn {
     margin-left: 20px;
     border: none;
     background-color: transparent;
@@ -70,12 +69,30 @@ const EditASection = styled.section`
   }
 `;
 
-const EditAnswerView = ({ title, question, content }) => {
+const EditAnswerView = () => {
   const { id } = useParams();
   const editARef = useRef();
   const navigate = useNavigate();
   const [newAnswer, setnewAnswer] = useState(false);
   const [newAnswerValue, setNewAnswerValue] = useState("");
+  const [singleA, setSingleA] = useState({
+    id: 1,
+    memberId: 1,
+    questionId: 1,
+    content: "안녕하세요",
+    voteCount: 0,
+    createdAt: "2022-12-29T12:17:09.189009",
+    modifiedAt: "2022-12-29T12:17:09.189009",
+  });
+  const [singleQ, setSingleQ] = useState({
+    id: 1,
+    title: "테스트 내용입니다. 본 내용이 제대로 떠야 합니다.",
+    author: "프론트엔드",
+    content: "이게 제대로 떠야 하는데 걱정이 큽니다 그래도 화이팅입니다",
+    createdAt: 20221219,
+    updateAt: 20221229,
+    view: 348,
+  });
 
   const updateAnswer = () => {
     const data = editARef.current.getInstance().getMarkdown();
@@ -88,10 +105,41 @@ const EditAnswerView = ({ title, question, content }) => {
     setNewAnswerValue(data);
   };
 
+  const getSingleA = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/answers/${id}`)
+      .then((response) => {
+        setSingleA(response.data);
+        console.log(singleA);
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
+  const getSingleQ = async () => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/api/questions/${singleA.questionId}`
+      )
+      .then((response) => {
+        setSingleQ(response.data);
+        console.log(singleQ);
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
+  useEffect(() => {
+    getSingleA();
+    getSingleQ();
+  }, []);
+
   const handleUpdate = async () => {
     if (newAnswerValue.length) {
       await axios
-        .patch(`/api/answer/${id}`, {
+        .patch(`/api/answers/${id}`, {
           content: newAnswerValue,
         })
         .then(() => {
@@ -121,13 +169,13 @@ const EditAnswerView = ({ title, question, content }) => {
         </p>
       </div>
       <div className="question-inform">
-        <span className="question-title">{title}</span>
-        <p className="question-body">{question}</p>
+        <span className="question-title">{singleQ.title}</span>
+        <p className="question-body">{singleQ.content}</p>
       </div>
       <h3>Answer</h3>
       <Editor
         id="input-body"
-        initialValue={content}
+        initialValue={`${singleA.content}`}
         previewStyle="vertical"
         height="300px"
         initialEditType="wysiwyg"

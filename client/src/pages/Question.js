@@ -1,4 +1,5 @@
 import axios from "axios";
+import instance from "../api/axios";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -210,32 +211,21 @@ const questionData = {
   view: 348,
 };
 
-const answersData = [
-  {
-    id: 1,
-    author: "백엔드",
-    content: "이건 답변 예시입니다. 이게 화면에 잘 뜨면 됩니다. 화이팅.",
-    createdAt: 20221219,
-    updateAt: 20221229,
-  },
-  {
-    id: 2,
-    author: "풀스택",
-    content:
-      "이건 답변 예시 두 번째입니다. 이것도 화면에 잘 뜨면 됩니다. 화이팅.",
-    createdAt: 20221225,
-    updateAt: 20221230,
-  },
-];
+const answerData = {
+  id: 1,
+  author: "백엔드",
+  content: "이건 답변 예시입니다. 이게 화면에 잘 뜨면 됩니다. 화이팅.",
+  createdAt: 20221219,
+  updateAt: 20221229,
+};
 
-function Question() {
+function Question({ isLogin }) {
   const { id } = useParams();
   const [singleQ, setSingleQ] = useState(questionData);
-  const [dataA, setdataA] = useState(answersData);
+  //const [dataA, setdataA] = useState(answersData);
 
-  {
-    /*단일 질문글 정보 받아오기*/
-  }
+  /*단일 질문글 정보 받아오기*/
+
   const getSingleQ = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/api/questions/${id}`)
@@ -251,6 +241,28 @@ function Question() {
   useEffect(() => {
     getSingleQ();
   }, []);
+
+  const removeQuestion = async () => {
+    await instance
+      .delete(`/api/questions/${id}`)
+      .then(() => {
+        getSingleQ();
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
+  const removeAnswer = async () => {
+    await axios
+      .delete(`/api/answers/${answerData.id}`)
+      .then(() => {
+        getSingleQ();
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
 
   return (
     <QuestionContainer>
@@ -300,7 +312,7 @@ function Question() {
             <div className="writer-area">
               <div>
                 <span>Share</span>
-                <Link to="/edit/question">Edit</Link>
+                <Link to={`/edit/question/${singleQ.id}`}>Edit</Link>
                 <span>Follow</span>
               </div>
               <div>
@@ -313,7 +325,7 @@ function Question() {
                   <span className="asked">
                     Asked <time>{singleQ.createdAt}</time>
                   </span>
-                  <div>
+                  <div className="user-container">
                     <div className="user">
                       <svg
                         className="user-icon"
@@ -327,7 +339,7 @@ function Question() {
                     <span className="user-name">{singleQ.author}</span>
                   </div>
                 </div>
-                <DeleteButton>Delete</DeleteButton>
+                <DeleteButton onClick={removeQuestion}>Delete</DeleteButton>
               </div>
             </div>
           </Content>
@@ -366,23 +378,23 @@ function Question() {
             </LeftBtn>
             <Content>
               <div className="post-area">
-                <p>작성한 대답이 도착할 영역</p>
+                <p>{answerData.content}</p>
               </div>
               <div className="writer-area">
                 <div>
                   <span>Share</span>
-                  <Link to="/edit/answer">Edit</Link>
+                  <Link to={`/edit/answer/${answerData.id}`}>Edit</Link>
                   <span>Follow</span>
                 </div>
                 <div>
                   <span>
-                    Edited <time>{/*작성시간*/}</time>
+                    Edited <time>{answerData.updateAt}</time>
                   </span>
                 </div>
                 <div className="flex">
                   <div className="user-info">
                     <span className="asked">
-                      Asked <time>{/*작성시간*/}</time>
+                      Asked <time>{answerData.createdAt}</time>
                     </span>
                     <div className="user-container">
                       <div className="user">
@@ -395,10 +407,10 @@ function Question() {
                           <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
                         </svg>
                       </div>
-                      <span className="user-name">유저이름{/*유저네임*/}</span>
+                      <span className="user-name">{answerData.author}</span>
                     </div>
                   </div>
-                  <DeleteButton>Delete</DeleteButton>
+                  <DeleteButton onClick={removeAnswer}>Delete</DeleteButton>
                 </div>
               </div>
             </Content>
@@ -409,7 +421,7 @@ function Question() {
             <div className="answer-header">
               <h1>Your Answer</h1>
             </div>
-            <AnswerForm onClickHandler={handleAnswerSubmit} />
+            <AnswerForm getSingleQ={getSingleQ} isLogin={isLogin} />
           </AnswerCreate>
         </AnswerArea>
       </Section>

@@ -31,18 +31,9 @@ const AnswerButton = styled.button`
   }
 `;
 
-const LoginMessage = styled.span`
-  font-size: 15px;
-  margin-left: 10px;
-  a {
-    color: #0074cc;
-  }
-`;
-
-function AnswerForm({ initialValue, onClickHandler, isLogin }) {
-  const { params } = useParams();
+function AnswerForm({ getSingleQ, isLogin }) {
+  const { questionId } = useParams();
   const answerRef = useRef();
-  const [answerData, setAnswerData] = useState([]);
   const [isError, setIsError] = useState(false);
   const [body, setBody] = useState("");
   const bodyLength = body.length;
@@ -54,23 +45,22 @@ function AnswerForm({ initialValue, onClickHandler, isLogin }) {
   };
 
   const onSubmit = () => {
-    !isError && onClickHandler(body);
-    answerRef.current.getInstance().setMarkdown("");
-    setIsError(false);
+    if (!isError) {
+      addAnswer(questionId, body);
+    }
   };
 
-  const addAnswer = async () => {
+  const addAnswer = async (questionId, body) => {
     await axios
       .post("/api/answers", {
-        params,
+        questionId,
         content: body,
       })
-      .then((res) => {
-        setAnswerData(res.data.body);
-        console.log(answerData);
+      .then(() => {
+        // 답변 목록 갱신 필요
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
       });
   };
 
@@ -79,7 +69,7 @@ function AnswerForm({ initialValue, onClickHandler, isLogin }) {
       <EditorWrap error={isError}>
         <Editor
           ref={answerRef} // 값을 저장
-          initialValue={initialValue || " "}
+          initialValue={" "}
           height="300px"
           autofocus={false}
           initialEditType="wysiwyg"
@@ -98,13 +88,12 @@ function AnswerForm({ initialValue, onClickHandler, isLogin }) {
           </ErrorMassage>
         )}
       </EditorWrap>
-      <AnswerButton onClick={onSubmit}>Post Your Answer</AnswerButton>
-      {!isLogin ? null : (
-        <LoginMessage>
-          <Link to="/signup">Sign up</Link>
-          &nbsp;or&nbsp;
-          <Link to="/login">Log in</Link>
-        </LoginMessage>
+      {isLogin ? (
+        <AnswerButton onClick={onSubmit}>Post Your Answer</AnswerButton>
+      ) : (
+        <Link to="/login">
+          <AnswerButton>Post Your Answer</AnswerButton>
+        </Link>
       )}
     </>
   );
