@@ -31,7 +31,7 @@ const AnswerButton = styled.button`
   }
 `;
 
-function AnswerForm({ getSingleQ, isLogin }) {
+function AnswerForm({ isLogin }) {
   const { questionId } = useParams();
   const answerRef = useRef();
   const [isError, setIsError] = useState(false);
@@ -57,7 +57,7 @@ function AnswerForm({ getSingleQ, isLogin }) {
         content: body,
       })
       .then(() => {
-        // 답변 목록 갱신 필요
+        window.location.reload();
       })
       .catch((error) => {
         console.log(`ERROR RESPONSE : ${error.status}`);

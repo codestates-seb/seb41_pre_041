@@ -19,6 +19,8 @@ const SectionContainer = styled.div`
   display: flex;
   width: 1264px;
   min-width: 1264px;
+  min-height: 950px;
+  overflow: auto;
 `;
 
 const Main = ({ isLogin }) => {

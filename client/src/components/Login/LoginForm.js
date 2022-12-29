@@ -10,7 +10,8 @@ const LoginForm = () => {
   const emailReg = /[a-z0-9]+@[a-z]+.[a-z]{2,6}/;
   const pwdReg = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
 
-  const loginHandler = async () => {
+  const loginHandler = async (e) => {
+    e.preventDefault();
     if (!email.length) {
       setEmailWarning("Email cannot be empty.");
     } else if (!emailReg.test(email)) {
@@ -35,14 +36,10 @@ const LoginForm = () => {
       setEmailWarning("");
       setPasswordWarning("");
       await axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/api/auths/login`,
-          {
-            email,
-            password,
-          },
-          { withCredentials: true }
-        )
+        .post(`${process.env.REACT_APP_API_URL}/api/auths/login`, {
+          email,
+          password,
+        })
         .then((response) => {
           if (response) {
             console.log(response);
@@ -61,43 +58,45 @@ const LoginForm = () => {
   };
 
   return (
-    <section className="account-login-container">
-      <div className="email">
-        <label htmlFor="email" className="email-label">
-          Email
-        </label>
-        <div className="email-input">
-          <input
-            id={emailWarning ? "wrong-email" : "email"}
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          ></input>
-          <span className="warning">{emailWarning}</span>
+    <section>
+      <form className="account-login-container" onSubmit={loginHandler}>
+        <div className="email">
+          <label htmlFor="email" className="email-label">
+            Email
+          </label>
+          <div className="email-input">
+            <input
+              id={emailWarning ? "wrong-email" : "email"}
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            ></input>
+            <span className="warning">{emailWarning}</span>
+          </div>
         </div>
-      </div>
-      <div className="password">
-        <label htmlFor="password" className="password-label">
-          Password
-          <Link to="/notfound" className="talent-link">
-            <span>Forgot password?</span>
-          </Link>
-        </label>
-        <div className="password-input">
-          <input
-            id={passwordWarning ? "wrong-password" : "password"}
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          ></input>
-          <span className="warning">{passwordWarning}</span>
+        <div className="password">
+          <label htmlFor="password" className="password-label">
+            Password
+            <Link to="/notfound" className="talent-link">
+              <span>Forgot password?</span>
+            </Link>
+          </label>
+          <div className="password-input">
+            <input
+              id={passwordWarning ? "wrong-password" : "password"}
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            ></input>
+            <span className="warning">{passwordWarning}</span>
+          </div>
         </div>
-      </div>
-      <div className="login">
-        <button onClick={loginHandler} className="login-btn">
-          Log in
-        </button>
-      </div>
+        <div className="login">
+          <button type="submit" className="login-btn">
+            Log in
+          </button>
+        </div>
+      </form>
     </section>
   );
 };

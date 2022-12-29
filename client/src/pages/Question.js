@@ -202,44 +202,10 @@ const DeleteButton = styled.button`
   }
 `;
 
-const questionData = {
-  id: 1,
-  title: "테스트 내용입니다. 본 내용이 제대로 떠야 합니다.",
-  author: "프론트엔드",
-  content: "이게 제대로 떠야 하는데 걱정이 큽니다 그래도 화이팅입니다",
-  createdAt: 20221219,
-  updateAt: 20221229,
-  view: 348,
-};
-
-const answerData = [
-  {
-    id: 1,
-    author: "백엔드",
-    content: "이건 답변 예시입니다. 이게 화면에 잘 뜨면 됩니다. 화이팅.",
-    createdAt: 20221219,
-    updateAt: 20221229,
-  },
-  {
-    id: 2,
-    author: "프론트엔드",
-    content: "살려주세요.",
-    createdAt: 20221220,
-    updateAt: 20221228,
-  },
-  {
-    id: 3,
-    author: "갓희진",
-    content: "제가 살려드리겠습니다.",
-    createdAt: 20221220,
-    updateAt: 20221228,
-  }
-];
-
 function Question({ isLogin }) {
   const { id } = useParams();
-  const [singleQ, setSingleQ] = useState(questionData);
-  //const [dataA, setdataA] = useState(answersData);
+  const [singleQ, setSingleQ] = useState({});
+  const [dataA, setdataA] = useState([]);
 
   // pagination
   // const [posts, setPosts] = useState([]);
@@ -249,7 +215,7 @@ function Question({ isLogin }) {
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const response = await axios.get(
-        
+
   //     );
   //     setPosts(response.data)
   //   };
@@ -277,8 +243,21 @@ function Question({ isLogin }) {
       });
   };
 
+  const getDataA = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/answers`)
+      .then((response) => {
+        setdataA(response.data.data);
+        console.log(dataA);
+      })
+      .catch((error) => {
+        console.log(`ERROR RESPONSE : ${error.status}`);
+      });
+  };
+
   useEffect(() => {
     getSingleQ();
+    getDataA();
   }, []);
 
   const removeQuestion = async () => {
@@ -294,7 +273,7 @@ function Question({ isLogin }) {
 
   const removeAnswer = async () => {
     await axios
-      .delete(`/api/answers/${answerData.id}`)
+      .delete(`/api/answers/${dataA.id}`)
       .then(() => {
         getSingleQ();
       })
@@ -391,70 +370,70 @@ function Question({ isLogin }) {
           </div>
           {/* 답변 내용 */}
           {/* if 답변이 등록되어 있다면, 등록된 답변을 출력한다. */}
-          {answerData.map((answerData) => (
-          <AnswerContent key={answerData.id}>
-            <LeftBtn>
-              <button>
-                <svg
-                  className="icon"
-                  width="36"
-                  height="36"
-                  viewBox="0 0 36 36"
-                >
-                  <path d="M2 25h32L18 9 2 25Z"></path>
-                </svg>
-              </button>
-              <div className="count">1</div>
-              <button>
-                <svg
-                  className="icon"
-                  width="36"
-                  height="36"
-                  viewBox="0 0 36 36"
-                >
-                  <path d="M2 11h32L18 27 2 11Z"></path>
-                </svg>
-              </button>
-            </LeftBtn>
-            <Content>
-              <div className="post-area">
-                <p>{answerData.content}</p>
-              </div>
-              <div className="writer-area">
-                <div>
-                  <span>Share</span>
-                  <Link to={`/edit/answer/${answerData.id}`}>Edit</Link>
-                  <span>Follow</span>
+          {dataA.map((singleA) => (
+            <AnswerContent key={singleA.id}>
+              <LeftBtn>
+                <button>
+                  <svg
+                    className="icon"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                  >
+                    <path d="M2 25h32L18 9 2 25Z"></path>
+                  </svg>
+                </button>
+                <div className="count">1</div>
+                <button>
+                  <svg
+                    className="icon"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 36 36"
+                  >
+                    <path d="M2 11h32L18 27 2 11Z"></path>
+                  </svg>
+                </button>
+              </LeftBtn>
+              <Content>
+                <div className="post-area">
+                  <p>{singleA.content}</p>
                 </div>
-                <div>
-                  <span>
-                    Edited <time>{answerData.updateAt}</time>
-                  </span>
-                </div>
-                <div className="flex">
-                  <div className="user-info">
-                    <span className="asked">
-                      Asked <time>{answerData.createdAt}</time>
-                    </span>
-                    <div className="user-container">
-                      <div className="user">
-                        <svg
-                          className="user-icon"
-                          width="24"
-                          heigth="24"
-                          viewBox="0 0 1000 1000"
-                        >
-                          <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
-                        </svg>
-                      </div>
-                      <span className="user-name">{answerData.author}</span>
-                    </div>
+                <div className="writer-area">
+                  <div>
+                    <span>Share</span>
+                    <Link to={`/edit/answer/${singleA.id}`}>Edit</Link>
+                    <span>Follow</span>
                   </div>
-                  <DeleteButton onClick={removeAnswer}>Delete</DeleteButton>
+                  <div>
+                    <span>
+                      Edited <time>{singleA.updateAt}</time>
+                    </span>
+                  </div>
+                  <div className="flex">
+                    <div className="user-info">
+                      <span className="asked">
+                        Asked <time>{singleA.createdAt}</time>
+                      </span>
+                      <div className="user-container">
+                        <div className="user">
+                          <svg
+                            className="user-icon"
+                            width="24"
+                            heigth="24"
+                            viewBox="0 0 1000 1000"
+                          >
+                            <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
+                          </svg>
+                        </div>
+                        <span className="user-name">{singleA.author}</span>
+                      </div>
+                    </div>
+                    <DeleteButton onClick={removeAnswer}>Delete</DeleteButton>
+                  </div>
                 </div>
-              </div>
-            </Content>
-          </AnswerContent>
+              </Content>
+            </AnswerContent>
           ))}
           {/* 답변 작성 */}
           {/* 답변을 작성한다. */}
@@ -462,7 +441,7 @@ function Question({ isLogin }) {
             <div className="answer-header">
               <h1>Your Answer</h1>
             </div>
-            <AnswerForm getSingleQ={getSingleQ} isLogin={isLogin} />
+            <AnswerForm isLogin={isLogin} />
           </AnswerCreate>
           {/* <Pagination/> */}
         </AnswerArea>
