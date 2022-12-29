@@ -1,6 +1,7 @@
 package seb4141preproject.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -62,6 +63,14 @@ public class ExceptionAdvice {
         log.error("해당 요소가 없습니다.", e);
 
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleDuplicateKeyException(DuplicateKeyException e) {
+        log.error("해당 키가 중복입니다.", e);
+
+        return ErrorResponse.of(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler
