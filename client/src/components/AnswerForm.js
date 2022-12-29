@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Editor } from '@toast-ui/react-editor';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
+import axios from "../api/axios";
+import { useParams } from 'react-router-dom';
 
 const EditorWrap = styled.div`
     border-radius: 4px;
@@ -38,7 +40,9 @@ const LoginMessage = styled.span`
 `
 
 function AnswerForm({ initialValue, onClickHandler, isLogin }) {
+    const params = useParams();
     const answerRef = useRef();
+    const [answerData, setAnswerData] = useState([]);
     const [isError, setIsError] = useState(false);
     const [body, setBody] = useState('');
     const bodyLength = body.length;
@@ -53,6 +57,21 @@ function AnswerForm({ initialValue, onClickHandler, isLogin }) {
         !isError && onClickHandler(body);
         answerRef.current.getInstance().setMarkdown('');
         setIsError(false);
+    }
+
+    const addAnswer = async () => {
+        await axios
+            .post("/api/answers", {
+                params,
+                content: body,
+            })
+            .then((res) => {
+                setAnswerData(res.data.body);
+                console.log(answerData);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     return (
