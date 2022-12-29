@@ -9,6 +9,7 @@ import seb4141preproject.questions.entity.QuestionVote;
 
 @Mapper(componentModel = "spring")
 public interface QuestionVoteMapper {
+
     default QuestionVote questionVoteRequestDtoToQuestionVote(QuestionVoteRequestDto requestDto, long questionId) {
         QuestionVote questionVote = new QuestionVote();
         Question question = new Question();

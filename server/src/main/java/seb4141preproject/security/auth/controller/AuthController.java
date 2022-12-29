@@ -4,14 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import seb4141preproject.security.auth.dto.LoginDto;
+import seb4141preproject.security.auth.dto.TokenDto;
+import seb4141preproject.security.auth.service.AuthService;
 import seb4141preproject.members.entity.Member;
-import seb4141preproject.security.auth.dto.*;
-import seb4141preproject.security.auth.service.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor

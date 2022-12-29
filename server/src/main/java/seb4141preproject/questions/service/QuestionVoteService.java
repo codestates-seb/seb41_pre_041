@@ -13,6 +13,7 @@ import seb4141preproject.utils.Vote;
 @Service
 @Transactional
 public class QuestionVoteService {
+
     private final QuestionVoteRepository questionVoteRepository;
 
     public QuestionVote createQuestionVote(QuestionVote questionVote) {
@@ -36,6 +37,6 @@ public class QuestionVoteService {
                         .orElseThrow();
         foundQuestionVote.setVoteStatus(questionVote.getVoteStatus());
 
-        return questionVoteRepository.save(foundQuestionVote);
+        return foundQuestionVote;
     }
 }

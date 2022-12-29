@@ -34,11 +34,11 @@ const Main = ({ isLogin }) => {
               element={<Question isLogin={isLogin} />}
             />
             <Route
-              path="/edit/answer"
+              path="/edit/answer/:id"
               element={isLogin ? <EditAnswer /> : <NotFound />}
             />
             <Route
-              path="/edit/question"
+              path="/edit/question/:id"
               element={isLogin ? <EditQuestion /> : <NotFound />}
             />
             <Route path="/*" element={<NotFound />} />

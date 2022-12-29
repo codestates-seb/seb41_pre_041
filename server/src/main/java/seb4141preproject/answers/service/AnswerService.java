@@ -38,7 +38,7 @@ public class AnswerService {
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Answer updateAnswer(Answer answer) {
-        Answer findAnswer = findVerifiedAnswer(answer.getAnswerId());
+        Answer findAnswer = findVerifiedAnswer(answer.getId());
 
         Optional.ofNullable(answer.getContent())
                 .ifPresent(content -> findAnswer.setContent(content));
@@ -53,7 +53,7 @@ public class AnswerService {
     @Transactional(readOnly = true)
     public Page<Answer> findAnswers(int page, int size, long questionId) {
         return answerRepository.findByQuestionId(questionId, PageRequest.of(page, size,
-                Sort.by("answerId").descending()));
+                Sort.by("id").descending()));
     }
 
     public void deleteAnswer(long answerId) {

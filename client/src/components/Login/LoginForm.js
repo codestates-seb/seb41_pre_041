@@ -7,34 +7,49 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [emailWarning, setEmailWarning] = useState("");
   const [passwordWarning, setPasswordWarning] = useState("");
-
-  const reg = /[a-z0-9]+@[a-z]+.[a-z]{2,6}/;
+  const emailReg = /[a-z0-9]+@[a-z]+.[a-z]{2,6}/;
+  const pwdReg = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
 
   const loginHandler = async () => {
     if (!email.length) {
       setEmailWarning("Email cannot be empty.");
-    } else if (!reg.test(email)) {
+    } else if (!emailReg.test(email)) {
       setEmailWarning("The email is not a valid email address.");
     } else {
       setEmailWarning("");
     }
+
     if (!password.length) {
       setPasswordWarning("Password cannot be empty.");
+    } else if (!pwdReg.test(password)) {
+      setPasswordWarning("The password is not a valid password.");
     } else {
       setPasswordWarning("");
     }
-    if (password.length && email.length && reg.test(email)) {
+    if (
+      password.length &&
+      email.length &&
+      emailReg.test(email) &&
+      pwdReg.test(password)
+    ) {
       setEmailWarning("");
       setPasswordWarning("");
       await axios
-        .post("/login", {
-          email,
-          password,
-        })
+        .post(
+          `${process.env.REACT_APP_API_URL}/api/auths/login`,
+          {
+            email,
+            password,
+          },
+          { withCredentials: true }
+        )
         .then((response) => {
           if (response) {
-            let accessToken = response.headers.get("Authorization");
-            sessionStorage.setItem("Authorization", accessToken);
+            console.log(response);
+            let accessToken = response.headers.authorization;
+            let refreshToken = response.headers.refreshtoken;
+            sessionStorage.setItem("accessToken", accessToken);
+            sessionStorage.setItem("refreshToken", refreshToken);
             window.location.replace("/");
           }
         })

@@ -27,14 +27,14 @@ const SectionWrap = styled.div`
 `;
 
 function App() {
-  const isLoginStore = () => !!sessionStorage.getItem("Authorization");
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    isLoginStore() ? setIsLogin(true) : setIsLogin(false);
+    !!sessionStorage.getItem("accessToken")
+      ? setIsLogin(true)
+      : setIsLogin(false);
   }, []);
 
-  // 로그인 기능 구현 후  각 페이지 로딩 상태 확인 필수
   return (
     <>
       <Router>
