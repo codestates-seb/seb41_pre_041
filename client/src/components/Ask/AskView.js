@@ -140,10 +140,10 @@ const AskView = () => {
   const [bodyValue, setBodyValue] = useState("");
 
   const hadleTitle = (e) => {
-    if (e.target.value.length < 15) {
-      setTitle(false);
-    } else {
+    if (e.target.value.length >= 15 && e.target.value.length <= 150) {
       setTitle(true);
+    } else {
+      setTitle(false);
     }
     setTitleValue(e.target.value);
   };
@@ -151,10 +151,10 @@ const AskView = () => {
   const handleBody = () => {
     const data = askRef.current.getInstance().getMarkdown();
 
-    if (data.length < 20) {
-      setBody(false);
-    } else {
+    if (data.length >= 30 && data.length <= 65535 ) {
       setBody(true);
+    } else {
+      setBody(false);
     }
     setBodyValue(data);
   };
@@ -225,7 +225,7 @@ const AskView = () => {
           </label>
           <p className="input-notice">
             Be specific and imagine you’re asking a question to another person.{" "}
-            <span className="warning">Minimum 15 characters.</span>
+            <span className="warning">Minimum 15 characters and maximum 150 characters.</span>
           </p>
           <input
             id="input-title"
@@ -244,7 +244,7 @@ const AskView = () => {
             <br />
             And Describe what you tried, what you expected to happen, and what
             actually resulted.{" "}
-            <span className="warning">Minimum 20 characters.</span>
+            <span className="warning">Minimum 30 characters maximum 65535 characters.</span>
           </p>
           <Editor
             id="input-body"
