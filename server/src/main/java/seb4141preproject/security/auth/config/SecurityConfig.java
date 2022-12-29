@@ -2,36 +2,26 @@ package seb4141preproject.security.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import seb4141preproject.security.auth.handler.CustomAccessDeniedHandler;
 import seb4141preproject.security.auth.handler.CustomAuthenticationEntryPoint;
 import seb4141preproject.security.auth.provider.JwtTokenizer;
-import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
-
-import java.util.Arrays;
 
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
-    private final CustomAuthorityUtils authorityUtils;
 
-    public SecurityConfig(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public SecurityConfig(JwtTokenizer jwtTokenizer) {
         this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
     }
 
-    @Bean // TODO : 구체적인 CORS 설정 필요
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .headers().frameOptions().disable()

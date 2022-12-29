@@ -1,27 +1,24 @@
 package seb4141preproject.security.auth.service;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import seb4141preproject.security.auth.provider.*;
 import seb4141preproject.security.auth.dto.*;
 import seb4141preproject.security.auth.entity.*;
 import seb4141preproject.security.auth.repository.RefreshTokenRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    private final UserDetailsService userDetailsService;
     private final JwtTokenizer jwtTokenizer;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -47,7 +44,6 @@ public class AuthService {
     }
 
     public TokenDto reissue(HttpServletRequest request) {
-
         // 1. Refresh Token 검증
         String accessToken = request.getHeader("Authorization").substring(7);
         String refreshToken = request.getHeader("refreshToken").substring(7);
@@ -81,10 +77,11 @@ public class AuthService {
     }
 
     public void logout(HttpServletRequest request) {
-
         String refreshToken = request.getHeader("refreshToken").substring(7);
-        System.out.println("refresh Token : " + refreshToken);
+        String accessToken = request.getHeader("Authorization").substring(7);
+
         // TODO: 사용된 토큰은 폐기 -> accessToken 의 expiration 을 짧게 설정
+
 
         // Refresh token 제거
         RefreshToken findRefreshToken = refreshTokenRepository.findByValue(refreshToken)
@@ -93,8 +90,7 @@ public class AuthService {
         refreshTokenRepository.delete(findRefreshToken);
     }
 
-    // 클래스 내부에서만 사용 가능한 토큰 생성하는 로직
-    private TokenDto createToken(Authentication authentication) {
+    private TokenDto createToken(Authentication authentication) { // 토큰 생성
         String accessToken = jwtTokenizer.generateAccessToken(authentication);
         String refreshToken = jwtTokenizer.generateRefreshToken(authentication);
         TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
