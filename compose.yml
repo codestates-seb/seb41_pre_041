@@ -1,6 +1,7 @@
 services:
   web:
     image: nginx
+    restart: always
     ports:
       - 80:80
     volumes:
@@ -11,6 +12,7 @@ services:
 
   db:
     image: mariadb
+    restart: always
     secrets:
       - db-password
     volumes:
@@ -23,16 +25,22 @@ services:
       interval: 3s
       retries: 5
       start_period: 30s
+    ports:
+      - 3306:3306
 
   redis:
     image: redis
+    restart: always
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       interval: 3s
       retries: 5
+    ports:
+      - 6379:6379
 
   backend:
     image: eclipse-temurin:11-jre
+    restart: always
     secrets:
       - backend-secrets
     command: java -jar app.jar
