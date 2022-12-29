@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.answers.entity.Answer;
 import seb4141preproject.answers.repository.AnswerRepository;
+import seb4141preproject.answers.repository.AnswerVoteRepository;
 import seb4141preproject.members.entity.Member;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.repository.QuestionRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,9 +28,12 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+    private final AnswerVoteRepository answerVoteRepository;
+
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository, AnswerVoteRepository answerVoteRepository) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
+        this.answerVoteRepository = answerVoteRepository;
     }
 
     public Answer createAnswer(Answer answer) {
@@ -51,9 +57,9 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Answer> findAnswers(int page, int size, long questionId) {
-        return answerRepository.findByQuestionId(questionId, PageRequest.of(page, size,
-                Sort.by("id").descending()));
+    public Page<Answer> findAnswers(int page, int size, long questionId, Sort sort) {
+
+        return answerRepository.findByQuestionId(questionId, PageRequest.of(page, size),sort);
     }
 
     public void deleteAnswer(long answerId) {
@@ -79,5 +85,13 @@ public class AnswerService {
                 optionalQuestion.orElseThrow(()->
                         new IllegalArgumentException("질문을 찾을 수 없습니다."));
         return findQuestion;
+    }
+
+    private Sort sortByVoteCount() {
+        return Sort.by(Sort.Direction.ASC, "voteCount");
+    }
+
+    private Sort sortById() {
+        return Sort.by("id").descending();
     }
 }
