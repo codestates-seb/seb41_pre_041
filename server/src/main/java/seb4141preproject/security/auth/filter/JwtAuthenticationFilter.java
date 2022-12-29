@@ -8,10 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
+import seb4141preproject.security.auth.dto.TokenDto;
 import seb4141preproject.security.auth.provider.*;
+import seb4141preproject.security.auth.redis.RedisDao;
+import seb4141preproject.security.auth.service.AuthService;
 import seb4141preproject.security.auth.utils.HeaderMapRequestWrapper;
 
 import javax.servlet.FilterChain;
@@ -26,39 +30,37 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
+    private final AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // request header 에서 accessToken 추출
-        String accessToken = resolveToken(request);
-        // HttpServletRequest 의 header 를 수정하기 위한 wrapper 객체 생성
-        HeaderMapRequestWrapper wrapper = new HeaderMapRequestWrapper(request);
+        String accessToken = resolveAccessToken(request); // request header 에서 accessToken 추출
+        HeaderMapRequestWrapper wrapper = new HeaderMapRequestWrapper(request); // (reissue 시) header 값 덮어쓰기를 위한 wrapper 객체 생성
 
-        // validateToken 이 이상없이 됐을 경우
-        if (StringUtils.hasText(accessToken) && jwtTokenizer.validateToken(accessToken, request) == 0) {
+        int validateResult = jwtTokenizer.validateToken(accessToken);
+
+        if (validateResult == 0) { // validateToken 이상 없을 경우
 
             Authentication authentication = jwtTokenizer.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // jwt 토큰이 만료되었을 경우
-        } else if (StringUtils.hasText(accessToken) && jwtTokenizer.validateToken(accessToken, request) == 1) {
+        } else if (validateResult == 1) { // jwt 토큰이 만료되었을 경우
 
-            // autoReissue 로직을 거쳐서 얻은 accessToken, refreshToken 을 map 으로 받음
-            Map<String, String> map = autoReissue(request);
+            String refreshToken = resolveRefreshToken(request); // request header 에서 refreshToken 추출
 
-            // 새로운 accessToken 으로 authentication 생성
-            Authentication authentication = jwtTokenizer.getAuthentication(map.get("authorization"));
-            // SecurityContextHolder 에 저장
+            Authentication authentication = jwtTokenizer.getAuthentication(refreshToken); // refreshToken 으로 authentication 생성
+            // -> 만료된 accessToken 으로는 getAuthentication 불가능하기 때문
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // wrapper 로 감싼 HttpServletRequest header 에 새로운 accessToken, refreshToken 값 할당
-            wrapper.addHeader("Authorization", "Bearer " + map.get("authorization"));
-            wrapper.addHeader("RefreshToken", "Bearer " + map.get("refreshToken"));
+            TokenDto tokenDto = authService.reissue(request, authentication); // 토큰 재발급
+
+            setHeaderResponse(wrapper, response, tokenDto); // header, response 값 재설정
+
         }
-        // validateToken 결과값이 2(정상통과 or 토큰 만료가 아닌 겅우)인 경우 바로 다음 필터링 진행
+        // validateToken 결과값이 2(이상 없음 or 토큰 만료가 아닌 겅우)인 경우 바로 다음 필터링 진행
         filterChain.doFilter(wrapper, response);
     }
 
@@ -66,36 +68,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 해당 url 들은 filter 를 거치지 않도록 설정 (토큰 인증이 필요 없는 endpoint)
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        String[] urls = new String[] {"/api/auths/reissue", "/api/members", "/api/auths/login"};
+        String[] urls = new String[] {"/api/members", "/api/auths/login"}; // 회원가입, 로그인은 토큰이 필요 없음
 
         return Arrays.stream(urls).anyMatch(s -> s.equals(path));
     }
 
-    private String resolveToken(HttpServletRequest request) {
+    private String resolveAccessToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
+
         return null;
     }
 
-    private Map autoReissue(HttpServletRequest request) { // restTemplate 을 이용한 http request 전송
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
-        HttpHeaders headers = new HttpHeaders(); // Header 인스턴스 생성
+    private String resolveRefreshToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("RefreshToken");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
 
-        headers.setContentType(MediaType.APPLICATION_JSON); // 서버가 받는 데이터 타입 : JSON
-        headers.set("Authorization", request.getHeader("Authorization"));
-        headers.set("refreshToken", request.getHeader("refreshToken"));
+        return null;
+    }
 
-        HttpEntity<String> httpRequest = new HttpEntity<>(headers);
+    private void setHeaderResponse(HeaderMapRequestWrapper wrapper,
+                                   HttpServletResponse response,
+                                   TokenDto tokenDto) {
 
-        ResponseEntity<String> response =
-                restTemplate.postForEntity("http://localhost:8080/api/auths/reissue", httpRequest, String.class); // TODO : 실제 서버 운용 시, 서버 url 작성  필요
+        // accessToken, refreshToken Header 값 새로 덮어쓰기
+        wrapper.addHeader("Authorization", tokenDto.getAccessToken());
+        wrapper.addHeader("RefreshToken", tokenDto.getRefreshToken());
 
-        Map<String, String> map = new HashMap<>();
-        map.put("authorization", response.getHeaders().getFirst("Authorization"));
-        map.put("refreshToken", response.getHeaders().getFirst("RefreshToken"));
-
-        return map;
+        // reissue 후 response header 에 새로운 accessToken, refreshToken 값 추가
+        response.addHeader("Authorization", tokenDto.getAccessToken());
+        response.addHeader("RefreshToken", tokenDto.getRefreshToken());
     }
 }

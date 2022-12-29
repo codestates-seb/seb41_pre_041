@@ -1,7 +1,6 @@
 package seb4141preproject.security.auth.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import javax.servlet.http.HttpServletRequest;
