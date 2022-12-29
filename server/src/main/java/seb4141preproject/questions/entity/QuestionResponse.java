@@ -24,10 +24,13 @@ import java.time.LocalDateTime;
                         "on ac.question_id = q.id " +
                 "left join (select question_id, count(*) vote_count " +
                         "from question_vote " +
-                        "group by question_id having vote_status = 1) quv " +
+                        "where vote_status = 1 " +
+                        "group by question_id) quv " +
                         "on quv.question_id = q.id " +
-                "left join (select question_id, count(*) vote_count from question_vote " +
-                        "group by question_id having vote_status = 2) qdv " +
+                "left join (select question_id, count(*) vote_count " +
+                        "from question_vote " +
+                        "where vote_status = 2 " +
+                        "group by question_id) qdv " +
                         "on qdv.question_id = q.id"
 )
 @Synchronize({"question", "member", "question_view", "answer", "question_vote"})

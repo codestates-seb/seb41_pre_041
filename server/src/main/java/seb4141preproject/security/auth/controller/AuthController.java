@@ -5,16 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import seb4141preproject.security.auth.dto.*;
-import seb4141preproject.security.auth.service.*;
+import org.springframework.web.bind.annotation.*;
+import seb4141preproject.security.auth.dto.LoginDto;
+import seb4141preproject.security.auth.dto.TokenDto;
+import seb4141preproject.security.auth.dto.TokenRequestDto;
+import seb4141preproject.security.auth.service.AuthService;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor

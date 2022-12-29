@@ -23,6 +23,7 @@ import javax.validation.constraints.Positive;
 @Validated
 @RestController
 @RequestMapping("/api/questions/{question-id}")
+@CrossOrigin
 public class QuestionVoteController {
 
     private final QuestionVoteService questionVoteService;
