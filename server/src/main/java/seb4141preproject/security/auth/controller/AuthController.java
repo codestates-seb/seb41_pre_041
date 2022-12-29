@@ -4,44 +4,42 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import seb4141preproject.security.auth.dto.LoginDto;
-import seb4141preproject.security.auth.dto.TokenDto;
-import seb4141preproject.security.auth.dto.TokenRequestDto;
-import seb4141preproject.security.auth.service.AuthService;
+import seb4141preproject.security.auth.dto.*;
+import seb4141preproject.security.auth.service.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*", exposedHeaders = {"Authorization", "refreshToken"}, allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 
-    // 회원가입 -> MemberService에서 처리.
-
-    @PostMapping("/login") // TODO : refresh Token 생성 후 cookie 저장?
+    @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
 
-//        Cookie setting 로직 초안
         TokenDto tokenDto = authService.login(loginDto);
-//        Cookie cookie = authService.createCookie(tokenDto);
-//        response.addCookie(cookie);
 
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        response.addHeader("Authorization", tokenDto.getAccessToken());
+        response.addHeader("refreshToken", tokenDto.getRefreshToken());
+
+        return new ResponseEntity<>("Login Successful!", HttpStatus.OK);
     }
 
-    @PostMapping("/reissue")
-    public ResponseEntity reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        return new ResponseEntity(authService.reissue(tokenRequestDto), HttpStatus.OK);
-    }
+    // reissue 는 엔드포인트 따로 필요 없이 내부적으로 로직 처리
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody TokenRequestDto tokenRequestDto,
-                                 @AuthenticationPrincipal User user) {
-        if (user != null) authService.logout(tokenRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        public ResponseEntity logout(HttpServletRequest request,
+                                     @AuthenticationPrincipal UserDetails user) {
+        if (user != null) {
+            authService.logout(user);
+            return new ResponseEntity<>("Logout Successful!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity("User not Found", HttpStatus.NOT_FOUND);
+        }
     }
 }

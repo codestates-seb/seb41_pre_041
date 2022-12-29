@@ -14,16 +14,16 @@ import java.util.Optional;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
-    private final MemberRepository memberRepository; // TODO : 희성님께서 만드신 memberRepository 주입 필요
+    private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
 
     public CustomUserDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils) {
-        this.memberRepository = memberRepository; // TODO : 희성님께서 만드신 memberRepository 주입 필요
+        this.memberRepository = memberRepository;
         this.authorityUtils = authorityUtils;
     }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email); // TODO : 희성님께서 만드신 memberRepository 주입 필요
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
         Member findMember = optionalMember.orElseThrow(() ->
                 new UsernameNotFoundException("email not found"));
 

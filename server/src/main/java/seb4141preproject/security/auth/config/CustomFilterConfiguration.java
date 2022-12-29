@@ -6,16 +6,16 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import seb4141preproject.security.auth.provider.*;
 import seb4141preproject.security.auth.filter.*;
+import seb4141preproject.security.auth.service.AuthService;
 
 @RequiredArgsConstructor
-public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity>{
+public class CustomFilterConfiguration extends AbstractHttpConfigurer<CustomFilterConfiguration, HttpSecurity>{
     private final JwtTokenizer jwtTokenizer;
+    private final AuthService authService;
 
-    // JwtTokenizer 를 주입받아 JwtFilter 를 통해 Security 로직에 필터를 등록
-    // 커스텀한 jwtAuthenticationFilter 를 Security Filter 앞에 추가한다.
     @Override
-        public void configure(HttpSecurity http) {
-            JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenizer);
-            http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        public void configure(HttpSecurity http) { // Custom Filter 추가 (jwtTokenizer 주입)
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenizer, authService);
+            http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         }
 }
