@@ -75,24 +75,8 @@ const EditAnswerView = () => {
   const navigate = useNavigate();
   const [newAnswer, setnewAnswer] = useState(false);
   const [newAnswerValue, setNewAnswerValue] = useState("");
-  const [singleA, setSingleA] = useState({
-    id: 1,
-    memberId: 1,
-    questionId: 1,
-    content: "안녕하세요",
-    voteCount: 0,
-    createdAt: "2022-12-29T12:17:09.189009",
-    modifiedAt: "2022-12-29T12:17:09.189009",
-  });
-  const [singleQ, setSingleQ] = useState({
-    id: 1,
-    title: "테스트 내용입니다. 본 내용이 제대로 떠야 합니다.",
-    author: "프론트엔드",
-    content: "이게 제대로 떠야 하는데 걱정이 큽니다 그래도 화이팅입니다",
-    createdAt: 20221219,
-    updateAt: 20221229,
-    view: 348,
-  });
+  const [singleA, setSingleA] = useState({});
+  const [singleQ, setSingleQ] = useState({});
 
   const updateAnswer = () => {
     const data = editARef.current.getInstance().getMarkdown();
