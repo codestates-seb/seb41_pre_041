@@ -1,10 +1,7 @@
 package seb4141preproject.security.auth.filter;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,10 +64,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     // 해당 url 들은 filter 를 거치지 않도록 설정 (토큰 인증이 필요 없는 endpoint)
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = request.getRequestURI(); // URL
+        String method = request.getMethod(); // request 의 메소드 종류
         String[] urls = new String[] {"/api/members", "/api/auths/login"}; // 회원가입, 로그인은 토큰이 필요 없음
 
-        return Arrays.stream(urls).anyMatch(s -> s.equals(path));
+        return Arrays.stream(urls).anyMatch(s -> s.equals(path)) || method.equals("GET");
     }
 
     private String resolveAccessToken(HttpServletRequest request) {
