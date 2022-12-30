@@ -6,13 +6,23 @@ import axios from "axios";
 
 const Questions = () => {
   const [questionData, setQuestionData] = useState([]);
+  const [totalQuestions, setTotalQuestions] = useState("");
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
   const fetchQuestions = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/questions`
-      );
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions?page=${page}&limit=${limit}`);
       setQuestionData(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchTotalQuestions = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions`);
+      setTotalQuestions(res.data.pageInfo.totalElements);
     } catch (error) {
       console.log(error);
     }
@@ -20,7 +30,8 @@ const Questions = () => {
 
   useEffect(() => {
     fetchQuestions();
-  }, []);
+    fetchTotalQuestions();
+  }, [page]);
 
   return (
     <Layout>
@@ -34,7 +45,7 @@ const Questions = () => {
         </h1>
       </Header>
       <Quantity>
-        <h4>{questionData.length} questions</h4>
+        <h4>{totalQuestions} questions</h4>
       </Quantity>
       <div className="question">
         {questionData.map((question) => (
@@ -59,7 +70,10 @@ const Questions = () => {
           </Ask>
         ))}
       </div>
-      <Paging totalPosts={questionData.length} />
+      <Paging totalQuestions={totalQuestions}
+        limit={limit}
+        page={page}
+        setPage={setPage} />
     </Layout>
   );
 };

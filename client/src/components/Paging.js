@@ -1,91 +1,56 @@
-import React, { useState } from 'react';
-import Pagination from 'react-js-pagination';
-import styled from 'styled-components';
-// import axios from 'axios';
+import styled from "styled-components";
 
-// const Paging = () => {
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [pageInfo, setPageInfo] = useState({});
-//   const [items, setItems] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions?page=${currentPage}&size=${pageInfo.size}`);
-//       setPageInfo(res.data.pageInfo);
-//       setItems(res.data.items);
-//     };
-//     fetchData();
-//   }, [currentPage, pageInfo.size]);
-
-//   const handlePageChange = page => {
-//     setCurrentPage(page);
-//   };
-
-//   return (
-//     <div>
-//       {items.map(item => (
-//         <div key={item.id}>{item.name}</div>
-//       ))}
-//       <PaginationBox>
-//         <Pagination
-//           activePage={currentPage}
-//           itemsCountPerPage={pageInfo.size}
-//           totalItemsCount={pageInfo.totalElements}
-//           pageRangeDisplayed={5}
-//           prevPageText="Prev"
-//           nextPageText="Next"
-//           hideFirstLastPages={true}
-//           onChange={handlePageChange}
-//         /></PaginationBox>
-//     </div>
-//   );
-// };
-const Paging = ({ totalPosts }) => {
-  const [page, setPage] = useState(1);
-  const handlePageChange = page => {
-    setPage(page);
-  };
+function Paging({ totalQuestions, limit, page, setPage }) {
+  const numPages = Math.ceil(totalQuestions / limit);
 
   return (
-    <PaginationBox>
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={15}
-        totalItemsCount={totalPosts}
-        pageRangeDisplayed={5}
-        prevPageText="Prev"
-        nextPageText="Next"
-        hideFirstLastPages={true}
-        onChange={handlePageChange}
-      /> </PaginationBox>
+    <>
+      <Nav>
+        <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
+          prev
+        </Button>
+        {Array(numPages)
+          .fill()
+          .map((_, i) => (
+            <Button
+              key={i + 1}
+              onClick={() => setPage(i + 1)}
+              aria-current={page === i + 1 ? "page" : null}
+            >
+              {i + 1}
+            </Button>
+          ))}
+        <Button onClick={() => setPage(page + 1)} disabled={page === numPages}>
+          next
+        </Button>
+      </Nav>
+    </>
   );
-};
+}
 
+const Nav = styled.nav`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 7px;
+  margin: 16px;
+`;
 
+const Button = styled.button`
+  border: none;
+  border-radius: 5px;
+  border: 1px solid grey;
+  padding: 8px;
+  background-color: white;
+  color: black;
+  margin: 0;
+  font-size: 1rem;
 
-
-
-const PaginationBox = styled.div`
-  .pagination { display: flex; justify-content: start; margin-top: 20px; margin-left: 20px; }
-  ul { list-style: none; padding: 0; }
-  ul.pagination li {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #e2e2e2;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1rem; 
-    margin: 1px;
+  &:hover {
+    background: rgb(239, 107, 29);
+    cursor: pointer;
   }
-  ul.pagination li:first-child{ width:45px; }
-  ul.pagination li:last-child{ width:45px; }
-  ul.pagination li a { text-decoration: none; color: black; }
-  ul.pagination li.active a { color: white; }
-  ul.pagination li.active { background-color: rgb(239, 107, 29); }
-  ul.pagination li a:hover,
-  ul.pagination li a.active { color: black; }
-`
+
+`;
+
 export default Paging;
