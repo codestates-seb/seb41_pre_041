@@ -8,6 +8,8 @@ import seb4141preproject.questions.entity.QuestionVote;
 import seb4141preproject.questions.repository.QuestionVoteRepository;
 import seb4141preproject.utils.Vote;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -28,13 +30,14 @@ public class QuestionVoteService {
 
     @Transactional(readOnly = true)
     public QuestionVote readQuestionVote(long questionId, long memberId) {
-        return questionVoteRepository.findByQuestion_IdAndMember_Id(questionId, memberId).orElseThrow();
+        return questionVoteRepository.findByQuestion_IdAndMember_Id(questionId, memberId)
+                .orElseThrow(() -> new NoSuchElementException("투표 기록을 찾을 수 없습니다."));
     }
 
     public QuestionVote updateQuestionVote(QuestionVote questionVote, long memberId) {
         QuestionVote foundQuestionVote =
                 questionVoteRepository.findByQuestion_IdAndMember_Id(questionVote.getQuestion().getId(), memberId)
-                        .orElseThrow();
+                        .orElseThrow(() -> new NoSuchElementException("투표 기록을 찾을 수 없습니다."));
         foundQuestionVote.setVoteStatus(questionVote.getVoteStatus());
 
         return foundQuestionVote;

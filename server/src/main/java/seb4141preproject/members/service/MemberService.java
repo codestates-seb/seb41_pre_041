@@ -2,15 +2,17 @@ package seb4141preproject.members.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb4141preproject.members.entity.*;
-import seb4141preproject.members.repository.*;
+import seb4141preproject.members.entity.Member;
+import seb4141preproject.members.repository.MemberRepository;
 import seb4141preproject.security.auth.redis.RedisDao;
 import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -60,7 +62,7 @@ public class MemberService {
    public void deleteMember (long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         Member member = optionalMember.orElseThrow(() ->
-                new RuntimeException("존재하지 않는 회원입니다."));
+                new NoSuchElementException("존재하지 않는 회원입니다."));
 
         redisDao.deleteValues(member.getEmail()); // 해당 회원의 refreshToken 을 redis 에서 삭제
 
@@ -70,14 +72,14 @@ public class MemberService {
    private void verifyExistsEmail(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if (optionalMember.isPresent()) {
-            throw new RuntimeException("이미 가입된 회원입니다.");
+            throw new DuplicateKeyException("이미 가입된 회원입니다.");
         }
    }
 
    private Member findVerifiedMember(long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         Member findMember = optionalMember.orElseThrow(() ->
-                new RuntimeException("MEMBER NOT FOUND"));
+                new NoSuchElementException("존재하지 않는 회원입니다."));
 
         return findMember;
    }
