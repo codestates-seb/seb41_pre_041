@@ -1,0 +1,4 @@
+jwt:
+  key: kevin12341234123412341234123412341234adsfgeeettwaeaafasfsadf
+  ATExpiration: 10
+  RTExpiration: 420
