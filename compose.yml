@@ -32,11 +32,14 @@ services:
     image: redis
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      test: ["CMD-SHELL", "redis-cli -a $$(sed 's/requirepass //' /run/secrets/redis) ping | grep PONG"]
       interval: 3s
       retries: 5
     ports:
       - 6379:6379
+    secrets:
+      - redis
+    command: redis-server /run/secrets/redis
 
   backend:
     image: eclipse-temurin:11-jre
@@ -67,3 +70,5 @@ secrets:
     file: ./secrets/db-password
   backend-secrets:
     file: ./secrets/backend-secrets.yml
+  redis:
+    file: ./secrets/redis.conf
