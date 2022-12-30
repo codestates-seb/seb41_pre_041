@@ -129,21 +129,33 @@ width: 800px;
 `;
 
 const SaveButton = styled.button`
-width: 100px;
-height: 30px;
-margin-left: 270px;
-margin-top: 30px;
-margin-right: 10px;
-&:hover {
-  background: rgb(239, 107, 29);
-}
+    width: 105px;
+    height: 47px;
+    border: none;
+    border-radius: 5px;
+    background-color: #81c7fc;
+    font-size: 16px;
+    margin: 20px 5px 50px 0;
+    color: #ffffff;
+    background-color: #0a95ff;
+    :hover {
+      cursor: pointer;
+      background-color: #0074cc;
+    }
 `
 const CancelButton = styled.button`
-width: 100px;
-height: 30px;
-&:hover {
-  background: rgb(239, 107, 29);
-}
+    width: 105px;
+    height: 47px;
+    border: none;
+    border-radius: 5px;
+    background-color: #81c7fc;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #0a95ff;
+    :hover {
+      cursor: pointer;
+      background-color: #0074cc;
+    }
 `
 
 export default EditQuestion;
