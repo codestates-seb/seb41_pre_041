@@ -38,6 +38,7 @@ const EditQuestion = () => {
       setTitle(qData.title);
     }
   }, [qData]);
+
   useEffect(() => {
     if (qData.content) {
       editorRef.current.getInstance().setMarkdown(qData.content);
@@ -116,7 +117,7 @@ const Precaution = styled.div`
 `;
 
 const TitleContainer = styled.div`
-padding: 10px;
+  padding: 10px;
   & input {
     width: 780px;
     line-height: 30px;
@@ -124,38 +125,38 @@ padding: 10px;
 `;
 
 const EditorContainer = styled.div`
-padding: 10px;
-width: 800px;
+  padding: 10px;
+  width: 800px;
 `;
 
 const SaveButton = styled.button`
-    width: 105px;
-    height: 47px;
-    border: none;
-    border-radius: 5px;
-    background-color: #81c7fc;
-    font-size: 16px;
-    margin: 20px 5px 50px 0;
-    color: #ffffff;
-    background-color: #0a95ff;
-    :hover {
-      cursor: pointer;
-      background-color: #0074cc;
-    }
-`
+  width: 105px;
+  height: 47px;
+  border: none;
+  border-radius: 5px;
+  background-color: #81c7fc;
+  font-size: 16px;
+  margin: 20px 5px 50px 0;
+  color: #ffffff;
+  background-color: #0a95ff;
+  :hover {
+    cursor: pointer;
+    background-color: #0074cc;
+  }
+`;
 const CancelButton = styled.button`
-    width: 105px;
-    height: 47px;
-    border: none;
-    border-radius: 5px;
-    background-color: #81c7fc;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #0a95ff;
-    :hover {
-      cursor: pointer;
-      background-color: #0074cc;
-    }
-`
+  width: 105px;
+  height: 47px;
+  border: none;
+  border-radius: 5px;
+  background-color: #81c7fc;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #0a95ff;
+  :hover {
+    cursor: pointer;
+    background-color: #0074cc;
+  }
+`;
 
 export default EditQuestion;
