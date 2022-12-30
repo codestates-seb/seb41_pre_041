@@ -1,17 +1,12 @@
 package seb4141preproject.security.auth.filter;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import seb4141preproject.security.auth.dto.TokenDto;
 import seb4141preproject.security.auth.provider.*;
-import seb4141preproject.security.auth.redis.RedisDao;
 import seb4141preproject.security.auth.service.AuthService;
 import seb4141preproject.security.auth.utils.HeaderMapRequestWrapper;
 
@@ -21,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
