@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AnswerForm from "../components/AnswerForm";
-// import Pagination from "../components/Pagination";
+import Pagination from "../components/Pagination";
 
 // CSS
 const QuestionContainer = styled.div`
@@ -213,27 +213,27 @@ function Question({ isLogin }) {
   const [dataA, setDataA] = useState([]);
 
   // pagination
-  // const [posts, setPosts] = useState([]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [postsPerPage, setPostPerPage] = useState(5);
+  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostPerPage] = useState(5);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await axios.get(
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/answers`
+      );
+      setPosts(response.data)
+    };
+    fetchData();
+  }, []);
 
-  //     );
-  //     setPosts(response.data)
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // const indexOfLast = currentPage * postsPerPage;
-  // const indexOfFirst = indexOfLast - postsPerPage;
-  // const currentPosts = (posts) => {
-  //   let currentPosts = 0;
-  //   currentPosts = posts.slice(indexOfFirst, indexOfLast);
-  //   return currentPosts;
-  // }
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentPosts = (posts) => {
+    let currentPosts = 0;
+    currentPosts = posts.slice(indexOfFirst, indexOfLast);
+    return currentPosts;
+  }
 
   /*단일 질문글 받아오기*/
   const getSingleQ = async () => {
@@ -386,7 +386,7 @@ function Question({ isLogin }) {
           </div>
           {/* 답변 내용 */}
           {dataA.map((singleA) => (
-            <AnswerContent key={singleA.id}>
+            <AnswerContent key={singleA.id} posts={currentPosts(posts)}>
               <LeftBtn>
                 <button>
                   <svg
@@ -461,7 +461,11 @@ function Question({ isLogin }) {
             </div>
             <AnswerForm isLogin={isLogin} />
           </AnswerCreate>
-          {/* <Pagination/> */}
+          <Pagination 
+            postsPerPage={postsPerPage}
+            totalPosts={posts.length}
+            paginate={setCurrentPage}
+          />
         </AnswerArea>
       </Section>
     </QuestionContainer>
