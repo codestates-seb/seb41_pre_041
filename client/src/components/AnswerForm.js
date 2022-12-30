@@ -60,7 +60,7 @@ function AnswerForm({ isLogin }) {
         window.location.reload();
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 

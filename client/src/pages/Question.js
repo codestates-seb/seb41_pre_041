@@ -241,10 +241,9 @@ function Question({ isLogin }) {
       .get(`${process.env.REACT_APP_API_URL}/api/questions/${id}`)
       .then((response) => {
         setSingleQ(response.data);
-        console.log(singleQ);
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 
@@ -258,17 +257,11 @@ function Question({ isLogin }) {
         // console.log(dataA);
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 
-  /*무한 랜더링 방지*/
-  useEffect(() => {
-    getSingleQ();
-    getDataA();
-  }, []);
-
-  // /*질문 삭제*/
+  /*질문 삭제*/
   const removeQuestion = async () => {
     await instance
       .delete(`/api/questions/${id}`)
@@ -276,7 +269,7 @@ function Question({ isLogin }) {
         window.location.replace("/");
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 
@@ -288,9 +281,23 @@ function Question({ isLogin }) {
         getDataA();
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
+
+  /*질문글 투표 여부 체크*/
+
+  /*질문글 투표 수정*/
+
+  /*답변 투표 여부 체크*/
+
+  /*답변 투표 수정*/
+
+  /*무한 랜더링 방지*/
+  useEffect(() => {
+    getSingleQ();
+    getDataA();
+  }, []);
 
   return (
     <QuestionContainer>

@@ -14,7 +14,7 @@ const Questions = () => {
       );
       setQuestionData(res.data.data);
     } catch (error) {
-      console.log(`ERROR RESPONSE : ${error.status}`);
+      console.log(error);
     }
   };
 

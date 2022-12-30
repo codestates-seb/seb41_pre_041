@@ -151,7 +151,7 @@ const AskView = () => {
   const handleBody = () => {
     const data = askRef.current.getInstance().getMarkdown();
 
-    if (data.length >= 30 && data.length <= 65535 ) {
+    if (data.length >= 30 && data.length <= 65535) {
       setBody(true);
     } else {
       setBody(false);
@@ -179,7 +179,7 @@ const AskView = () => {
         window.location.replace("/");
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 
@@ -224,8 +224,13 @@ const AskView = () => {
             Title
           </label>
           <p className="input-notice">
-            Be specific and imagine you’re asking a question to another person.{" "}
-            <span className="warning">Minimum 15 characters and maximum 150 characters.</span>
+            <p>
+              Be specific and imagine you’re asking a question to another
+              person.
+            </p>
+            <span className="warning">
+              Minimum 15 characters and maximum 150 characters.
+            </span>
           </p>
           <input
             id="input-title"
@@ -240,11 +245,17 @@ const AskView = () => {
             were you expecting?
           </label>
           <p className="input-notice">
-            Introduce the problem and expand on what you put in the title first.{" "}
-            <br />
-            And Describe what you tried, what you expected to happen, and what
-            actually resulted.{" "}
-            <span className="warning">Minimum 30 characters maximum 65535 characters.</span>
+            <p>
+              Introduce the problem and expand on what you put in the title
+              first.
+            </p>
+            <p>
+              And Describe what you tried, what you expected to happen, and what
+              actually resulted.
+            </p>
+            <span className="warning">
+              Minimum 30 characters maximum 65535 characters.
+            </span>
           </p>
           <Editor
             id="input-body"

@@ -97,7 +97,7 @@ const EditAnswerView = () => {
         console.log(singleA);
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 
@@ -111,7 +111,7 @@ const EditAnswerView = () => {
         console.log(singleQ);
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
 
@@ -130,7 +130,7 @@ const EditAnswerView = () => {
           navigate(-1);
         })
         .catch((error) => {
-          console.log(`ERROR RESPONSE : ${error.status}`);
+          console.log(error);
         });
     }
   };

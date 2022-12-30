@@ -159,7 +159,7 @@ const Logout = ({ setIsLogin }) => {
         }
       })
       .catch((error) => {
-        console.log(`ERROR RESPONSE : ${error.status}`);
+        console.log(error);
       });
   };
   const handleCancel = () => {

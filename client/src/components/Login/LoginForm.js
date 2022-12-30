@@ -42,7 +42,6 @@ const LoginForm = () => {
         })
         .then((response) => {
           if (response) {
-            console.log(response);
             let accessToken = response.headers.authorization;
             let refreshToken = response.headers.refreshtoken;
             sessionStorage.setItem("accessToken", accessToken);
@@ -51,7 +50,7 @@ const LoginForm = () => {
           }
         })
         .catch((error) => {
-          console.log(`ERROR RESPONSE : ${error.status}`);
+          console.log(error);
           setEmailWarning("The email or password is incorrect.");
         });
     }
