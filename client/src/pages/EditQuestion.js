@@ -6,20 +6,20 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const EditQuestion = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  // const [title, setTitle] = useState('');
+  // const [content, setContent] = useState('');
   const [qData, setQData] = useState({});
   const { navigate } = useNavigate();
   const editorRef = useRef();
 
   const updateQuestion = () => {
     const data = editorRef.current.getInstance().getMarkdown();
-    setContent(data);
+    setQData(data);
   };
 
   const getQuestion = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions/${qData.id}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions/${qData.questionId}`);
       setQData(res.data);
     } catch (err) {
       console.error(err);
@@ -28,13 +28,13 @@ const EditQuestion = () => {
 
   useEffect(() => {
     getQuestion();
-  }, []);
+  });
 
   const editSubmit = async () => {
     try {
-      await axios.patch(`${process.env.REACT_APP_API_URL}/api/questions/${qData.id}`, {
-        title: title,
-        content: content,
+      await axios.patch(`${process.env.REACT_APP_API_URL}/api/questions/${qData.questionId}`, {
+        title: qData.title,
+        content: qData.content,
       });
     } catch (err) {
       console.error(err);
@@ -56,7 +56,7 @@ const EditQuestion = () => {
       <Precaution>{headPrecaution}</Precaution>
       <TitleContainer>
         <div className="edit-title"><div>Title</div>
-          <input value={qData.title} onChange={event => setTitle(event.target.value)} />
+          <input value={qData.title} />
         </div>
       </TitleContainer>
       <div className="edit-question">
