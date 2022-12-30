@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class AnswerDto {
@@ -14,6 +15,7 @@ public class AnswerDto {
     public static class Post {
         private long questionId;
         @NotBlank
+        @Size(min = 30)
         private String content;
     }
 
@@ -22,6 +24,7 @@ public class AnswerDto {
     @NoArgsConstructor
     public static class Patch {
         private long id;
+        @Size(min = 30)
         private String content;
 
         public void setId(long id) {
@@ -36,6 +39,7 @@ public class AnswerDto {
         long id;
         long memberId;
         long questionId;
+        String memberName;
         String content;
         long voteCount;
         LocalDateTime createdAt;

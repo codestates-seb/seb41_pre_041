@@ -10,6 +10,7 @@ import seb4141preproject.utils.Auditable;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
