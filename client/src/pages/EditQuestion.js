@@ -2,14 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import styled from "styled-components";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axios from "../api/axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditQuestion = () => {
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [qData, setQData] = useState({});
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
   const editorRef = useRef();
 
   const updateQuestion = () => {
@@ -20,7 +21,7 @@ const EditQuestion = () => {
   const getQuestion = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/questions/${qData.id}`
+        `${process.env.REACT_APP_API_URL}/api/questions/${id}`
       );
       setQData(res.data);
     } catch (err) {
@@ -32,10 +33,22 @@ const EditQuestion = () => {
     getQuestion();
   }, []);
 
+  useEffect(() => {
+    if (qData.title) {
+      setTitle(qData.title);
+    }
+  }, [qData]);
+
+  useEffect(() => {
+    if (qData.content) {
+      editorRef.current.getInstance().setMarkdown(qData.content);
+    }
+  }, [qData]);
+
   const editSubmit = async () => {
     try {
       await axios.patch(
-        `${process.env.REACT_APP_API_URL}/api/questions/${qData.id}`,
+        `${process.env.REACT_APP_API_URL}/api/questions/${id}`,
         {
           title: title,
           content: content,
@@ -49,7 +62,7 @@ const EditQuestion = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     editSubmit();
-    navigate(`${process.env.REACT_APP_API_URL}/api/questions/`);
+    navigate(-1);
   };
 
   const handleCancel = () => {
@@ -63,32 +76,28 @@ const EditQuestion = () => {
         <div className="edit-title">
           <div>Title</div>
           <input
-            value={qData.title}
+            value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
         </div>
       </TitleContainer>
-      <div className="edit-question">
-        <div>Body</div>
-        <Editor
-          ref={editorRef}
-          initialValue={`${qData.content}`}
-          previewStyle="vertical"
-          height="300px"
-          initialEditType="wysiwyg"
-          onChange={() => updateQuestion()}
-          toolbarItems={[
-            ["heading", "bold", "italic", "strike"],
-            ["hr", "quote"],
-            ["ul", "ol", "task", "indent", "outdent"],
-            ["table", "image", "link"],
-            ["code", "codeblock"],
-          ]}
-          useCommandShortcut={false}
-        ></Editor>
-        <button onClick={handleSubmit}>Save edits</button>
-        <button onClick={handleCancel}>Cancel</button>
-      </div>
+      <EditorContainer>
+        <div className="edit-question">
+          <div>Body</div>
+          <Editor
+            ref={editorRef}
+            initialValue={content}
+            previewStyle="vertical"
+            height="300px"
+            initialEditType="wysiwyg"
+            onChange={() => updateQuestion()}
+            useCommandShortcut={false}
+          ></Editor>
+
+          <SaveButton onClick={handleSubmit}>Save edits</SaveButton>
+          <CancelButton onClick={handleCancel}>Cancel</CancelButton>
+        </div>
+      </EditorContainer>
     </div>
   );
 };
@@ -102,15 +111,51 @@ const headPrecaution = `Your edit will be placed in queue until it is peer revie
 const Precaution = styled.div`
   white-space: pre-line;
   background: rgb(255, 248, 220);
-  width: 100vw;
-  padding: 10px;
+  width: 90wv;
+  padding: 20px;
   border: 1px solid rgb(220, 224, 226);
 `;
 
 const TitleContainer = styled.div`
+  padding: 10px;
   & input {
-    width: 100%;
+    width: 780px;
     line-height: 30px;
+  }
+`;
+
+const EditorContainer = styled.div`
+  padding: 10px;
+  width: 800px;
+`;
+
+const SaveButton = styled.button`
+  width: 105px;
+  height: 47px;
+  border: none;
+  border-radius: 5px;
+  background-color: #81c7fc;
+  font-size: 16px;
+  margin: 20px 5px 50px 0;
+  color: #ffffff;
+  background-color: #0a95ff;
+  :hover {
+    cursor: pointer;
+    background-color: #0074cc;
+  }
+`;
+const CancelButton = styled.button`
+  width: 105px;
+  height: 47px;
+  border: none;
+  border-radius: 5px;
+  background-color: #81c7fc;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #0a95ff;
+  :hover {
+    cursor: pointer;
+    background-color: #0074cc;
   }
 `;
 

@@ -74,9 +74,9 @@ const EditAnswerView = () => {
   const editARef = useRef();
   const navigate = useNavigate();
   const [newAnswer, setnewAnswer] = useState(false);
-  const [newAnswerValue, setNewAnswerValue] = useState("");
   const [singleA, setSingleA] = useState({});
   const [singleQ, setSingleQ] = useState({});
+  const [content, setContent] = useState("");
 
   const updateAnswer = () => {
     const data = editARef.current.getInstance().getMarkdown();
@@ -86,15 +86,15 @@ const EditAnswerView = () => {
     } else {
       setnewAnswer(true);
     }
-    setNewAnswerValue(data);
+    setContent(data);
   };
 
   const getSingleA = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/api/answers/${id}`)
       .then((response) => {
+        console.log(response.data);
         setSingleA(response.data);
-        console.log(singleA);
       })
       .catch((error) => {
         console.log(error);
@@ -116,15 +116,21 @@ const EditAnswerView = () => {
   };
 
   useEffect(() => {
+    if (singleA.content) {
+      editARef.current.getInstance().setMarkdown(singleA.content);
+    }
+  }, [singleA]);
+
+  useEffect(() => {
     getSingleA();
     getSingleQ();
   }, []);
 
   const handleUpdate = async () => {
-    if (newAnswerValue.length) {
+    if (setContent.length) {
       await axios
         .patch(`/api/answers/${id}`, {
-          content: newAnswerValue,
+          content,
         })
         .then(() => {
           navigate(-1);
@@ -159,7 +165,7 @@ const EditAnswerView = () => {
       <h3>Answer</h3>
       <Editor
         id="input-body"
-        initialValue={`${singleA.content}`}
+        initialValue={content}
         previewStyle="vertical"
         height="300px"
         initialEditType="wysiwyg"

@@ -6,7 +6,6 @@ const instance = axios.create({
     authorization: `Bearer ${window.sessionStorage.getItem("accessToken")}`,
     refreshToken: `Bearer ${window.sessionStorage.getItem("refreshToken")}`,
   },
-  withCredentials: true,
 });
 
 export default instance;
