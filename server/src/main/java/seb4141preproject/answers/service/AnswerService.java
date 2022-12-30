@@ -9,15 +9,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import seb4141preproject.answers.entity.Answer;
 import seb4141preproject.answers.repository.AnswerRepository;
-import seb4141preproject.answers.repository.AnswerVoteRepository;
-import seb4141preproject.members.entity.Member;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.repository.QuestionRepository;
-import seb4141preproject.utils.ErrorResponse;
-import seb4141preproject.utils.ExceptionAdvice;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -28,12 +22,9 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
-    private final AnswerVoteRepository answerVoteRepository;
-
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository, AnswerVoteRepository answerVoteRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
-        this.answerVoteRepository = answerVoteRepository;
     }
 
     public Answer createAnswer(Answer answer) {
@@ -73,7 +64,7 @@ public class AnswerService {
                 answerRepository.findById(answerId);
         Answer findAnswer =
                 optionalAnswer.orElseThrow(() ->
-                        new NoSuchElementException());
+                        new NoSuchElementException("답변을 찾을 수 없습니다."));
         return findAnswer;
     }
 
@@ -83,8 +74,7 @@ public class AnswerService {
                 questionRepository.findById(questionId);
         Question findQuestion =
                 optionalQuestion.orElseThrow(()->
-                        new NoSuchElementException());
+                        new NoSuchElementException("질문을 찾을 수 없습니다."));
         return findQuestion;
     }
-
 }
