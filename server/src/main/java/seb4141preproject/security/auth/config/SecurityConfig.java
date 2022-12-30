@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .apply(new CustomFilterConfiguration(jwtTokenizer, authService))
                 .and()
 
-                .authorizeRequests(auth -> auth // TODO : 회원, 비회원 권한 조정 필요
+                .authorizeRequests(auth -> auth
                         .antMatchers("/h2/**").permitAll() // h2 데이터베이스 확인 가능하게
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 요청 모두 pass
                         .antMatchers(HttpMethod.POST, "/api/questions/{questionId}/votes").hasRole("USER") // 질문 투표 작성
