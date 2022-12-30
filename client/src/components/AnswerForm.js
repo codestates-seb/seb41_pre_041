@@ -32,7 +32,7 @@ const AnswerButton = styled.button`
 `;
 
 function AnswerForm({ isLogin }) {
-  const { questionId } = useParams();
+  const { id } = useParams();
   const answerRef = useRef();
   const [isError, setIsError] = useState(false);
   const [body, setBody] = useState("");
@@ -46,14 +46,14 @@ function AnswerForm({ isLogin }) {
 
   const onSubmit = () => {
     if (!isError) {
-      addAnswer(questionId, body);
+      addAnswer(id, body);
     }
   };
 
-  const addAnswer = async (questionId, body) => {
+  const addAnswer = async (id, body) => {
     await axios
       .post("/api/answers", {
-        questionId,
+        questionId: id,
         content: body,
       })
       .then(() => {

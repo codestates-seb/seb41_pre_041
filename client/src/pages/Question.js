@@ -217,12 +217,18 @@ function Question({ isLogin }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostPerPage] = useState(5);
 
+  // vote
+  const [isVotedQ, setIsVotedQ] = useState("");
+  const [voteStatusQ, setVoteStatusQ] = useState("");
+  const [isVotedA, setIsVotedA] = useState(false);
+  const [voteStatusA, setVoteStatusA] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/answers`
       );
-      setPosts(response.data)
+      setPosts(response.data);
     };
     fetchData();
   }, []);
@@ -233,7 +239,7 @@ function Question({ isLogin }) {
     let currentPosts = 0;
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
-  }
+  };
 
   /*단일 질문글 받아오기*/
   const getSingleQ = async () => {
@@ -250,11 +256,10 @@ function Question({ isLogin }) {
   /*답변 목록 받아오기*/
   const getDataA = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/answers`)
+      .get(`${process.env.REACT_APP_API_URL}/api/answers?questionId=${id}`)
       .then((response) => {
         console.log(response);
-        // setDataA(response.data.data);
-        // console.log(dataA);
+        setDataA(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -286,8 +291,39 @@ function Question({ isLogin }) {
   };
 
   /*질문글 투표 여부 체크*/
+  const checkVoteQ = async () => {
+    await instance
+      .get(`api/questions/${id}/votes/me`)
+      .then((response) => {
+        setIsVotedQ(response.data.voteStatus);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   /*질문글 투표 수정*/
+
+  const voteClickHandler = async (e) => {
+    if (e.target.id === "UPVOTE" && voteStatusQ !== "UPVOTE") {
+      setVoteStatusQ("UPVOTE");
+    } else if (e.target.id === "DOWNVOTE" && voteStatusQ !== "DOWNVOTE") {
+      setVoteStatusQ("DOWNVOTE");
+    } else {
+      setVoteStatusQ("NO_VOTE");
+    }
+
+    if (e.target.id !== isVotedQ) {
+      await instance
+        .patch(`/api/questions/${id}/votes`, { voteStatus: voteStatusA })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   /*답변 투표 여부 체크*/
 
@@ -297,6 +333,7 @@ function Question({ isLogin }) {
   useEffect(() => {
     getSingleQ();
     getDataA();
+    checkVoteQ();
   }, []);
 
   return (
@@ -326,13 +363,13 @@ function Question({ isLogin }) {
       <Section>
         <QuestionArea>
           <LeftBtn>
-            <button>
+            <button onClick={voteClickHandler} id="1">
               <svg className="icon" width="36" height="36" viewBox="0 0 36 36">
                 <path d="M2 25h32L18 9 2 25Z"></path>
               </svg>
             </button>
             <div className="count">{singleQ.voteCount}</div>
-            <button>
+            <button onClick={voteClickHandler} id="2">
               <svg className="icon" width="36" height="36" viewBox="0 0 36 36">
                 <path d="M2 11h32L18 27 2 11Z"></path>
               </svg>
@@ -388,7 +425,7 @@ function Question({ isLogin }) {
           {dataA.map((singleA) => (
             <AnswerContent key={singleA.id} posts={currentPosts(posts)}>
               <LeftBtn>
-                <button>
+                <button onClick={voteClickHandler} id="1">
                   <svg
                     className="icon"
                     width="36"
@@ -399,7 +436,7 @@ function Question({ isLogin }) {
                   </svg>
                 </button>
                 <div className="count">{singleA.voteCount}</div>
-                <button>
+                <button onClick={voteClickHandler} id="2">
                   <svg
                     className="icon"
                     width="36"
@@ -461,7 +498,7 @@ function Question({ isLogin }) {
             </div>
             <AnswerForm isLogin={isLogin} />
           </AnswerCreate>
-          <Pagination 
+          <Pagination
             postsPerPage={postsPerPage}
             totalPosts={posts.length}
             paginate={setCurrentPage}
@@ -471,5 +508,4 @@ function Question({ isLogin }) {
     </QuestionContainer>
   );
 }
-
 export default Question;
