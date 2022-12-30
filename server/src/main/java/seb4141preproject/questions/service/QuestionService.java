@@ -15,6 +15,7 @@ import seb4141preproject.questions.entity.QuestionView;
 import seb4141preproject.questions.repository.QuestionRepository;
 import seb4141preproject.questions.repository.QuestionResponseRepository;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -44,14 +45,16 @@ public class QuestionService {
     }
 
     public Question readQuestion(long id) {
-        Question question = questionRepository.findById(id).orElseThrow();
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("질문을 찾을 수 없습니다."));
         question.getQuestionView().countView();
 
         return question;
     }
 
     public Question updateQuestion(Question question) {
-        Question foundQuestion = questionRepository.findById(question.getId()).orElseThrow();
+        Question foundQuestion = questionRepository.findById(question.getId())
+                .orElseThrow(() -> new NoSuchElementException("질문을 찾을 수 없습니다."));
         foundQuestion.setTitle(question.getTitle());
         foundQuestion.setContent(question.getContent());
 

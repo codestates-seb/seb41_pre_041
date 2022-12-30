@@ -10,6 +10,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.NoSuchElementException;
@@ -20,15 +21,23 @@ public class ExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("메소드 인자가 올바르지 않습니다.", e);
+        log.error("컨트롤러 메서드 인자가 올바르지 않습니다.", e);
 
         return ErrorResponse.of(e.getBindingResult());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMethod(MethodArgumentTypeMismatchException e) {
+        log.error("컨트롤러 메서드 인자의 타입이 맞지 않습니다.", e);
+
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(ConstraintViolationException e) {
-        log.error("검증 대상 객체가 제한을 위반했습니다.", e);
+        log.error("검증 대상 객체가 제약을 위반했습니다.", e);
 
         return ErrorResponse.of(e);
     }
@@ -44,7 +53,7 @@ public class ExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        log.error("필수 요청 body가 없습니다.", e);
+        log.error("요청에 필요한 body가 없습니다.", e);
 
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, "Required request body is missing");
     }
@@ -52,7 +61,7 @@ public class ExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
-        log.error("필수 요청 매개변수가 없습니다.", e);
+        log.error("요청에 필요한 파라미터가 없습니다: " + e.getMessage() , e);
 
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
@@ -60,7 +69,7 @@ public class ExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNoSuchElementException(NoSuchElementException e) {
-        log.error("해당 요소가 없습니다.", e);
+        log.error("요소를 찾을 수 없습니다: " + e.getMessage(), e);
 
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
@@ -68,7 +77,7 @@ public class ExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateKeyException(DuplicateKeyException e) {
-        log.error("해당 키가 중복입니다.", e);
+        log.error("해당 키가 중복입니다: " + e.getMessage(), e);
 
         return ErrorResponse.of(HttpStatus.CONFLICT, e.getMessage());
     }
