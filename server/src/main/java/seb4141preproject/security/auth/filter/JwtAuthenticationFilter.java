@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = resolveAccessToken(request); // request header 에서 accessToken 추출
         HeaderMapRequestWrapper wrapper = new HeaderMapRequestWrapper(request); // (reissue 시) header 값 덮어쓰기를 위한 wrapper 객체 생성
 
-        int validateResult = jwtTokenizer.validateToken(accessToken);
+        int validateResult = jwtTokenizer.validateToken(accessToken, request);
 
         if (validateResult == 0) { // validateToken 이상 없을 경우
 
@@ -61,7 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod(); // request 의 메소드 종류
         String[] urls = new String[] {"/api/members", "/api/auths/login"}; // 회원가입, 로그인은 토큰이 필요 없음
 
-        return Arrays.stream(urls).anyMatch(s -> s.equals(path)) || method.equals("GET");
+        return Arrays.stream(urls).anyMatch(s -> s.equals(path))
+                || (!path.matches(".*/votes/me") && method.equals("GET"));
     }
 
     private String resolveAccessToken(HttpServletRequest request) {

@@ -114,7 +114,7 @@ public class JwtTokenizer {
     }
 
     // 토큰 정보를 검증
-    public int validateToken(String token) {
+    public int validateToken(String token, HttpServletRequest request) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return 0;

@@ -1,8 +1,5 @@
 package seb4141preproject.security.auth.handler;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -22,7 +19,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         Exception exception = (Exception) request.getAttribute("exception");
-
         ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 
         logExceptionMessage(authException, exception);
