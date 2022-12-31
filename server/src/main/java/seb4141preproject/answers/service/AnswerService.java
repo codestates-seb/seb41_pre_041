@@ -76,7 +76,7 @@ public class AnswerService {
                 questionRepository.findById(questionId);
         Question findQuestion =
                 optionalQuestion.orElseThrow(()->
-                        new NoSuchElementException(ExceptionMessage.ANSWER_NOT_FOUND.get()));
+                        new NoSuchElementException(ExceptionMessage.QUESTION_NOT_FOUND.get()));
         return findQuestion;
     }
 
