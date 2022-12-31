@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("match ? : " + Arrays.stream(urls).anyMatch(s -> path.matches(s)));
 
         return Arrays.stream(urls).anyMatch(s -> path.matches(s))
-                || (!path.matches(".*/votes/me") && method.equals("GET"));
+                || (method.equals("GET") && !path.matches(".*/me|/api/members/.*"));
     }
 
     private String resolveAccessToken(HttpServletRequest request) {
