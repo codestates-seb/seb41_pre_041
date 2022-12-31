@@ -25,7 +25,6 @@ import javax.validation.constraints.Size;
 @Validated
 @RestController
 @RequestMapping("/api/questions")
-@CrossOrigin
 public class QuestionController {
 
     private final QuestionService questionService;
