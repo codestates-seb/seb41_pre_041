@@ -29,7 +29,7 @@ public class QuestionVoteService {
     @Transactional(readOnly = true)
     public long readQuestionVoteCount(long questionId) {
         if(!questionRepository.existsById(questionId)) {
-            throw new NoSuchElementException(ExceptionMessage.QUESTION_NOT_FOUND.toString());
+            throw new NoSuchElementException(ExceptionMessage.QUESTION_NOT_FOUND.get());
         }
 
         return questionVoteRepository.countByQuestion_IdAndVoteStatus(questionId, Vote.VoteStatus.UPVOTE)
