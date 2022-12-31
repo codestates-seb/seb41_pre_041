@@ -6,14 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import seb4141preproject.members.entity.Member;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.questions.entity.QuestionResponse;
 import seb4141preproject.questions.entity.QuestionView;
 import seb4141preproject.questions.repository.QuestionRepository;
 import seb4141preproject.questions.repository.QuestionResponseRepository;
+import seb4141preproject.utils.ExceptionMessage;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class QuestionService {
 
     public Question readQuestion(long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("질문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.QUESTION_NOT_FOUND.get()));
         question.getQuestionView().countView();
 
         return question;
@@ -54,7 +55,7 @@ public class QuestionService {
 
     public Question updateQuestion(Question question) {
         Question foundQuestion = questionRepository.findById(question.getId())
-                .orElseThrow(() -> new NoSuchElementException("질문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.QUESTION_NOT_FOUND.get()));
         foundQuestion.setTitle(question.getTitle());
         foundQuestion.setContent(question.getContent());
 
@@ -65,10 +66,10 @@ public class QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public boolean checkMember(Authentication authentication, long id) {
+    public boolean checkMember(Member principal, long id) {
         Optional<Question> optionalQuestion = questionRepository.findById(id);
 
         return optionalQuestion.isPresent()
-                && optionalQuestion.get().getMember().getEmail().equals(authentication.getName());
+                && (optionalQuestion.get().getMember().getId() == principal.getId());
     }
 }

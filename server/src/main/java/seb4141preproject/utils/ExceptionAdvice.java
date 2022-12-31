@@ -67,11 +67,11 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchElementException(NoSuchElementException e) {
         log.error("요소를 찾을 수 없습니다: " + e.getMessage(), e);
 
-        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+        return ErrorResponse.of(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler

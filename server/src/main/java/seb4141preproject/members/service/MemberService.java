@@ -10,6 +10,7 @@ import seb4141preproject.members.entity.Member;
 import seb4141preproject.members.repository.MemberRepository;
 import seb4141preproject.security.auth.redis.RedisDao;
 import seb4141preproject.security.auth.utils.CustomAuthorityUtils;
+import seb4141preproject.utils.ExceptionMessage;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -62,7 +63,7 @@ public class MemberService {
    public void deleteMember (long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         Member member = optionalMember.orElseThrow(() ->
-                new NoSuchElementException("존재하지 않는 회원입니다."));
+                new NoSuchElementException(ExceptionMessage.MEMBER_NOT_FOUND.get()));
 
         redisDao.deleteValues(member.getEmail()); // 해당 회원의 refreshToken 을 redis 에서 삭제
 
@@ -72,14 +73,14 @@ public class MemberService {
    private void verifyExistsEmail(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if (optionalMember.isPresent()) {
-            throw new DuplicateKeyException("이미 가입된 회원입니다.");
+            throw new DuplicateKeyException(ExceptionMessage.MEMBER_EMAIL_DUPLICATES.get());
         }
    }
 
    private Member findVerifiedMember(long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         Member findMember = optionalMember.orElseThrow(() ->
-                new NoSuchElementException("존재하지 않는 회원입니다."));
+                new NoSuchElementException(ExceptionMessage.MEMBER_NOT_FOUND.get()));
 
         return findMember;
    }
