@@ -46,19 +46,23 @@ public class SecurityConfig {
                         .antMatchers("/h2/**").permitAll() // h2 데이터베이스 확인 가능하게
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 요청 모두 pass
                         .antMatchers(HttpMethod.POST, "/api/questions/{questionId}/votes").hasRole("USER") // 질문 투표 작성
-                        .antMatchers(HttpMethod.PATCH, "/api/questions/{questionId}/votes/me")
-                        .hasRole("USER") // 질문 투표 수정
+                        .antMatchers("/api/questions/{questionId}/votes/me").hasRole("USER") // 질문 투표 확인, 수정
                         .antMatchers(HttpMethod.POST, "/api/questions").hasRole("USER") // 질문 작성
                         .antMatchers(HttpMethod.PATCH, "/api/questions/{questionId}")
-                        .access("@questionService.checkMember(authentication,#questionId)") // 질문 수정
+                        .access("@questionService.checkMember(principal, T(Long).parseLong(#questionId))") // 질문 수정
                         .antMatchers(HttpMethod.DELETE, "/api/questions/{questionId}")
-                        .access("@questionService.checkMember(authentication,#questionId)")// 질문 삭제
+                        .access("@questionService.checkMember(principal, T(Long).parseLong(#questionId))") // 질문 삭제
+                        .antMatchers(HttpMethod.POST, "/api/answers/{answerId}/votes").hasRole("USER") // 질문 투표 작성
+                        .antMatchers("/api/answers/{answerId}/votes/me").hasRole("USER") // 답변 투표 확인, 수정
                         .antMatchers(HttpMethod.POST, "/api/answers").hasRole("USER") // 답변 작성
-                        .antMatchers(HttpMethod.PATCH, "/api/answers/{answer-id}").hasRole("USER") // 답변 수정
-                        .antMatchers(HttpMethod.DELETE, "/api/answers/{answer-id}").hasRole("USER") // 답변 삭제
+                        .antMatchers(HttpMethod.PATCH, "/api/answers/{answerId}")
+                        .access("@answerService.checkMember(principal, T(Long).parseLong(#answerId))") // 답변 수정
+                        .antMatchers(HttpMethod.DELETE, "/api/answers/{answerId}")
+                        .access("@answerService.checkMember(principal, T(Long).parseLong(#answerId))") // 답변 삭제
                         .antMatchers("/api/auths/logout").hasRole("USER") // 로그아웃
-                        .antMatchers("/api/members/{member-id}").hasRole("USER") // 마이페이지 확인, 회원정보 수정
-
+                        .antMatchers("/api/members/{memberId}")
+                        .access("T(seb4141preproject.members.entity.Member).cast(principal).getId() " +
+                                "== T(Long).parseLong(#memberId)")// 마이페이지 확인, 회원정보 수정
                         .anyRequest().permitAll())
                 .logout()
                 .disable();

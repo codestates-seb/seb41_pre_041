@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import seb4141preproject.security.auth.dto.TokenDto;
-import seb4141preproject.security.auth.provider.*;
+import seb4141preproject.security.auth.provider.JwtTokenizer;
 import seb4141preproject.security.auth.service.AuthService;
 import seb4141preproject.security.auth.utils.HeaderMapRequestWrapper;
 
@@ -61,8 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod(); // request 의 메소드 종류
         String[] urls = new String[] {"/api/members", "/api/auths/login"}; // 회원가입, 로그인은 토큰이 필요 없음
 
-        return Arrays.stream(urls).anyMatch(s -> s.equals(path))
-                || (!path.matches(".*/votes/me") && method.equals("GET"));
+        return Arrays.asList(urls).contains(path)
+                || (method.equals("GET") && !path.matches(".*/me|/api/members/.*"));
     }
 
     private String resolveAccessToken(HttpServletRequest request) {
