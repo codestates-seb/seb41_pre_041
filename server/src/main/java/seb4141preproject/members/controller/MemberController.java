@@ -5,20 +5,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import seb4141preproject.members.dto.*;
-import seb4141preproject.members.entity.*;
-import seb4141preproject.members.mapper.*;
-import seb4141preproject.members.service.*;
-
+import org.springframework.web.bind.annotation.*;
+import seb4141preproject.members.dto.MemberPatchDto;
+import seb4141preproject.members.dto.MemberPostDto;
+import seb4141preproject.members.entity.Member;
+import seb4141preproject.members.mapper.MemberMapper;
+import seb4141preproject.members.service.MemberService;
 
 import javax.validation.Valid;
 
 
 @RestController
 @RequestMapping("/api/members")
-@CrossOrigin
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;

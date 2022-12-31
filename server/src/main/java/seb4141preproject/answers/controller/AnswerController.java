@@ -24,7 +24,6 @@ import java.util.List;
 @RequestMapping("/api/answers")
 @Validated
 @Slf4j
-@CrossOrigin
 public class AnswerController {
     private final AnswerService answerService;
     private final AnswerMapper mapper;
