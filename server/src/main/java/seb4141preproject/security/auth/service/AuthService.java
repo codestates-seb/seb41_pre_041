@@ -1,6 +1,7 @@
 package seb4141preproject.security.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenizer jwtTokenizer;
@@ -64,7 +66,9 @@ public class AuthService {
 
         String refreshToken = redisDao.getValues(user.getUsername());
 
-        if (refreshToken == null) throw new RuntimeException("REFRESH_TOKEN_NOT_FOUND");
+        if (refreshToken == null) {
+            log.warn("REFRESH_TOKEN_NOT_FOUND");
+        }
 
         redisDao.deleteValues(user.getUsername());
     }
