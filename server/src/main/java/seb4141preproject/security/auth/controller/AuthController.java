@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor
-@CrossOrigin(originPatterns = "*", allowedHeaders = "*", exposedHeaders = {"Authorization", "refreshToken"}, allowCredentials = "true")
+@CrossOrigin(exposedHeaders = {"Authorization", "refreshToken"})
 public class AuthController {
     private final AuthService authService;
 
