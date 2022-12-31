@@ -114,21 +114,14 @@ public class JwtTokenizer {
     }
 
     // 토큰 정보를 검증
-    public int validateToken(String token, HttpServletRequest request) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return 0;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.error("잘못된 JWT 서명입니다.", e);
-        } catch (ExpiredJwtException e) {
-            log.error("만료된 JWT 토큰입니다. 재발급을 진행합니다.", e);
-            return 1;
-        } catch (UnsupportedJwtException e) {
-            log.error("지원되지 않는 JWT 토큰입니다.", e);
-        } catch (IllegalArgumentException e) {
-            log.error("JWT 토큰이 잘못되었습니다.", e);
-        }
-        return 2;
+    public boolean validateToken(String token) {
+       Jwts
+               .parserBuilder()
+               .setSigningKey(key)
+               .build()
+               .parseClaimsJws(token);
+
+       return true;
     }
 
     public Claims parseClaims(String accessToken) { // 토큰 정보 확인 (만료 토큰도 확인 가능)

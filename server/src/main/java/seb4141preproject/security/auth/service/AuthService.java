@@ -45,11 +45,7 @@ public class AuthService {
         String refreshToken = request.getHeader("refreshToken").substring(7);
 
         // 1. Refresh Token 검증
-        if (jwtTokenizer.validateToken(refreshToken, request) == 1) { // refreshToken 이 만료된 경우
-            // 강제 로그아웃 처리 필요
-        } else if (jwtTokenizer.validateToken(refreshToken, request) == 2) {
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
-        }
+        jwtTokenizer.validateToken(refreshToken); // 서비스 단의 exception은 JwtExceptionAdvice에서 처리
 
         // 2. 인증 정보를 기반으로 토큰 생성
         TokenDto tokenDto = createToken(authentication);

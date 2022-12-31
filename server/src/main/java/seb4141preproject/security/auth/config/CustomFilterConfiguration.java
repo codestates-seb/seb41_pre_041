@@ -15,7 +15,10 @@ public class CustomFilterConfiguration extends AbstractHttpConfigurer<CustomFilt
 
     @Override
         public void configure(HttpSecurity http) { // Custom Filter 추가 (jwtTokenizer 주입)
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenizer, authService);
-            http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenizer);
+            JwtExceptionHandlerFilter jwtExceptionHandlerFilter = new JwtExceptionHandlerFilter(jwtTokenizer, authService);
+
+            http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter.class);
         }
 }

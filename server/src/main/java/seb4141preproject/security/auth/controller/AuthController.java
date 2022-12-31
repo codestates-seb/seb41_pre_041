@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import seb4141preproject.security.auth.dto.*;
 import seb4141preproject.security.auth.service.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/auths")
@@ -33,13 +33,12 @@ public class AuthController {
     // reissue 는 엔드포인트 따로 필요 없이 내부적으로 로직 처리
 
     @PostMapping("/logout")
-        public ResponseEntity logout(HttpServletRequest request,
-                                     @AuthenticationPrincipal UserDetails user) {
+        public ResponseEntity logout(@AuthenticationPrincipal UserDetails user) {
         if (user != null) {
             authService.logout(user);
             return new ResponseEntity<>("Logout Successful!", HttpStatus.OK);
         } else {
-            return new ResponseEntity("User not Found", HttpStatus.NOT_FOUND);
+            throw new NoSuchElementException("회원 정보를 불러올 수 없습니다. 토큰을 확인 해주세요.");
         }
     }
 }
