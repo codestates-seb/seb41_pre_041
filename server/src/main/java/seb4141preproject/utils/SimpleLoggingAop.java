@@ -38,7 +38,7 @@ public class SimpleLoggingAop {
             log.info("no parameter");
         } else {
             for (Object arg : args) {
-                if (args == null) {
+                if (arg == null) {
                     log.info("parameter {} is null", arg.getClass().getSimpleName());
                 } else {
                     log.info("parameter type : {}", arg.getClass().getSimpleName());
