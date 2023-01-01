@@ -7,7 +7,7 @@ import axios from "axios";
 const Questions = () => {
   const [questionData, setQuestionData] = useState([]);
   const [totalQuestions, setTotalQuestions] = useState("");
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(15);
   const [page, setPage] = useState(1);
 
   const fetchQuestions = async () => {
@@ -31,7 +31,7 @@ const Questions = () => {
   useEffect(() => {
     fetchQuestions();
     fetchTotalQuestions();
-  }, [page]);
+  }, [page, limit]);
 
   return (
     <Layout>
