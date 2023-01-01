@@ -38,8 +38,6 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
 
-            log.info("Exception Filter filterChain 실행");
-
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.error("잘못된 Access Token 서명입니다.", e);
             ErrorResponder.sendJwtErrorResponse(response, e.getMessage());

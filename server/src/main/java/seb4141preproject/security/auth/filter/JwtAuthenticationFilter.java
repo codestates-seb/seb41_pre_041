@@ -27,8 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String accessToken = resolveAccessToken(request); // request header 에서 accessToken 추출
 
-        log.info("Authentication Filter validateToken 실행");
-
         if (jwtTokenizer.validateToken(accessToken)) {
             Authentication authentication = jwtTokenizer.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -43,8 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod(); // request 의 메소드 종류
         String[] urls = new String[] {"/api/members", "/api/auths/login", "/h2.*"}; // 회원가입, 로그인, h2는 토큰이 필요 없음
 
+        log.info("======= method name : {} =======", "shouldNotFilter");
+
+        log.info("method : " + method);
         log.info("path : " + path);
-        log.info("match ? : " + Arrays.stream(urls).anyMatch(s -> path.matches(s)));
+        log.info("match : " + Arrays.stream(urls).anyMatch(s -> path.matches(s)));
 
         return Arrays.stream(urls).anyMatch(s -> path.matches(s))
                 || (method.equals("GET") && !path.matches(".*/me|/api/members/.*"));
