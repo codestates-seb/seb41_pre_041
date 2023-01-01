@@ -213,22 +213,16 @@ function Question({ isLogin }) {
   const [dataA, setDataA] = useState([]);
 
   // pagination
-  const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostPerPage] = useState(5);
-
-  // // vote
-  // const [isVotedQ, setIsVotedQ] = useState("");
-  // const [voteStatusQ, setVoteStatusQ] = useState("");
-  // const [isVotedA, setIsVotedA] = useState(false);
-  // const [voteStatusA, setVoteStatusA] = useState("");
+  const [posts, setPosts] = useState([]); // 게시글의 갯수
+  const [currentPage, setCurrentPage] = useState(1); // 페이지네이션의 페이지
+  const [postsPerPage, setPostPerPage] = useState(2); // 1 페이지당 보여줄 게시글의 갯수
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/answers`
+        `${process.env.REACT_APP_API_URL}/api/answers`, { params }
       );
-      setPosts(response.data);
+      setPosts(response.data.data)
     };
     fetchData();
   }, []);
@@ -239,7 +233,14 @@ function Question({ isLogin }) {
     let currentPosts = 0;
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
-  };
+  }
+  
+  console.log(dataA);
+  // // vote
+  // const [isVotedQ, setIsVotedQ] = useState("");
+  // const [voteStatusQ, setVoteStatusQ] = useState("");
+  // const [isVotedA, setIsVotedA] = useState(false);
+  // const [voteStatusA, setVoteStatusA] = useState("");
 
   /*단일 질문글 받아오기*/
   const getSingleQ = async () => {
@@ -421,8 +422,8 @@ function Question({ isLogin }) {
             <h1>{dataA.length} Answer</h1>
           </div>
           {/* 답변 내용 */}
-          {dataA.map((singleA) => (
-            <AnswerContent key={singleA.id} posts={currentPosts(posts)}>
+          {currentPosts(dataA).map((singleA) => (
+            <AnswerContent key={singleA.id}>
               <LeftBtn>
                 <button>
                   <svg
@@ -489,6 +490,14 @@ function Question({ isLogin }) {
               </Content>
             </AnswerContent>
           ))}
+          {dataA.length === 0 ? 
+            (null) : 
+            (<Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={posts.length}
+            paginate={setCurrentPage}
+            className="pagination"
+            />)}
           {/* 답변 작성 */}
           {/* 답변을 작성한다. */}
           <AnswerCreate>
@@ -497,11 +506,6 @@ function Question({ isLogin }) {
             </div>
             <AnswerForm isLogin={isLogin} />
           </AnswerCreate>
-          <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={posts.length}
-            paginate={setCurrentPage}
-          />
         </AnswerArea>
       </Section>
     </QuestionContainer>

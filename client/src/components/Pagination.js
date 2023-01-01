@@ -1,16 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
+const PageWrap = styled.nav`
+    margin: 10px auto;
+`
+
 const PageUl = styled.ul`
     float: left;
     list-style: none;
     text-align: center;
-    border-radius: 3px;
+    border-radius: 4px;
     color: #ffffff;
     padding: 2px;
 
-    border: 3px 0px solid #186ead;
-    background: rgba(0, 0, 0, 0.4);
+    border: 4px 0px solid #186ead;
+    background: #0a95ff;
 `
 
 const Pageli = styled.li`
@@ -24,11 +28,11 @@ const Pageli = styled.li`
     &:hover {
         cursor: pointer;
         color: #ffffff;
-        background: #263a6c;
+        background: #0074cc;
     }
     &:focus {
         color: #ffffff;
-        background: #263a6c;
+        background: #0074cc;
     }
 `
 
@@ -37,7 +41,7 @@ const PageSpan = styled.span`
     &:focus::after {
         border-radius: 100%;
         color: #ffffff;
-        background: #263a6c;
+        background: #0074cc;
     }
 `
 
@@ -49,7 +53,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
 
     return (
         <>
-            <nav>
+            <PageWrap>
                 <PageUl className="pagination">
                     {pageNumbers.map((number) => (
                         <Pageli key={number} className="page-item">
@@ -59,7 +63,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
                         </Pageli>
                     ))}
                 </PageUl>
-            </nav>
+            </PageWrap>
         </>
     )
 }
