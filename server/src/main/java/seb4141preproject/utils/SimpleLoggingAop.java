@@ -38,8 +38,12 @@ public class SimpleLoggingAop {
             log.info("no parameter");
         } else {
             for (Object arg : args) {
-                log.info("parameter type : {}", arg.getClass().getSimpleName());
-                log.info("parameter value : {}", arg);
+                if (args == null) {
+                    log.info("parameter {} is null", arg.getClass().getSimpleName());
+                } else {
+                    log.info("parameter type : {}", arg.getClass().getSimpleName());
+                    log.info("parameter value : {}", arg);
+                }
             }
         }
     }
@@ -49,8 +53,12 @@ public class SimpleLoggingAop {
         Method method = getMethod(joinPoint);
         log.info("======= method name : {} =======", method.getName());
 
-        log.info("return type : {}", returnObj.getClass().getSimpleName());
-        log.info("return value : {}", returnObj);
+        if (returnObj == null) {
+            log.info("return object {} is null", returnObj.getClass().getSimpleName());
+        } else {
+            log.info("return type : {}", returnObj.getClass().getSimpleName());
+            log.info("return value : {}", returnObj);
+        }
     }
 
     private Method getMethod(JoinPoint joinPoint) {
