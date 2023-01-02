@@ -17,6 +17,8 @@
 - Pagination (페이지네이션)
 - Security, Auths (보안, 인증 / 인가)
 
+## 주요 화면
+
 ### Login (로그인)
 
 <p align="center">
