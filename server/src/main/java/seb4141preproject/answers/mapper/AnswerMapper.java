@@ -2,7 +2,6 @@ package seb4141preproject.answers.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 import seb4141preproject.answers.dto.AnswerDto;
 import seb4141preproject.answers.entity.Answer;
 

@@ -30,7 +30,7 @@ public class AnswerService {
     }
 
     public Answer createAnswer(Answer answer) {
-        Question findquestion = verifiedQuestion(answer.getQuestion().getId());
+        Question findQuestion = verifiedQuestion(answer.getQuestion().getId());
 
         return answerRepository.save(answer);
     }

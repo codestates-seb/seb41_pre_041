@@ -28,15 +28,15 @@ public class JwtTokenizer {
 
     @Getter
     @Value("${jwt.ATExpiration}")
-    private int ATExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
+    private int ATExpiration;
 
     @Getter
     @Value("${jwt.RTExpiration}")
-    private int RTExpiration; // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
+    private int RTExpiration;
 
     private final UserDetailsService userDetailsService;
 
-    public JwtTokenizer(@Value("${jwt.key}") String secretKey, // TODO : 로컬이 아닌, 실제 서버에서 값을 가져오는 것이 바람직
+    public JwtTokenizer(@Value("${jwt.key}") String secretKey,
                         UserDetailsService userDetailsService) {
         this.key = getKeyFromEncodedSecretKey(encodeSecretKey(secretKey));
         this.userDetailsService = userDetailsService;
