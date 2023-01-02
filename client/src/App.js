@@ -8,7 +8,8 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Ask from "./pages/Ask";
-import NotFound from "./components/NotFound";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 
 // CSS 초기화
 const GlobalStyle = createGlobalStyle`
@@ -42,6 +43,10 @@ function App() {
         <Header isLogin={isLogin} />
         <SectionWrap>
           <Routes>
+          <Route
+              path="/"
+              element={<Home />}
+            />
             <Route
               path="/signup"
               element={isLogin ? <NotFound /> : <Signup />}

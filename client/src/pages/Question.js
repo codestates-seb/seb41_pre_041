@@ -3,8 +3,9 @@ import instance from "../api/axios";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import AnswerForm from "../components/AnswerForm";
-import Pagination from "../components/Pagination";
+import AnswerForm from "../components/Question/AnswerForm";
+import AnswerVoteForm from "../components/Question/AnswerVoteForm";
+import PaginationA from "../components/PaginationA";
 
 // CSS
 const QuestionContainer = styled.div`
@@ -80,28 +81,21 @@ const LeftBtn = styled.div`
   justify-content: space-around;
   padding-right: 16px;
 
-  button {
+  .btn_frame {
     height: 36px;
     background: inherit;
     border: none;
-    border-radius: 0;
     padding: 0;
     overflow: visible;
-    cursor: pointer;
-
-    &:active {
-      .icon {
-        fill: #f48225;
-      }
-    }
   }
 
-  .icon {
-    fill: #babfc4;
-  }
   .count {
     font-size: 21px;
     color: #6a737c;
+  }
+
+  .icon {
+    cursor: pointer;
   }
 `;
 
@@ -217,12 +211,17 @@ function Question({ isLogin }) {
   const [currentPage, setCurrentPage] = useState(1); // 페이지네이션의 페이지
   const [postsPerPage, setPostPerPage] = useState(2); // 1 페이지당 보여줄 게시글의 갯수
 
+  // vote (isVote: 서버에 등록된 투표 이력, isClickVote: 현재 누른 버튼)
+  const [isVotedQ, setIsVotedQ] = useState("");
+  const [voteA, setVoteA] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/answers`, { params }
+        `${process.env.REACT_APP_API_URL}/api/answers`,
+        { params }
       );
-      setPosts(response.data.data)
+      setPosts(response.data.data);
     };
     fetchData();
   }, []);
@@ -233,14 +232,7 @@ function Question({ isLogin }) {
     let currentPosts = 0;
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
-  }
-  
-  console.log(dataA);
-  // // vote
-  // const [isVotedQ, setIsVotedQ] = useState("");
-  // const [voteStatusQ, setVoteStatusQ] = useState("");
-  // const [isVotedA, setIsVotedA] = useState(false);
-  // const [voteStatusA, setVoteStatusA] = useState("");
+  };
 
   /*단일 질문글 받아오기*/
   const getSingleQ = async () => {
@@ -272,7 +264,7 @@ function Question({ isLogin }) {
     await instance
       .delete(`/api/questions/${id}`)
       .then(() => {
-        window.location.replace("/");
+        window.location.replace("/questions");
       })
       .catch((error) => {
         console.log(error);
@@ -291,50 +283,68 @@ function Question({ isLogin }) {
       });
   };
 
-  // /*질문글 투표 여부 체크*/
-  // const checkVoteQ = async () => {
-  //   await instance
-  //     .get(`api/questions/${id}/votes/me`)
-  //     .then((response) => {
-  //       setIsVotedQ(response.data.voteStatus);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  /*질문글 투표 여부 체크*/
+  const checkVoteQ = async () => {
+    await instance
+      .get(`api/questions/${id}/votes/me`)
+      .then((response) => {
+        setIsVotedQ(response.data.voteStatus);
+      })
+      .catch(() => {
+        console.log("질문에 투표를 하지 않았습니다.");
+      });
+  };
 
-  // /*질문글 투표 수정*/
-
-  // const voteClickHandler = async (e) => {
-  //   if (e.target.id === "UPVOTE" && voteStatusQ !== "UPVOTE") {
-  //     setVoteStatusQ("UPVOTE");
-  //   } else if (e.target.id === "DOWNVOTE" && voteStatusQ !== "DOWNVOTE") {
-  //     setVoteStatusQ("DOWNVOTE");
-  //   } else {
-  //     setVoteStatusQ("NO_VOTE");
-  //   }
-
-  //   if (e.target.id !== isVotedQ) {
-  //     await instance
-  //       .patch(`/api/questions/${id}/votes`, { voteStatus: voteStatusA })
-  //       .then((response) => {
-  //         console.log(response);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
-  // };
-
-  /*답변 투표 여부 체크*/
-
-  /*답변 투표 수정*/
-
-  /*무한 랜더링 방지*/
+  /*투표 정보 즉각 업데이트 (투표 post 또는 patch 할 때마다 발생하도록)*/
   useEffect(() => {
     getSingleQ();
+    checkVoteQ();
+  }, [isVotedQ]);
+
+  /*질문글 투표(post) 또는 재투표(patch)*/
+  const handleVoteClickQ = (e) => {
+    /*첫 투표*/
+    if (isVotedQ === "" && e.target.id) {
+      postVoteadQ(e.target.id);
+    } else if (isVotedQ !== e.target.id) {
+      /*재투표(표 변경)*/
+      patchVoteadQ(e.target.id);
+    } else {
+      /*재투표(표 취소:: 현재 투표 상태와 누른 버튼 id가 동일할 때)*/
+      patchVoteadQ("NO_VOTE");
+    }
+  };
+
+  const postVoteadQ = async (click) => {
+    await instance
+      .post(`api/questions/${id}/votes`, {
+        voteStatus: click,
+      })
+      .then(() => {
+        checkVoteQ();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const patchVoteadQ = async (click) => {
+    await instance
+      .patch(`api/questions/${id}/votes/me`, {
+        voteStatus: click,
+      })
+      .then(() => {
+        checkVoteQ();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  /*답변 투표에 따른 상태 변경 발생할 때마다 재실행*/
+  useEffect(() => {
     getDataA();
-  }, []);
+  }, [voteA]);
 
   return (
     <QuestionContainer>
@@ -363,17 +373,41 @@ function Question({ isLogin }) {
       <Section>
         <QuestionArea>
           <LeftBtn>
-            <button>
-              <svg className="icon" width="36" height="36" viewBox="0 0 36 36">
-                <path d="M2 25h32L18 9 2 25Z"></path>
+            <div className="btn_frame">
+              <svg
+                className="icon"
+                width="36"
+                height="36"
+                viewBox="0 0 36 36"
+                fill={isVotedQ === "UPVOTE" ? "#f48225" : "#babfc4"}
+              >
+                <path
+                  id="UPVOTE"
+                  d="M2 25h32L18 9 2 25Z"
+                  onClick={(e) => {
+                    handleVoteClickQ(e);
+                  }}
+                ></path>
               </svg>
-            </button>
+            </div>
             <div className="count">{singleQ.voteCount}</div>
-            <button>
-              <svg className="icon" width="36" height="36" viewBox="0 0 36 36">
-                <path d="M2 11h32L18 27 2 11Z"></path>
+            <div className="btn_frame">
+              <svg
+                className="icon"
+                width="36"
+                height="36"
+                viewBox="0 0 36 36"
+                fill={isVotedQ === "DOWNVOTE" ? "#f48225" : "#babfc4"}
+              >
+                <path
+                  id="DOWNVOTE"
+                  d="M2 11h32L18 27 2 11Z"
+                  onClick={(e) => {
+                    handleVoteClickQ(e);
+                  }}
+                ></path>
               </svg>
-            </button>
+            </div>
           </LeftBtn>
 
           {/* 게시글 내용 */}
@@ -424,29 +458,12 @@ function Question({ isLogin }) {
           {/* 답변 내용 */}
           {currentPosts(dataA).map((singleA) => (
             <AnswerContent key={singleA.id}>
-              <LeftBtn>
-                <button>
-                  <svg
-                    className="icon"
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                  >
-                    <path d="M2 25h32L18 9 2 25Z"></path>
-                  </svg>
-                </button>
-                <div className="count">{singleA.voteCount}</div>
-                <button>
-                  <svg
-                    className="icon"
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                  >
-                    <path d="M2 11h32L18 27 2 11Z"></path>
-                  </svg>
-                </button>
-              </LeftBtn>
+              <AnswerVoteForm
+                id={singleA.id}
+                voteCount={singleA.voteCount}
+                voteA={voteA}
+                setVoteA={setVoteA}
+              />
               <Content>
                 <div className="post-area">
                   <p>{singleA.content}</p>
@@ -454,7 +471,6 @@ function Question({ isLogin }) {
                 <div className="writer-area">
                   <div>
                     <span>Share</span>
-                    {/*답변에는 맴버 네임 속성이 없는지 확인 필수!*/}
                     <Link to={`/edit/answer/${singleA.id}`}>Edit</Link>
                     <span>Follow</span>
                   </div>
@@ -479,7 +495,7 @@ function Question({ isLogin }) {
                             <path d="M500,10C227,10,10,227,10,500s217,490,490,490s490-217,490-490S773,10,500,10z M500,206c77,0,140,63,140,140c0,77-63,140-140,140c-77,0-140-63-140-140C360,269,423,206,500,206z M801,773c-77,77-182,133-301,133s-224-49-301-133c-21-21-21-56,0-77c77-84,182-140,301-140s224,56,301,140C822,717,822,752,801,773z" />
                           </svg>
                         </div>
-                        <span className="user-name">{singleA.memberId}</span>
+                        <span className="user-name">{singleA.memberName}</span>
                       </div>
                     </div>
                     <DeleteButton onClick={() => removeAnswer(singleA.id)}>
@@ -490,14 +506,14 @@ function Question({ isLogin }) {
               </Content>
             </AnswerContent>
           ))}
-          {dataA.length === 0 ? 
-            (null) : 
-            (<Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={posts.length}
-            paginate={setCurrentPage}
-            className="pagination"
-            />)}
+          {dataA.length === 0 ? null : (
+            <PaginationA
+              postsPerPage={postsPerPage}
+              totalPosts={posts.length}
+              paginate={setCurrentPage}
+              className="pagination"
+            />
+          )}
           {/* 답변 작성 */}
           {/* 답변을 작성한다. */}
           <AnswerCreate>

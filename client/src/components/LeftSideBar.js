@@ -50,7 +50,7 @@ function LeftSideBar() {
                 <li>
                     <ul>
                         <li className="public">PUBLIC</li>
-                        <li><Link className="public-links check icon" to="/"><Earth width="16" height="16"/>Questions</Link></li>
+                        <li><Link className="public-links check icon" to="/questions"><Earth width="16" height="16"/>Questions</Link></li>
                         <li><Link className="public-links" to="/notfound">Tags</Link></li>
                         <li><Link className="public-links" to="/notfound">Users</Link></li>
                         <li><Link className="public-links" to="/notfound">Compaines</Link></li>

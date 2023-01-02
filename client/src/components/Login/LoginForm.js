@@ -46,7 +46,7 @@ const LoginForm = () => {
             let refreshToken = response.headers.refreshtoken;
             sessionStorage.setItem("accessToken", accessToken);
             sessionStorage.setItem("refreshToken", refreshToken);
-            window.location.replace("/");
+            window.location.replace("/questions");
           }
         })
         .catch((error) => {

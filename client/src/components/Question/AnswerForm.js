@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
 import { useRef, useState } from "react";
 import styled from "styled-components";
-import axios from "../api/axios";
+import axios from "../../api/axios";
 import { useParams } from "react-router-dom";
 
 const EditorWrap = styled.div`
@@ -68,14 +68,13 @@ function AnswerForm({ isLogin }) {
     <>
       <EditorWrap error={isError}>
         <Editor
-          ref={answerRef} // 값을 저장
+          ref={answerRef}
           initialValue={" "}
           height="300px"
           autofocus={false}
           initialEditType="wysiwyg"
           previewStyle="tab"
           toolbarItems={[
-            // 툴바에 들어갈것들
             ["heading", "bold", "italic", "code", "strike"],
             ["link", "quote", "codeblock", "image", "table"],
             ["ol", "ul", "hr"],

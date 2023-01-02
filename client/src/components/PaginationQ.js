@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function Paging({ totalQuestions, limit, page, setPage }) {
+function PaginationQ({ totalQuestions, limit, page, setPage }) {
   const numPages = Math.ceil(totalQuestions / limit);
 
   return (
@@ -50,7 +50,6 @@ const Button = styled.button`
     background: rgb(239, 107, 29);
     cursor: pointer;
   }
-
 `;
 
-export default Paging;
+export default PaginationQ;

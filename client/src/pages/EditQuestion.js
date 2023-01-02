@@ -62,7 +62,7 @@ const EditQuestion = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     editSubmit();
-    navigate(-1);
+    window.location.replace(`/question/${id}`);
   };
 
   const handleCancel = () => {
@@ -134,28 +134,26 @@ const SaveButton = styled.button`
   height: 47px;
   border: none;
   border-radius: 5px;
-  background-color: #81c7fc;
+  background-color: #0a95ff;
   font-size: 16px;
   margin: 20px 5px 50px 0;
   color: #ffffff;
-  background-color: #0a95ff;
   :hover {
     cursor: pointer;
     background-color: #0074cc;
   }
 `;
+
 const CancelButton = styled.button`
   width: 105px;
   height: 47px;
   border: none;
   border-radius: 5px;
-  background-color: #81c7fc;
+  background-color: transparent;
   font-size: 16px;
   color: #ffffff;
-  background-color: #0a95ff;
   :hover {
     cursor: pointer;
-    background-color: #0074cc;
   }
 `;
 

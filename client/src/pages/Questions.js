@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Paging from "../components/Paging";
+import PaginationQ from "../components/PaginationQ";
 import axios from "axios";
 
 const Questions = () => {
@@ -12,7 +12,9 @@ const Questions = () => {
 
   const fetchQuestions = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions?page=${page}&limit=${limit}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/questions?page=${page}&limit=${limit}`
+      );
       setQuestionData(res.data.data);
     } catch (error) {
       console.log(error);
@@ -21,7 +23,9 @@ const Questions = () => {
 
   const fetchTotalQuestions = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/questions`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/questions`
+      );
       setTotalQuestions(res.data.pageInfo.totalElements);
     } catch (error) {
       console.log(error);
@@ -70,10 +74,12 @@ const Questions = () => {
           </Ask>
         ))}
       </div>
-      <Paging totalQuestions={totalQuestions}
+      <PaginationQ
+        totalQuestions={totalQuestions}
         limit={limit}
         page={page}
-        setPage={setPage} />
+        setPage={setPage}
+      />
     </Layout>
   );
 };
