@@ -7,6 +7,7 @@
 
 ## 프로젝트 관리 시트
 [SEB 41기 41조 Master Sheet (읽기 전용)](https://docs.google.com/spreadsheets/d/1G2l_o6DePTYe4dAhnLlzmUXcM_w_VIAlPeZb60BIrIc/edit#gid=2050585575)
+<br>
 
 ## 주요 구현 기능
 
@@ -16,6 +17,7 @@
 - Question, Answer Vote (질문, 답변 투표)
 - Pagination (페이지네이션)
 - Security, Auths (보안, 인증 / 인가)
+<br>
 
 ## 주요 화면
 
@@ -24,36 +26,42 @@
 <p align="center">
   <img src="https://user-images.githubusercontent.com/110885981/210209603-5da23d87-0b3a-4aa7-aea4-7b18ad643dd2.png">
 </p>
+<br>
 
 ### Sign Up (회원가입)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/110885981/210209570-e13ad020-2ff8-42b5-804e-238008443400.png">
 </p>
+<br>
 
 ### Questions (질문 게시판)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/110885981/210209647-6017727d-e95d-4116-bfc4-a53ad4b156e3.png">
 </p>
+<br>
 
 ### Ask Question (질문 작성)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/110885981/210209701-0eebc25b-0f07-4f42-bfa2-f62d904f7946.png">
 </p>
+<br>
 
 ### Question Edit (질문 수정)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/110885981/210209768-a0d50176-18e6-460f-ba49-a31ba973ba21.png">
 </p>
+<br>
 
 ### Post Your Answer (답변 작성)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/110885981/210209838-500db10f-d35b-4243-b8ec-d520122cd7ac.png">
 </p>
+<br>
 
 ### Answer Edit (답변 수정)
 
