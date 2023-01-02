@@ -1,5 +1,66 @@
 # 코드스테이츠 SEB 41기 41조 💗4ever1 Pre-Project
 
+### 배포 링크
+
+[SEB 41기 41조 4ever1 StackOverflow](https://seb41-pre-041.vercel.app/)
+(주소 옆 자물쇠 아이콘 클릭 > 사이트 설정 > "안전하지 않은 콘텐츠"를 "허용"으로 변경해야 서버와 통신 가능합니다)
+
+## 프로젝트 관리 시트
+[SEB 41기 41조 Master Sheet (읽기 전용)](https://docs.google.com/spreadsheets/d/1G2l_o6DePTYe4dAhnLlzmUXcM_w_VIAlPeZb60BIrIc/edit#gid=2050585575)
+
+## 주요 구현 기능
+
+- Question CRUD (질문 CRUD)
+- Answer CRUD (답변 CRUD)
+- Member CRUD (회원 CRUD)
+- Question, Answer Vote (질문, 답변 투표)
+- Pagination (페이지네이션)
+- Security, Auths (보안, 인증 / 인가)
+
+### Login (로그인)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209603-5da23d87-0b3a-4aa7-aea4-7b18ad643dd2.png">
+</p>
+
+### Sign Up (회원가입)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209570-e13ad020-2ff8-42b5-804e-238008443400.png">
+</p>
+
+### Questions (질문 게시판)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209647-6017727d-e95d-4116-bfc4-a53ad4b156e3.png">
+</p>
+
+### Ask Question (질문 작성)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209701-0eebc25b-0f07-4f42-bfa2-f62d904f7946.png">
+</p>
+
+### Question Edit (질문 수정)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209768-a0d50176-18e6-460f-ba49-a31ba973ba21.png">
+</p>
+
+### Post Your Answer (답변 작성)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209838-500db10f-d35b-4243-b8ec-d520122cd7ac.png">
+</p>
+
+### Answer Edit (답변 수정)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210209889-2704c608-db76-4858-bab7-a5f56de1100d.png">
+</p>
+
+<br>
+
 ## 팀원 소개
 
 | FE 심지원                                                                                                                           | FE 이희진                                                                                                                                  | FE 이영우                                                                                                                                | BE 김지민                                                                                                                                 | BE 신대경                                                                                                                                        | BE 오수빈                                                                                                                                 | BE 김희성                                                                                                                                |
