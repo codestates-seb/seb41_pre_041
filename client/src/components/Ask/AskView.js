@@ -176,7 +176,7 @@ const AskView = () => {
         content: body,
       })
       .then(() => {
-        window.location.replace("/");
+        window.location.replace("/questions");
       })
       .catch((error) => {
         console.log(error);

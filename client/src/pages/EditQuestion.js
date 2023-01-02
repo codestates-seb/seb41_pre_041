@@ -62,7 +62,7 @@ const EditQuestion = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     editSubmit();
-    navigate(-1);
+    window.location.replace(`/question/${id}`);
   };
 
   const handleCancel = () => {
@@ -70,11 +70,11 @@ const EditQuestion = () => {
   };
 
   return (
-    <div>
+    <EditQSection>
       <Precaution>{headPrecaution}</Precaution>
       <TitleContainer>
         <div className="edit-title">
-          <div>Title</div>
+          <div className="name">Title</div>
           <input
             value={title}
             onChange={(event) => setTitle(event.target.value)}
@@ -83,7 +83,7 @@ const EditQuestion = () => {
       </TitleContainer>
       <EditorContainer>
         <div className="edit-question">
-          <div>Body</div>
+          <div className="name">Body</div>
           <Editor
             ref={editorRef}
             initialValue={content}
@@ -98,9 +98,18 @@ const EditQuestion = () => {
           <CancelButton onClick={handleCancel}>Cancel</CancelButton>
         </div>
       </EditorContainer>
-    </div>
+    </EditQSection>
   );
 };
+
+const EditQSection = styled.section`
+  margin: 30px;
+  .name {
+    font-size: 25px;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+`;
 
 const headPrecaution = `Your edit will be placed in queue until it is peer reviewed.
 
@@ -117,15 +126,17 @@ const Precaution = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  padding: 10px;
+  margin-top: 20px;
   & input {
-    width: 780px;
+    width: 800px;
     line-height: 30px;
+    padding: 5px;
+    margin-bottom: 10px;
   }
 `;
 
 const EditorContainer = styled.div`
-  padding: 10px;
+  margin-top: 20px;
   width: 800px;
 `;
 
@@ -134,28 +145,26 @@ const SaveButton = styled.button`
   height: 47px;
   border: none;
   border-radius: 5px;
-  background-color: #81c7fc;
+  background-color: #0a95ff;
   font-size: 16px;
   margin: 20px 5px 50px 0;
   color: #ffffff;
-  background-color: #0a95ff;
   :hover {
     cursor: pointer;
     background-color: #0074cc;
   }
 `;
+
 const CancelButton = styled.button`
   width: 105px;
   height: 47px;
   border: none;
   border-radius: 5px;
-  background-color: #81c7fc;
+  background-color: transparent;
   font-size: 16px;
-  color: #ffffff;
-  background-color: #0a95ff;
+  color: #1392db;
   :hover {
     cursor: pointer;
-    background-color: #0074cc;
   }
 `;
 

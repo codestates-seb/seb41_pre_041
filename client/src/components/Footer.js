@@ -100,7 +100,7 @@ function Footer() {
             </h5>
             <ul>
               <li>
-                <Link className="link" to="/">
+                <Link className="link" to="/notfound">
                   Questions
                 </Link>
               </li>
@@ -113,7 +113,7 @@ function Footer() {
           </div>
           <div className="footer-list">
             <h5 className="title">
-              <Link to="/">PRODUCTS</Link>
+              <Link to="/questions">PRODUCTS</Link>
             </h5>
             <ul>
               <li>
@@ -140,7 +140,7 @@ function Footer() {
           </div>
           <div className="footer-list">
             <h5 className="title">
-              <Link to="/">COMPANY</Link>
+              <Link to="/notfound">COMPANY</Link>
             </h5>
             <ul>
               <li>
@@ -192,7 +192,7 @@ function Footer() {
           </div>
           <div className="footer-list">
             <h5 className="title">
-              <Link to="/">STACK EXCHANGE NETWORK</Link>
+              <Link to="/notfound">STACK EXCHANGE NETWORK</Link>
             </h5>
             <ul>
               <li>

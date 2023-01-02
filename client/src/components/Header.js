@@ -156,7 +156,7 @@ function Header({ isLogin }) {
         {isLogin ? (
           <ul className="nav-items">
             <li>
-              <Link to="/">Products</Link>
+              <Link to="/questions">Products</Link>
             </li>
           </ul>
         ) : (
@@ -165,7 +165,7 @@ function Header({ isLogin }) {
               <Link to="/notfound">About</Link>
             </li>
             <li>
-              <Link to="/">Products</Link>
+              <Link to="/questions">Products</Link>
             </li>
             <li>
               <Link to="/notfound">For Teams</Link>

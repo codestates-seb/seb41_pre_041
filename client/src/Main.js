@@ -7,7 +7,7 @@ import EditAnswer from "./pages/EditAnswer";
 import EditQuestion from "./pages/EditQuestion";
 import Footer from "./components/Footer";
 import LeftSideBar from "./components/LeftSideBar";
-import NotFound from "./components/NotFound";
+import NotFound from "./pages/NotFound";
 
 const SectionWrap = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ const Main = ({ isLogin }) => {
         <SectionContainer>
           <LeftSideBar />
           <Routes>
-            <Route path="/" element={<Questions />} />
+            <Route path="/questions" element={<Questions />} />
             <Route
               path="/question/:id"
               element={<Question isLogin={isLogin} />}
