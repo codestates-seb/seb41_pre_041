@@ -1,9 +1,11 @@
 # 코드스테이츠 SEB 41기 41조 💗4ever1 Pre-Project
+<br>
 
 ### 배포 링크
 
 [SEB 41기 41조 4ever1 StackOverflow](https://seb41-pre-041.vercel.app/)
 (주소 옆 자물쇠 아이콘 클릭 > 사이트 설정 > "안전하지 않은 콘텐츠"를 "허용"으로 변경해야 서버와 통신 가능합니다)
+<br>
 
 ## 프로젝트 관리 시트
 [SEB 41기 41조 Master Sheet (읽기 전용)](https://docs.google.com/spreadsheets/d/1G2l_o6DePTYe4dAhnLlzmUXcM_w_VIAlPeZb60BIrIc/edit#gid=2050585575)
