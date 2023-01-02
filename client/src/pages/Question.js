@@ -253,7 +253,7 @@ function Question({ isLogin }) {
         });
     };
     getSingleQ();
-  }, [loading]);
+  }, [loading, isVotedQ]);
 
   useEffect(() => {
     setContent(content);
