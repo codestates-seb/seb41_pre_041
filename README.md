@@ -51,6 +51,13 @@
 </p>
 <br>
 
+### Question and Answer(질문과 답변)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/110885981/210212130-75a6f878-cfe4-469b-8e6f-4c9fc9453c32.png">
+</p>
+<br>
+
 ### Question Edit (질문 수정)
 
 <p align="center">
