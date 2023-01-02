@@ -1,17 +1,13 @@
 package seb4141preproject.answers.entity;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
-import seb4141preproject.members.entity.Member;
 import seb4141preproject.questions.entity.Question;
 import seb4141preproject.utils.Auditable;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 /**
  * H2로 테스트
@@ -40,8 +36,4 @@ public class Answer extends Auditable {
             "(select count(*) from answer_vote av where av.answer_id = id and av.vote_status = 2)"
     )
     private long voteCount;
-
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
 }

@@ -39,7 +39,7 @@ public class SimpleLoggingAop {
         } else {
             for (Object arg : args) {
                 if (arg == null) {
-                    log.info("parameter {} is null");
+                    log.info("parameter is null");
                 } else {
                     log.info("parameter type : {}", arg.getClass().getSimpleName());
                     log.info("parameter value : {}", arg);
@@ -54,7 +54,7 @@ public class SimpleLoggingAop {
         log.info("======= method name : {} =======", method.getName());
 
         if (returnObj == null) {
-            log.info("return object {} is null");
+            log.info("return object is null");
         } else {
             log.info("return type : {}", returnObj.getClass().getSimpleName());
             log.info("return value : {}", returnObj);
