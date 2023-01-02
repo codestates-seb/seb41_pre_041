@@ -6,6 +6,8 @@ import styled from "styled-components";
 import AnswerForm from "../components/Question/AnswerForm";
 import AnswerVoteForm from "../components/Question/AnswerVoteForm";
 import PaginationA from "../components/PaginationA";
+import { Viewer } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 
 // CSS
 const QuestionContainer = styled.div`
@@ -205,6 +207,8 @@ function Question({ isLogin }) {
   const { id } = useParams();
   const [singleQ, setSingleQ] = useState({});
   const [dataA, setDataA] = useState([]);
+  const [content, setContent] = useState();
+  const [loading, setLoading] = useState(false);
 
   // pagination
   const [posts, setPosts] = useState([]); // 게시글의 갯수
@@ -235,16 +239,25 @@ function Question({ isLogin }) {
   };
 
   /*단일 질문글 받아오기*/
-  const getSingleQ = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/questions/${id}`)
-      .then((response) => {
-        setSingleQ(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  useEffect(() => {
+    setLoading(true);
+    const getSingleQ = async () => {
+      await axios
+        .get(`${process.env.REACT_APP_API_URL}/api/questions/${id}`)
+        .then((response) => {
+          setSingleQ(response.data);
+          setContent(response.data.content);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getSingleQ();
+  }, [loading]);
+
+  useEffect(() => {
+    setContent(content);
+  }, [content]);
 
   /*답변 목록 받아오기*/
   const params = { questionId: id };
@@ -297,7 +310,6 @@ function Question({ isLogin }) {
 
   /*투표 정보 즉각 업데이트 (투표 post 또는 patch 할 때마다 발생하도록)*/
   useEffect(() => {
-    getSingleQ();
     checkVoteQ();
   }, [isVotedQ]);
 
@@ -413,7 +425,9 @@ function Question({ isLogin }) {
           {/* 게시글 내용 */}
           <Content>
             <div className="post-area">
-              <p>{singleQ.content}</p>
+              {content && (
+                <Viewer events={["load", "change"]} initialValue={content} />
+              )}
             </div>
             <div className="writer-area">
               <div>
@@ -466,7 +480,12 @@ function Question({ isLogin }) {
               />
               <Content>
                 <div className="post-area">
-                  <p>{singleA.content}</p>
+                  {content && (
+                    <Viewer
+                      events={["load", "change"]}
+                      initialValue={singleA.content}
+                    />
+                  )}
                 </div>
                 <div className="writer-area">
                   <div>

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PaginationQ from "../components/PaginationQ";
 import axios from "axios";
+import { Viewer } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 
 const Questions = () => {
   const [questionData, setQuestionData] = useState([]);
@@ -64,7 +66,10 @@ const Questions = () => {
                 <h3>{question.title}</h3>
               </Link>
               <div className="question-summary">
-                {`${question.content}`.slice(0, 150)}
+                <Viewer
+                  events={["load", "change"]}
+                  initialValue={`${question.content}`.slice(0, 100)}
+                />
               </div>
             </Title>
             <UserContainer>
