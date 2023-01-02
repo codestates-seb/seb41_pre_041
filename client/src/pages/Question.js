@@ -7,7 +7,7 @@ import AnswerForm from "../components/Question/AnswerForm";
 import AnswerVoteForm from "../components/Question/AnswerVoteForm";
 import PaginationA from "../components/PaginationA";
 import { Viewer } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+// import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 
 // CSS
 const QuestionContainer = styled.div`
