@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@toast-ui/react-editor";
-// import "@toast-ui/editor/dist/toastui-editor.css";
 import styled from "styled-components";
 import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
