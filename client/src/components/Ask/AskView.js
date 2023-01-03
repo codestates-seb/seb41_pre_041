@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Editor } from "@toast-ui/react-editor";
 import { useState, useEffect, useRef } from "react";
 import AskImg from "../../assets/AskImg.png";
-import "@toast-ui/editor/dist/toastui-editor.css";
 
 const AskSection = styled.section`
   .ask-section {

@@ -10,6 +10,7 @@ import Logout from "./pages/Logout";
 import Ask from "./pages/Ask";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+import { TuiEditor } from "./TuiEditor";
 
 // CSS 초기화
 const GlobalStyle = createGlobalStyle`
@@ -21,7 +22,10 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+  ${TuiEditor}
 `;
+
 const SectionWrap = styled.div`
   width: 100%;
   padding-top: 53px;

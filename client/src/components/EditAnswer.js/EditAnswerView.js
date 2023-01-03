@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
 import { useState, useEffect, useRef } from "react";
-import "@toast-ui/editor/dist/toastui-editor.css";
 
 const EditASection = styled.section`
   width: 800px;

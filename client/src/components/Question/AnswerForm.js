@@ -1,4 +1,3 @@
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Link } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
 import { useRef, useState } from "react";

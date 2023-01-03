@@ -4,7 +4,6 @@ import styled from "styled-components";
 import PaginationQ from "../components/PaginationQ";
 import axios from "axios";
 import { Viewer } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 
 const Questions = () => {
   const [questionData, setQuestionData] = useState([]);
