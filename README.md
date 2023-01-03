@@ -3,8 +3,7 @@
 
 ### 배포 링크
 
-[SEB 41기 41조 4ever1 StackOverflow](https://seb41-pre-041.vercel.app/)
-(주소 옆 자물쇠 아이콘 클릭 > 사이트 설정 > "안전하지 않은 콘텐츠"를 "허용"으로 변경해야 서버와 통신 가능합니다)
+[SEB 41기 41조 4ever1 StackOverflow](http://ec2-43-201-110-117.ap-northeast-2.compute.amazonaws.com/)
 <br>
 
 ## 프로젝트 관리 시트
